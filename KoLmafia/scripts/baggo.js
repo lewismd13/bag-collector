@@ -11731,19 +11731,7 @@ var MyActionDefaults = /*#__PURE__*/(/* unused pure expression or super */ null 
   return MyActionDefaults;
 }()));
 ;// CONCATENATED MODULE: ./src/tasks.ts
-var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, _CombatStrategy$banis, _CombatStrategy, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33, tasks_templateObject34;
-
-function tasks_toConsumableArray(arr) { return tasks_arrayWithoutHoles(arr) || tasks_iterableToArray(arr) || tasks_unsupportedIterableToArray(arr) || tasks_nonIterableSpread(); }
-
-function tasks_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function tasks_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return tasks_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return tasks_arrayLikeToArray(o, minLen); }
-
-function tasks_iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function tasks_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return tasks_arrayLikeToArray(arr); }
-
-function tasks_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33;
 
 function tasks_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -11836,7 +11824,8 @@ var BaggoQuest = {
     choices: {
       1324: 5
     },
-    combat: (_CombatStrategy$banis = (_CombatStrategy = new combat_CombatStrategy()).banish.apply(_CombatStrategy, tasks_toConsumableArray($monsters(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"]))))).macro(combat_Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject31 || (tasks_templateObject31 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject32 || (tasks_templateObject32 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), combat_Macro.runaway()), $monsters(tasks_templateObject33 || (tasks_templateObject33 = tasks_taggedTemplateLiteral(["burnout, jock"]))))).kill.apply(_CombatStrategy$banis, tasks_toConsumableArray($monsters(tasks_templateObject34 || (tasks_templateObject34 = tasks_taggedTemplateLiteral(["burnout, jock"])))))
+    combat: new combat_CombatStrategy().banish($monsters(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(combat_Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject31 || (tasks_templateObject31 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject32 || (tasks_templateObject32 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), combat_Macro.runaway()).attack().repeat(), $monsters(tasks_templateObject33 || (tasks_templateObject33 = tasks_taggedTemplateLiteral(["burnout, jock"])))) // .kill($monsters`burnout, jock`),
+
   }]
 };
 ;// CONCATENATED MODULE: ./src/main.ts
