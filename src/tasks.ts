@@ -89,7 +89,7 @@ export const BaggoQuest: Quest = {
           familiar: $familiar`Reagnimated Gnome`,
           famequip: $item`gnomish housemaid's kgnee`,
           equip: [runwaySource()],
-          modifier: "item",
+          modifier: "0.0014familiar weight 0.04item drop",
         };
       },
       effects: [

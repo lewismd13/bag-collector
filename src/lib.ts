@@ -22,12 +22,7 @@ export function formatNumber(x: number): string {
 export function acquire(quantity: number, item: Item, maxPrice: number): number {
   if (!item.tradeable) return 0;
 
-  debug(
-    `Trying to acquire ${formatAmountOfItem(quantity, item)} with a max price of ${formatNumber(
-      maxPrice
-    )}`
-  );
-
+  debug(`Trying to acquire ${formatAmountOfItem(quantity, item)}}`, "green");
   const startAmount = itemAmount(item);
   withProperty("autoBuyPriceLimit", maxPrice, () => retrieveItem(item, quantity));
   return itemAmount(item) - startAmount;

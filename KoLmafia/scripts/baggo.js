@@ -11112,7 +11112,7 @@ function formatNumber(x) {
 }
 function acquire(quantity, item, maxPrice) {
   if (!item.tradeable) return 0;
-  debug("Trying to acquire ".concat(formatAmountOfItem(quantity, item), " with a max price of ").concat(formatNumber(maxPrice)));
+  debug("Trying to acquire ".concat(formatAmountOfItem(quantity, item), "}"), "green");
   var startAmount = (0,external_kolmafia_namespaceObject.itemAmount)(item);
   withProperty("autoBuyPriceLimit", maxPrice, () => (0,external_kolmafia_namespaceObject.retrieveItem)(item, quantity));
   return (0,external_kolmafia_namespaceObject.itemAmount)(item) - startAmount;
@@ -11144,7 +11144,6 @@ function potions_arrayLikeToArray(arr, len) { if (len == null || len > arr.lengt
 
 function potions_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
 
@@ -11170,57 +11169,6 @@ function getMutuallyExclusiveEffectsOf(effect) {
   }
 
   return [];
-}
-var farmingPotions = external_kolmafia_namespaceObject.Item.all().filter(item => item.tradeable && !blacklist.includes(item) && (0,external_kolmafia_namespaceObject.itemType)(item) === "potion").map(item => new Potion(item)).filter(potion => potion.netValue() > 0).sort((a, b) => b.netValue() - a.netValue());
-function setupPotions() {
-  var excludedEffects = new Set(getActiveEffects().map(effect => getMutuallyExclusiveEffectsOf(effect)).flat());
-
-  var _iterator2 = potions_createForOfIteratorHelper(farmingPotions),
-      _step2;
-
-  try {
-    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-      var potion = _step2.value;
-      var effect = potion.effect();
-      if (excludedEffects.has(effect)) continue;
-      var desiredAmount = Math.floor(args.turns / potion.effectDuration());
-      var acquiredAmount = acquire(desiredAmount, potion.item, potion.netValue());
-      debug("Using ".concat(formatAmountOfItem(acquiredAmount, potion.item)));
-      var used = (0,external_kolmafia_namespaceObject.use)(acquiredAmount, potion.item);
-
-      if (used) {
-        var _iterator3 = potions_createForOfIteratorHelper(getMutuallyExclusiveEffectsOf(effect)),
-            _step3;
-
-        try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var excluded = _step3.value;
-            excludedEffects.add(excluded);
-          }
-        } catch (err) {
-          _iterator3.e(err);
-        } finally {
-          _iterator3.f();
-        }
-      }
-    }
-  } catch (err) {
-    _iterator2.e(err);
-  } finally {
-    _iterator2.f();
-  }
-}
-function bubbleVision() {
-  if (have($effect(potions_templateObject5 || (potions_templateObject5 = potions_taggedTemplateLiteral(["Bubble Vision"]))))) return;
-  var potion = new Potion(template_string_$item(potions_templateObject6 || (potions_templateObject6 = potions_taggedTemplateLiteral(["bottle of bubbles"]))), {
-    itemDrop: 50
-  });
-
-  if (potion.netValue() > 0) {
-    acquire(1, potion.item, potion.grossValue());
-    debug("Using ".concat(potion.item));
-    (0,external_kolmafia_namespaceObject.use)(1, potion.item);
-  }
 }
 var Potion = /*#__PURE__*/function () {
   function Potion(item) {
@@ -11256,13 +11204,13 @@ var Potion = /*#__PURE__*/function () {
     value: function itemDrop() {
       var _this$overrideItemDro;
 
-      (0,external_kolmafia_namespaceObject.setLocation)($location(potions_templateObject7 || (potions_templateObject7 = potions_taggedTemplateLiteral(["none"]))));
+      (0,external_kolmafia_namespaceObject.setLocation)($location(potions_templateObject5 || (potions_templateObject5 = potions_taggedTemplateLiteral(["none"]))));
       return (_this$overrideItemDro = this.overrideItemDrop) !== null && _this$overrideItemDro !== void 0 ? _this$overrideItemDro : modifier_get("Item Drop", this.effect());
     }
   }, {
     key: "grossValue",
     value: function grossValue() {
-      var duration = Math.min(this.effectDuration(), turnsRemaining());
+      var duration = Math.min(this.effectDuration(), Math.max(0, turnsRemaining() - (0,external_kolmafia_namespaceObject.haveEffect)(this.effect())));
       return (0.0014 * this.familiarWeight() + 0.04 * this.itemDrop() / 100) * args.bagvalue * duration;
     }
   }, {
@@ -11274,6 +11222,61 @@ var Potion = /*#__PURE__*/function () {
 
   return Potion;
 }();
+function getRelevantPotions() {
+  return external_kolmafia_namespaceObject.Item.all().filter(item => item.tradeable && !blacklist.includes(item) && (0,external_kolmafia_namespaceObject.itemType)(item) === "potion").map(item => new Potion(item)).filter(potion => potion.netValue() > 0).sort((a, b) => b.netValue() - a.netValue());
+}
+function setupPotions() {
+  var excludedEffects = new Set(getActiveEffects().map(effect => getMutuallyExclusiveEffectsOf(effect)).flat());
+
+  var _iterator2 = potions_createForOfIteratorHelper(getRelevantPotions()),
+      _step2;
+
+  try {
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var potion = _step2.value;
+      var effect = potion.effect();
+      if (excludedEffects.has(effect)) continue;
+      var desiredAmount = Math.floor((turnsRemaining() - (0,external_kolmafia_namespaceObject.haveEffect)(potion.effect())) / potion.effectDuration());
+      if (desiredAmount <= 0) return;
+      acquire(desiredAmount, potion.item, potion.grossValue());
+      var useAmount = Math.min(desiredAmount, (0,external_kolmafia_namespaceObject.itemAmount)(potion.item));
+      debug("Using ".concat(formatAmountOfItem(useAmount, potion.item)));
+      var used = (0,external_kolmafia_namespaceObject.use)(useAmount, potion.item);
+
+      if (used) {
+        var _iterator3 = potions_createForOfIteratorHelper(getMutuallyExclusiveEffectsOf(effect)),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var excluded = _step3.value;
+            excludedEffects.add(excluded);
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+      }
+    }
+  } catch (err) {
+    _iterator2.e(err);
+  } finally {
+    _iterator2.f();
+  }
+}
+function bubbleVision() {
+  if (have($effect(potions_templateObject6 || (potions_templateObject6 = potions_taggedTemplateLiteral(["Bubble Vision"]))))) return;
+  var potion = new Potion(template_string_$item(potions_templateObject7 || (potions_templateObject7 = potions_taggedTemplateLiteral(["bottle of bubbles"]))), {
+    itemDrop: 50
+  });
+
+  if (potion.netValue() > 0) {
+    acquire(1, potion.item, potion.grossValue());
+    debug("Using ".concat(potion.item));
+    (0,external_kolmafia_namespaceObject.use)(1, potion.item);
+  }
+}
 ;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2013/Florist.js
 function Florist_toConsumableArray(arr) { return Florist_arrayWithoutHoles(arr) || Florist_iterableToArray(arr) || Florist_unsupportedIterableToArray(arr) || Florist_nonIterableSpread(); }
 
@@ -11665,7 +11668,7 @@ var BaggoQuest = {
         familiar: template_string_$familiar(tasks_templateObject14 || (tasks_templateObject14 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"]))),
         famequip: template_string_$item(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))),
         equip: [runwaySource()],
-        modifier: "item"
+        modifier: "0.0014familiar weight 0.04item drop"
       };
     },
     effects: [template_string_$skill(tasks_templateObject16 || (tasks_templateObject16 = tasks_taggedTemplateLiteral(["Blood Bond"]))), template_string_$skill(tasks_templateObject17 || (tasks_templateObject17 = tasks_taggedTemplateLiteral(["Leash of Linguini"]))), template_string_$skill(tasks_templateObject18 || (tasks_templateObject18 = tasks_taggedTemplateLiteral(["Empathy of the Newt"]))), template_string_$skill(tasks_templateObject19 || (tasks_templateObject19 = tasks_taggedTemplateLiteral(["The Spirit of Taking"]))), template_string_$skill(tasks_templateObject20 || (tasks_templateObject20 = tasks_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), template_string_$skill(tasks_templateObject21 || (tasks_templateObject21 = tasks_taggedTemplateLiteral(["Singer's Faithful Ocelot"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
@@ -11682,7 +11685,6 @@ function main_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof
 
 function main_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
 

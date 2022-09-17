@@ -1,5 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Effect, effectModifier, Item, itemType, mallPrice, setLocation, use } from "kolmafia";
+import {
+  Effect,
+  effectModifier,
+  haveEffect,
+  Item,
+  itemAmount,
+  itemType,
+  mallPrice,
+  setLocation,
+  use,
+} from "kolmafia";
 import { $effect, $effects, $item, $location, getActiveEffects, getModifier, have } from "libram";
 import { acquire, debug, formatAmountOfItem } from "./lib";
 import { args, turnsRemaining } from "./main";
@@ -19,45 +28,6 @@ export function getMutuallyExclusiveEffectsOf(effect: Effect): Effect[] {
     }
   }
   return [];
-}
-
-export const farmingPotions = Item.all()
-  .filter((item) => item.tradeable && !blacklist.includes(item) && itemType(item) === "potion")
-  .map((item) => new Potion(item))
-  .filter((potion) => potion.netValue() > 0)
-  .sort((a, b) => b.netValue() - a.netValue());
-
-export function setupPotions(): void {
-  const excludedEffects = new Set<Effect>(
-    getActiveEffects()
-      .map((effect) => getMutuallyExclusiveEffectsOf(effect))
-      .flat()
-  );
-
-  for (const potion of farmingPotions) {
-    const effect = potion.effect();
-    if (excludedEffects.has(effect)) continue;
-    const desiredAmount = Math.floor(args.turns / potion.effectDuration());
-    const acquiredAmount = acquire(desiredAmount, potion.item, potion.netValue());
-    debug(`Using ${formatAmountOfItem(acquiredAmount, potion.item)}`);
-    const used = use(acquiredAmount, potion.item);
-    if (used) {
-      for (const excluded of getMutuallyExclusiveEffectsOf(effect)) {
-        excludedEffects.add(excluded);
-      }
-    }
-  }
-}
-
-export function bubbleVision(): void {
-  if (have($effect`Bubble Vision`)) return;
-
-  const potion = new Potion($item`bottle of bubbles`, { itemDrop: 50 });
-  if (potion.netValue() > 0) {
-    acquire(1, potion.item, potion.grossValue());
-    debug(`Using ${potion.item}`);
-    use(1, potion.item);
-  }
 }
 
 export interface PotionOptions {
@@ -90,7 +60,10 @@ export class Potion {
   }
 
   grossValue(): number {
-    const duration = Math.min(this.effectDuration(), turnsRemaining());
+    const duration = Math.min(
+      this.effectDuration(),
+      Math.max(0, turnsRemaining() - haveEffect(this.effect()))
+    );
     return (
       (0.0014 * this.familiarWeight() + (0.04 * this.itemDrop()) / 100) * args.bagvalue * duration
     );
@@ -98,5 +71,50 @@ export class Potion {
 
   netValue(): number {
     return this.grossValue() - mallPrice(this.item);
+  }
+}
+
+export function getRelevantPotions(): Potion[] {
+  return Item.all()
+    .filter((item) => item.tradeable && !blacklist.includes(item) && itemType(item) === "potion")
+    .map((item) => new Potion(item))
+    .filter((potion) => potion.netValue() > 0)
+    .sort((a, b) => b.netValue() - a.netValue());
+}
+
+export function setupPotions(): void {
+  const excludedEffects = new Set<Effect>(
+    getActiveEffects()
+      .map((effect) => getMutuallyExclusiveEffectsOf(effect))
+      .flat()
+  );
+
+  for (const potion of getRelevantPotions()) {
+    const effect = potion.effect();
+    if (excludedEffects.has(effect)) continue;
+    const desiredAmount = Math.floor(
+      (turnsRemaining() - haveEffect(potion.effect())) / potion.effectDuration()
+    );
+    if (desiredAmount <= 0) return;
+    acquire(desiredAmount, potion.item, potion.grossValue());
+    const useAmount = Math.min(desiredAmount, itemAmount(potion.item));
+    debug(`Using ${formatAmountOfItem(useAmount, potion.item)}`);
+    const used = use(useAmount, potion.item);
+    if (used) {
+      for (const excluded of getMutuallyExclusiveEffectsOf(effect)) {
+        excludedEffects.add(excluded);
+      }
+    }
+  }
+}
+
+export function bubbleVision(): void {
+  if (have($effect`Bubble Vision`)) return;
+
+  const potion = new Potion($item`bottle of bubbles`, { itemDrop: 50 });
+  if (potion.netValue() > 0) {
+    acquire(1, potion.item, potion.grossValue());
+    debug(`Using ${potion.item}`);
+    use(1, potion.item);
   }
 }
