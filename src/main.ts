@@ -1,7 +1,7 @@
-import { Args, Engine, getTasks } from "grimoire-kolmafia";
+import { Args, getTasks } from "grimoire-kolmafia";
 import { myAdventures, myTurncount } from "kolmafia";
 import { effectResources } from "./effects";
-import { CombatActions } from "./engine/combat";
+import { Engine } from "./engine/engine";
 import { setupPotions } from "./potions";
 import { BaggoQuest } from "./tasks";
 
@@ -27,7 +27,7 @@ export function main(command?: string): void {
   }
 
   const tasks = getTasks([BaggoQuest]);
-  const engine = new Engine<CombatActions>(tasks);
+  const engine = new Engine(tasks);
 
   if (engine.getNextTask()) {
     setupPotions();

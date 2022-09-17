@@ -6232,7 +6232,7 @@ function clamp(n, min, max) {
  * @param chunkSize Size of chunk
  */
 
-function utils_chunk(array, chunkSize) {
+function chunk(array, chunkSize) {
   var result = [];
 
   for (var i = 0; i < array.length; i += chunkSize) {
@@ -7082,7 +7082,7 @@ function getZapGroup(item) {
  */
 
 function getBanishedMonsters() {
-  var banishes = chunk(get("banishedMonsters").split(":"), 3);
+  var banishes = chunk(property_get("banishedMonsters").split(":"), 3);
   var result = new Map();
 
   var _iterator = lib_createForOfIteratorHelper(banishes),
@@ -7096,18 +7096,18 @@ function getBanishedMonsters() {
 
       if (foe === undefined || banisher === undefined) break; // toItem doesn"t error if the item doesn"t exist, so we have to use that.
 
-      var banisherItem = toItem(banisher);
+      var banisherItem = (0,external_kolmafia_namespaceObject.toItem)(banisher);
 
       if (banisher.toLowerCase() === "saber force") {
-        result.set($skill(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["Use the Force"]))), Monster.get(foe));
-      } else if ([Item.none, Item.get("training scroll:  Snokebomb"), Item.get("tomayohawk-style reflex hammer"), null].includes(banisherItem)) {
-        if (Skill.get(banisher) === $skill.none) {
+        result.set(template_string_$skill(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["Use the Force"]))), external_kolmafia_namespaceObject.Monster.get(foe));
+      } else if ([external_kolmafia_namespaceObject.Item.none, external_kolmafia_namespaceObject.Item.get("training scroll:  Snokebomb"), external_kolmafia_namespaceObject.Item.get("tomayohawk-style reflex hammer"), null].includes(banisherItem)) {
+        if (external_kolmafia_namespaceObject.Skill.get(banisher) === template_string_$skill.none) {
           break;
         } else {
-          result.set(Skill.get(banisher), Monster.get(foe));
+          result.set(external_kolmafia_namespaceObject.Skill.get(banisher), external_kolmafia_namespaceObject.Monster.get(foe));
         }
       } else {
-        result.set(banisherItem, Monster.get(foe));
+        result.set(banisherItem, external_kolmafia_namespaceObject.Monster.get(foe));
       }
     }
   } catch (err) {
@@ -11092,6 +11092,35 @@ var effectResources = [{
     }
   }
 }];
+;// CONCATENATED MODULE: ./src/engine/outfit.ts
+function engine_outfit_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = engine_outfit_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function engine_outfit_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return engine_outfit_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return engine_outfit_arrayLikeToArray(o, minLen); }
+
+function engine_outfit_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function equipFirst(outfit, resources) {
+  var _iterator = engine_outfit_createForOfIteratorHelper(resources),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var _resource$equip, _resource$equip2;
+
+      var resource = _step.value;
+      if (!resource.available()) continue;
+      if (!outfit.canEquip((_resource$equip = resource.equip) !== null && _resource$equip !== void 0 ? _resource$equip : [])) continue;
+      if (!outfit.equip((_resource$equip2 = resource.equip) !== null && _resource$equip2 !== void 0 ? _resource$equip2 : [])) continue;
+      return resource;
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return undefined;
+}
 ;// CONCATENATED MODULE: ./src/lib.ts
 
 
@@ -11125,6 +11154,113 @@ function expectedBagsPerAdv(familiarWeight, itemDrop) {
 
   return 6 / 7 * b + 1 / 7 * (2 / 5 * b + 3 / 5 * (0.2 + 0.8 * a) * b);
 }
+;// CONCATENATED MODULE: ./src/engine/resources.ts
+var resources_templateObject, resources_templateObject2, resources_templateObject3, resources_templateObject4, resources_templateObject5, resources_templateObject6, resources_templateObject7, resources_templateObject8, resources_templateObject9, resources_templateObject10;
+
+function resources_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+var banishSources = [{
+  name: "Human Musk",
+  available: () => true,
+  prepare: () => (0,external_kolmafia_namespaceObject.retrieveItem)(template_string_$item(resources_templateObject || (resources_templateObject = resources_taggedTemplateLiteral(["human musk"])))),
+  do: template_string_$item(resources_templateObject2 || (resources_templateObject2 = resources_taggedTemplateLiteral(["human musk"])))
+}, {
+  name: "Ice House",
+  available: () => true,
+  prepare: () => (0,external_kolmafia_namespaceObject.retrieveItem)(template_string_$item(resources_templateObject3 || (resources_templateObject3 = resources_taggedTemplateLiteral(["ice house"])))),
+  do: template_string_$item(resources_templateObject4 || (resources_templateObject4 = resources_taggedTemplateLiteral(["ice house"])))
+}, {
+  name: "Tryptophan Dart",
+  available: () => true,
+  prepare: () => (0,external_kolmafia_namespaceObject.retrieveItem)(template_string_$item(resources_templateObject5 || (resources_templateObject5 = resources_taggedTemplateLiteral(["tryptophan dart"])))),
+  do: template_string_$item(resources_templateObject6 || (resources_templateObject6 = resources_taggedTemplateLiteral(["tryptophan dart"])))
+}];
+function unusedBanishes(to_banish) {
+  var used_banishes = new Set();
+  var already_banished = new Map(Array.from(getBanishedMonsters(), entry => [entry[1], entry[0]])); // Record monsters that still need to be banished, and the banishes used
+
+  to_banish.forEach(monster => {
+    var banished_with = already_banished.get(monster);
+
+    if (banished_with === undefined) {
+      to_banish.push(monster);
+    } else {
+      used_banishes.add(banished_with); // Map strange banish tracking to our resources
+
+      if (banished_with === template_string_$item(resources_templateObject7 || (resources_templateObject7 = resources_taggedTemplateLiteral(["training scroll:  Snokebomb"])))) used_banishes.add(template_string_$skill(resources_templateObject8 || (resources_templateObject8 = resources_taggedTemplateLiteral(["Snokebomb"]))));
+      if (banished_with === template_string_$item(resources_templateObject9 || (resources_templateObject9 = resources_taggedTemplateLiteral(["tomayohawk-style reflex hammer"])))) used_banishes.add(template_string_$skill(resources_templateObject10 || (resources_templateObject10 = resources_taggedTemplateLiteral(["Reflex Hammer"]))));
+    }
+  });
+  if (to_banish.length === 0) return []; // All monsters banished.
+
+  debug("Banish targets: ".concat(to_banish.join(", ")));
+  debug("Banishes used: ".concat(Array.from(used_banishes).join(", ")));
+  return banishSources.filter(banish => banish.available() && !used_banishes.has(banish.do));
+}
+;// CONCATENATED MODULE: ./src/engine/engine.ts
+var engine_engine_templateObject;
+
+function engine_engine_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+function engine_engine_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function engine_engine_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function engine_engine_createClass(Constructor, protoProps, staticProps) { if (protoProps) engine_engine_defineProperties(Constructor.prototype, protoProps); if (staticProps) engine_engine_defineProperties(Constructor, staticProps); return Constructor; }
+
+function engine_get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { engine_get = Reflect.get; } else { engine_get = function _get(target, property, receiver) { var base = engine_superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return engine_get(target, property, receiver || target); }
+
+function engine_superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = engine_getPrototypeOf(object); if (object === null) break; } return object; }
+
+function engine_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) engine_setPrototypeOf(subClass, superClass); }
+
+function engine_setPrototypeOf(o, p) { engine_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return engine_setPrototypeOf(o, p); }
+
+function engine_createSuper(Derived) { var hasNativeReflectConstruct = engine_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = engine_getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = engine_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return engine_possibleConstructorReturn(this, result); }; }
+
+function engine_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return engine_assertThisInitialized(self); }
+
+function engine_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function engine_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function engine_getPrototypeOf(o) { engine_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return engine_getPrototypeOf(o); }
+
+
+
+
+
+var engine_Engine = /*#__PURE__*/function (_BaseEngine) {
+  engine_inherits(Engine, _BaseEngine);
+
+  var _super = engine_createSuper(Engine);
+
+  function Engine() {
+    engine_engine_classCallCheck(this, Engine);
+
+    return _super.apply(this, arguments);
+  }
+
+  engine_engine_createClass(Engine, [{
+    key: "execute",
+    value: function execute(task) {
+      engine_get(engine_getPrototypeOf(Engine.prototype), "execute", this).call(this, task);
+
+      if (have($effect(engine_engine_templateObject || (engine_engine_templateObject = engine_engine_taggedTemplateLiteral(["Beaten Up"]))))) throw "You are beaten up";
+    }
+  }, {
+    key: "customize",
+    value: function customize(task, outfit, combat, resources) {
+      var banishSources = unusedBanishes(combat.where("banish"));
+      if (combat.can("banish")) resources.provide("banish", equipFirst(outfit, banishSources));
+    }
+  }]);
+
+  return Engine;
+}(Engine);
 ;// CONCATENATED MODULE: ./src/potions.ts
 var potions_templateObject, potions_templateObject2, potions_templateObject3, potions_templateObject4, potions_templateObject5, potions_templateObject6, potions_templateObject7;
 
@@ -11595,7 +11731,7 @@ var MyActionDefaults = /*#__PURE__*/(/* unused pure expression or super */ null 
   return MyActionDefaults;
 }()));
 ;// CONCATENATED MODULE: ./src/tasks.ts
-var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, _CombatStrategy$banis, _CombatStrategy$banis2, _CombatStrategy, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33, tasks_templateObject34;
+var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, _CombatStrategy$banis, _CombatStrategy, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33, tasks_templateObject34;
 
 function tasks_toConsumableArray(arr) { return tasks_arrayWithoutHoles(arr) || tasks_iterableToArray(arr) || tasks_unsupportedIterableToArray(arr) || tasks_nonIterableSpread(); }
 
@@ -11700,7 +11836,7 @@ var BaggoQuest = {
     choices: {
       1324: 5
     },
-    combat: (_CombatStrategy$banis = (_CombatStrategy$banis2 = (_CombatStrategy = new combat_CombatStrategy()).banish.apply(_CombatStrategy, tasks_toConsumableArray($monsters(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))))).macro.apply(_CombatStrategy$banis2, [combat_Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject31 || (tasks_templateObject31 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject32 || (tasks_templateObject32 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), combat_Macro.runaway())].concat(tasks_toConsumableArray($monsters(tasks_templateObject33 || (tasks_templateObject33 = tasks_taggedTemplateLiteral(["burnout, jock"]))))))).kill.apply(_CombatStrategy$banis, tasks_toConsumableArray($monsters(tasks_templateObject34 || (tasks_templateObject34 = tasks_taggedTemplateLiteral(["burnout, jock"])))))
+    combat: (_CombatStrategy$banis = (_CombatStrategy = new combat_CombatStrategy()).banish.apply(_CombatStrategy, tasks_toConsumableArray($monsters(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"]))))).macro(combat_Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject31 || (tasks_templateObject31 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject32 || (tasks_templateObject32 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), combat_Macro.runaway()), $monsters(tasks_templateObject33 || (tasks_templateObject33 = tasks_taggedTemplateLiteral(["burnout, jock"]))))).kill.apply(_CombatStrategy$banis, tasks_toConsumableArray($monsters(tasks_templateObject34 || (tasks_templateObject34 = tasks_taggedTemplateLiteral(["burnout, jock"])))))
   }]
 };
 ;// CONCATENATED MODULE: ./src/main.ts
@@ -11709,6 +11845,7 @@ function main_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Sym
 function main_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return main_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return main_arrayLikeToArray(o, minLen); }
 
 function main_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 
 
 
@@ -11738,7 +11875,7 @@ function main(command) {
   }
 
   var tasks = getTasks([BaggoQuest]);
-  var engine = new Engine(tasks);
+  var engine = new engine_Engine(tasks);
 
   if (engine.getNextTask()) {
     setupPotions();

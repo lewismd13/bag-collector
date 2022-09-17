@@ -140,7 +140,7 @@ export const BaggoQuest: Quest = {
               .join(" || "),
             Macro.runaway()
           ),
-          ...$monsters`burnout, jock`
+          $monsters`burnout, jock`
         )
         .kill(...$monsters`burnout, jock`),
     },
