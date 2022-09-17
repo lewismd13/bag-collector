@@ -1,5 +1,6 @@
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
+  canEquip,
   expectedColdMedicineCabinet,
   getWorkshed,
   Item,
@@ -22,6 +23,7 @@ import {
   get,
   have,
   Macro,
+  set,
 } from "libram";
 import { CombatStrategy } from "./engine/combat";
 import { Quest } from "./engine/task";
@@ -60,6 +62,25 @@ export const BaggoQuest: Quest = {
   name: "Baggo",
   tasks: [
     {
+      name: "Acquire Kgnee",
+      after: [],
+      ready: () =>
+        have($familiar`Reagnimated Gnome`) &&
+        !have($item`gnomish housemaid's kgnee`) &&
+        !get("_baggo_checkedGnome", false),
+      completed: () =>
+        !have($familiar`Reagnimated Gnome`) ||
+        have($item`gnomish housemaid's kgnee`) ||
+        get("_baggo_checkedGnome", false),
+      do: (): void => {
+        visitUrl("arena.php");
+        runChoice(4);
+        set("_baggo_checkedGnome", true);
+      },
+      outfit: { familiar: $familiar`Reagnimated Gnome` },
+      limit: { tries: 1 },
+    },
+    {
       name: "Handle Quest",
       completed: () => get("_questPartyFair") !== "unstarted",
       do: (): void => {
@@ -71,7 +92,7 @@ export const BaggoQuest: Quest = {
     },
     {
       name: "Collect Bags",
-      after: ["Handle Quest"],
+      after: ["Acquire Kgnee", "Handle Quest"],
       completed: () => turnsRemaining() <= 0,
       prepare: () => bubbleVision(),
       do: $location`The Neverending Party`,
@@ -80,15 +101,22 @@ export const BaggoQuest: Quest = {
         floristFriar();
       },
       outfit: (): OutfitSpec => {
+        const toEquip = [runwaySource()];
+        if (myClass().primestat === $stat`moxie`) {
+          toEquip.push($item`carnivorous potted plant`);
+        } else if (canEquip($item`mime army infiltration glove`)) {
+          toEquip.push($item`mime army infiltration glove`);
+          toEquip.push($item`carnivorous potted plant`);
+        } else {
+          toEquip.push($item`tiny black hole`);
+        }
+
         return {
           weapon: $item`June cleaver`,
-          offhand: $item`carnivorous potted plant`,
           acc1: $item`mafia thumb ring`,
-          acc2:
-            myClass().primestat !== $stat`moxie` ? $item`mime army infiltration glove` : undefined,
           familiar: $familiar`Reagnimated Gnome`,
           famequip: $item`gnomish housemaid's kgnee`,
-          equip: [runwaySource()],
+          equip: toEquip,
           modifier: "0.0014familiar weight 0.04item drop",
         };
       },
