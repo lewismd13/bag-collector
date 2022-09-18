@@ -16,7 +16,7 @@ export class Engine extends BaseEngine<CombatActions, Task> {
     const start_advs = myAdventures();
     super.execute(task);
     // Crash if we unexpectedly lost the fight
-    if (have($effect`Beaten Up`) && haveEffect($effect`Beaten Up`) !== 5) {
+    if (have($effect`Beaten Up`) && haveEffect($effect`Beaten Up`) <= 3) {
       // Poetic Justice gives 5
       if (
         haveEffect($effect`Beaten Up`) > beaten_turns || // Turns of beaten-up increased, so we lost

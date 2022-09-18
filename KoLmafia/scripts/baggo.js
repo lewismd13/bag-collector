@@ -11551,7 +11551,7 @@ var engine_Engine = /*#__PURE__*/function (_BaseEngine) {
       engine_get(engine_getPrototypeOf(Engine.prototype), "execute", this).call(this, task); // Crash if we unexpectedly lost the fight
 
 
-      if (have($effect(engine_templateObject2 || (engine_templateObject2 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) && (0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_templateObject3 || (engine_templateObject3 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) !== 5) {
+      if (have($effect(engine_templateObject2 || (engine_templateObject2 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) && (0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_templateObject3 || (engine_templateObject3 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) <= 3) {
         // Poetic Justice gives 5
         if ((0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_templateObject4 || (engine_templateObject4 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) > beaten_turns || (0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_templateObject5 || (engine_templateObject5 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) === beaten_turns && (0,external_kolmafia_namespaceObject.myAdventures)() < start_advs // Turns of beaten-up was constant but adventures went down, so we lost fight while already beaten up
         ) throw "Fight was lost (debug info: ".concat(beaten_turns, " => ").concat((0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_templateObject6 || (engine_templateObject6 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))), ", (").concat(start_advs, " => ").concat((0,external_kolmafia_namespaceObject.myAdventures)(), "); stop.");
