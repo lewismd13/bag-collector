@@ -6,6 +6,7 @@ import {
   getWorkshed,
   Item,
   itemAmount,
+  Monster,
   myClass,
   myLocation,
   putCloset,
@@ -30,7 +31,7 @@ import {
 } from "libram";
 import { CombatStrategy } from "./engine/combat";
 import { Quest } from "./engine/task";
-import { turnsRemaining } from "./main";
+import { args, turnsRemaining } from "./main";
 import { bubbleVision } from "./potions";
 
 export function runwaySource(): Item {
@@ -103,6 +104,7 @@ export const BaggoQuest: Quest = {
       name: "Closet Massagers",
       completed: () => itemAmount($item`personal massager`) === 0,
       do: () => putCloset(itemAmount($item`personal massager`), $item`personal massager`),
+      limit: { tries: 1 },
     },
     {
       name: "Collect Bags",
@@ -148,6 +150,11 @@ export const BaggoQuest: Quest = {
         .map((skill) => toEffect(skill)),
       choices: { 1324: 5 },
       combat: new CombatStrategy()
+        .startingMacro((): Macro => {
+          return args.olfact !== "none"
+            ? Macro.if_(Monster.get(args.olfact), Macro.trySkill($skill`Transcendent Olfaction`))
+            : new Macro();
+        })
         .banish($monsters`biker, party girl, "plain" girl`)
         .macro(
           Macro.step("pickpocket").if_(

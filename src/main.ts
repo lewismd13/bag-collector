@@ -1,22 +1,31 @@
 import { Args, getTasks } from "grimoire-kolmafia";
-import { myAdventures, myTurncount } from "kolmafia";
+import { myAdventures } from "kolmafia";
 import { effectResources } from "./effects";
 import { Engine } from "./engine/engine";
 import { setupPotions } from "./potions";
 import { BaggoQuest } from "./tasks";
 
 export const args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
-  turns: Args.number({
-    help: "Number of turns to spend farming. Defaults to your current number of adventures.",
+  advs: Args.number({
+    help: "Number of adventures to spend farming. Defaults to your current number of adventures.",
     default: myAdventures(),
   }),
-  bagvalue: Args.number({ help: "Value of a single duffel bag or van key.", default: 20_000 }),
+  itemvalue: Args.number({ help: "Value of a single duffel bag or van key.", default: 20_000 }),
+  olfact: Args.string({
+    help: "Which monster to olfact.",
+    options: [
+      ["none", ""],
+      ["burnout", "Drops van key (food)."],
+      ["jock", "Drops duffel bag (booze)."],
+    ],
+    default: "none",
+  }),
 });
 
-export const initialTurncount = myTurncount();
+export const initialAdvs = myAdventures();
 
 export function turnsRemaining(): number {
-  return args.turns - (myTurncount() - initialTurncount);
+  return args.advs - (initialAdvs - myAdventures());
 }
 
 export function main(command?: string): void {

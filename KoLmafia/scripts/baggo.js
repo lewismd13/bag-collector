@@ -5289,7 +5289,7 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
   "args": () => (/* binding */ args),
-  "initialTurncount": () => (/* binding */ initialTurncount),
+  "initialAdvs": () => (/* binding */ initialAdvs),
   "main": () => (/* binding */ main),
   "turnsRemaining": () => (/* binding */ turnsRemaining)
 });
@@ -11653,7 +11653,7 @@ var Potion = /*#__PURE__*/function () {
     key: "grossValue",
     value: function grossValue() {
       var duration = Math.min(this.effectDuration(), Math.max(0, turnsRemaining() - (0,external_kolmafia_namespaceObject.haveEffect)(this.effect())));
-      return (0.0014 * this.familiarWeight() + 0.04 * this.itemDrop() / 100) * args.bagvalue * duration;
+      return (0.0014 * this.familiarWeight() + 0.04 * this.itemDrop() / 100) * args.itemvalue * duration;
     }
   }, {
     key: "netValue",
@@ -11720,7 +11720,7 @@ function bubbleVision() {
   }
 }
 ;// CONCATENATED MODULE: ./src/tasks.ts
-var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33, tasks_templateObject34, tasks_templateObject35, tasks_templateObject36, tasks_templateObject37, tasks_templateObject38;
+var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33, tasks_templateObject34, tasks_templateObject35, tasks_templateObject36, tasks_templateObject37, tasks_templateObject38, tasks_templateObject39;
 
 function tasks_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -11788,7 +11788,10 @@ var BaggoQuest = {
   }, {
     name: "Closet Massagers",
     completed: () => (0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["personal massager"])))) === 0,
-    do: () => (0,external_kolmafia_namespaceObject.putCloset)((0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject14 || (tasks_templateObject14 = tasks_taggedTemplateLiteral(["personal massager"])))), template_string_$item(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["personal massager"]))))
+    do: () => (0,external_kolmafia_namespaceObject.putCloset)((0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject14 || (tasks_templateObject14 = tasks_taggedTemplateLiteral(["personal massager"])))), template_string_$item(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["personal massager"])))),
+    limit: {
+      tries: 1
+    }
   }, {
     name: "Collect Bags",
     after: ["Acquire Kgnee", "Handle Quest"],
@@ -11823,7 +11826,9 @@ var BaggoQuest = {
     choices: {
       1324: 5
     },
-    combat: new combat_CombatStrategy().banish($monsters(tasks_templateObject35 || (tasks_templateObject35 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject36 || (tasks_templateObject36 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject37 || (tasks_templateObject37 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), Macro.runaway()), $monsters(tasks_templateObject38 || (tasks_templateObject38 = tasks_taggedTemplateLiteral(["burnout, jock"])))).kill()
+    combat: new combat_CombatStrategy().startingMacro(() => {
+      return args.olfact !== "none" ? Macro.if_(external_kolmafia_namespaceObject.Monster.get(args.olfact), Macro.trySkill($skill(tasks_templateObject35 || (tasks_templateObject35 = tasks_taggedTemplateLiteral(["Transcendent Olfaction"]))))) : new Macro();
+    }).banish($monsters(tasks_templateObject36 || (tasks_templateObject36 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject37 || (tasks_templateObject37 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject38 || (tasks_templateObject38 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), Macro.runaway()), $monsters(tasks_templateObject39 || (tasks_templateObject39 = tasks_taggedTemplateLiteral(["burnout, jock"])))).kill()
   }]
 };
 ;// CONCATENATED MODULE: ./src/main.ts
@@ -11840,18 +11845,23 @@ function main_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) 
 
 
 var args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
-  turns: Args.number({
-    help: "Number of turns to spend farming. Defaults to your current number of adventures.",
+  advs: Args.number({
+    help: "Number of adventures to spend farming. Defaults to your current number of adventures.",
     default: (0,external_kolmafia_namespaceObject.myAdventures)()
   }),
-  bagvalue: Args.number({
+  itemvalue: Args.number({
     help: "Value of a single duffel bag or van key.",
     default: 20000
+  }),
+  olfact: Args.string({
+    help: "Which monster to olfact.",
+    options: [["none", ""], ["burnout", "Drops van key (food)."], ["jock", "Drops duffel bag (booze)."]],
+    default: "none"
   })
 });
-var initialTurncount = (0,external_kolmafia_namespaceObject.myTurncount)();
+var initialAdvs = (0,external_kolmafia_namespaceObject.myAdventures)();
 function turnsRemaining() {
-  return args.turns - ((0,external_kolmafia_namespaceObject.myTurncount)() - initialTurncount);
+  return args.advs - (initialAdvs - (0,external_kolmafia_namespaceObject.myAdventures)());
 }
 function main(command) {
   Args.fill(args, command);

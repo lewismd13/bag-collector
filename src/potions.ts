@@ -65,7 +65,7 @@ export class Potion {
       Math.max(0, turnsRemaining() - haveEffect(this.effect()))
     );
     return (
-      (0.0014 * this.familiarWeight() + (0.04 * this.itemDrop()) / 100) * args.bagvalue * duration
+      (0.0014 * this.familiarWeight() + (0.04 * this.itemDrop()) / 100) * args.itemvalue * duration
     );
   }
 
