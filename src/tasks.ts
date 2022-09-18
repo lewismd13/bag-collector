@@ -105,7 +105,7 @@ export const BaggoQuest: Quest = {
       do: $location`The Neverending Party`,
       post: (): void => {
         coldMedicineCabinet();
-        floristFriar();
+        // floristFriar();
       },
       outfit: (): OutfitSpec => {
         const toEquip = [runwaySource()];

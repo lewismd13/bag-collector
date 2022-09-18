@@ -15,7 +15,7 @@ export class MyActionDefaults implements ActionDefaults<CombatActions> {
   }
 
   banish() {
-    return Macro.abort(); // Abort if no resource provided
+    return Macro.runaway(); // Runaway if no resource provided
   }
 
   private delevel() {
