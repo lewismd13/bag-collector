@@ -131,18 +131,18 @@ export const BaggoQuest: Quest = {
         .filter((skill) => have(skill))
         .map((skill) => toEffect(skill)),
       choices: { 1324: 5 },
-      combat: new CombatStrategy().banish($monsters`biker, party girl, "plain" girl`).macro(
-        Macro.step("pickpocket")
-          .if_(
+      combat: new CombatStrategy()
+        .banish($monsters`biker, party girl, "plain" girl`)
+        .macro(
+          Macro.step("pickpocket").if_(
             [$item`van key`, $item`unremarkable duffel bag`]
               .map((item) => `match "${item}"`)
               .join(" || "),
             Macro.runaway()
-          )
-          .attack()
-          .repeat(),
-        $monsters`burnout, jock`
-      ),
+          ),
+          $monsters`burnout, jock`
+        )
+        .kill(),
     },
   ],
 };

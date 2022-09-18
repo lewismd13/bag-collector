@@ -1,5 +1,15 @@
 import { cliExecute, getClanLounge, use, useSkill } from "kolmafia";
-import { $effect, $item, $skill, get, getModifier, have, SourceTerminal } from "libram";
+import {
+  $effect,
+  $item,
+  $skill,
+  AsdonMartin,
+  get,
+  getModifier,
+  have,
+  SourceTerminal,
+} from "libram";
+import { turnsRemaining } from "./main";
 
 export type EffectResource = {
   name: string;
@@ -63,5 +73,10 @@ export const effectResources: EffectResource[] = [
     do: (): void => {
       while (get("_poolGames") < 3) cliExecute("pool stylish");
     },
+  },
+  {
+    name: "Asdon Martin",
+    available: () => AsdonMartin.installed(),
+    do: () => AsdonMartin.drive($effect`Driving Observantly`, turnsRemaining()),
   },
 ];

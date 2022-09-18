@@ -6596,7 +6596,7 @@ var $servants = createPluralConstant(external_kolmafia_namespaceObject.Servant);
  * @category In-game constant
  */
 
-var template_string_$skill = createSingleConstant(external_kolmafia_namespaceObject.Skill);
+var $skill = createSingleConstant(external_kolmafia_namespaceObject.Skill);
 /**
  * A list of Skills specified by a comma-separated list of names.
  * For a list of all possible Skills, leave the template string blank.
@@ -7099,9 +7099,9 @@ function getBanishedMonsters() {
       var banisherItem = (0,external_kolmafia_namespaceObject.toItem)(banisher);
 
       if (banisher.toLowerCase() === "saber force") {
-        result.set(template_string_$skill(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["Use the Force"]))), external_kolmafia_namespaceObject.Monster.get(foe));
+        result.set($skill(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["Use the Force"]))), external_kolmafia_namespaceObject.Monster.get(foe));
       } else if ([external_kolmafia_namespaceObject.Item.none, external_kolmafia_namespaceObject.Item.get("training scroll:  Snokebomb"), external_kolmafia_namespaceObject.Item.get("tomayohawk-style reflex hammer"), null].includes(banisherItem)) {
-        if (external_kolmafia_namespaceObject.Skill.get(banisher) === template_string_$skill.none) {
+        if (external_kolmafia_namespaceObject.Skill.get(banisher) === $skill.none) {
           break;
         } else {
           result.set(external_kolmafia_namespaceObject.Skill.get(banisher), external_kolmafia_namespaceObject.Monster.get(foe));
@@ -7516,7 +7516,7 @@ var InvalidMacroError = /*#__PURE__*/function (_Error) {
  * For example, you can do `Macro.skill('Saucestorm').attack()`.
  */
 
-var combat_Macro = /*#__PURE__*/function () {
+var Macro = /*#__PURE__*/function () {
   function Macro() {
     combat_classCallCheck(this, Macro);
 
@@ -8068,11 +8068,11 @@ var combat_Macro = /*#__PURE__*/function () {
  * @param macro Macro to execute.
  */
 
-combat_defineProperty(combat_Macro, "SAVED_MACRO_PROPERTY", "libram_savedMacro");
+combat_defineProperty(Macro, "SAVED_MACRO_PROPERTY", "libram_savedMacro");
 
-combat_defineProperty(combat_Macro, "cachedMacroIds", new Map());
+combat_defineProperty(Macro, "cachedMacroIds", new Map());
 
-combat_defineProperty(combat_Macro, "cachedAutoAttacks", new Map());
+combat_defineProperty(Macro, "cachedAutoAttacks", new Map());
 
 function adventureMacro(loc, macro) {
   macro.save();
@@ -8087,7 +8087,7 @@ function adventureMacro(loc, macro) {
 
     if (choiceFollowsFight()) visitUrl("choice.php");
   } finally {
-    combat_Macro.clearSaved();
+    Macro.clearSaved();
   }
 }
 /**
@@ -8105,7 +8105,7 @@ function adventureMacroAuto(loc, autoMacro) {
   var _nextMacro;
 
   var nextMacro = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  nextMacro = (_nextMacro = nextMacro) !== null && _nextMacro !== void 0 ? _nextMacro : combat_Macro.abort();
+  nextMacro = (_nextMacro = nextMacro) !== null && _nextMacro !== void 0 ? _nextMacro : Macro.abort();
   autoMacro.setAutoAttack();
   nextMacro.save();
 
@@ -8118,7 +8118,7 @@ function adventureMacroAuto(loc, autoMacro) {
 
     if (choiceFollowsFight()) visitUrl("choice.php");
   } finally {
-    combat_Macro.clearSaved();
+    Macro.clearSaved();
   }
 }
 var StrictMacro = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_Macro) {
@@ -8285,7 +8285,7 @@ var StrictMacro = /*#__PURE__*/(/* unused pure expression or super */ null && (f
   }]);
 
   return StrictMacro;
-}(combat_Macro)));
+}(Macro)));
 ;// CONCATENATED MODULE: ./node_modules/grimoire-kolmafia/dist/combat.js
 function dist_combat_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) dist_combat_setPrototypeOf(subClass, superClass); }
 
@@ -8325,7 +8325,7 @@ function dist_combat_createClass(Constructor, protoProps, staticProps) { if (pro
 
 
 function undelay(macro) {
-  if (macro instanceof combat_Macro) return macro;else return macro();
+  if (macro instanceof Macro) return macro;else return macro();
 }
 /**
  * The strategy to use for combat for a task, which indicates what to do
@@ -8620,7 +8620,7 @@ var CombatStrategy = /*#__PURE__*/function () {
     value: function compile(resources, defaults, location) {
       var _a, _b;
 
-      var result = new combat_Macro(); // If there is macro precursor, do it now
+      var result = new Macro(); // If there is macro precursor, do it now
 
       if (this.starting_macro) {
         result.step.apply(result, dist_combat_toConsumableArray(this.starting_macro.map(undelay)));
@@ -8631,7 +8631,7 @@ var CombatStrategy = /*#__PURE__*/function () {
       this.macros.forEach((value, key) => {
         var _Macro;
 
-        monster_macros.add(key, (_Macro = new combat_Macro()).step.apply(_Macro, dist_combat_toConsumableArray(value.map(undelay))));
+        monster_macros.add(key, (_Macro = new Macro()).step.apply(_Macro, dist_combat_toConsumableArray(value.map(undelay))));
       });
       result.step(monster_macros.compile()); // Perform the non-monster specific macro
 
@@ -8642,7 +8642,7 @@ var CombatStrategy = /*#__PURE__*/function () {
         var _a, _b;
 
         var macro = (_a = resources.getMacro(action)) !== null && _a !== void 0 ? _a : (_b = defaults === null || defaults === void 0 ? void 0 : defaults[action]) === null || _b === void 0 ? void 0 : _b.call(defaults, key);
-        if (macro) monster_actions.add(key, new combat_Macro().step(macro));
+        if (macro) monster_actions.add(key, new Macro().step(macro));
       });
       result.step(monster_actions.compile()); // Perform the non-monster specific action (these should end the fight)
 
@@ -8662,13 +8662,13 @@ var CombatStrategy = /*#__PURE__*/function () {
   }, {
     key: "compileAutoattack",
     value: function compileAutoattack() {
-      var result = new combat_Macro(); // Perform any monster-specific autoattacks (these may or may not end the fight)
+      var result = new Macro(); // Perform any monster-specific autoattacks (these may or may not end the fight)
 
       var monster_macros = new CompressedMacro();
       this.autoattacks.forEach((value, key) => {
         var _Macro2;
 
-        monster_macros.add(key, (_Macro2 = new combat_Macro()).step.apply(_Macro2, dist_combat_toConsumableArray(value.map(undelay))));
+        monster_macros.add(key, (_Macro2 = new Macro()).step.apply(_Macro2, dist_combat_toConsumableArray(value.map(undelay))));
       });
       result.step(monster_macros.compile()); // Perform the non-monster specific macro
 
@@ -8771,7 +8771,7 @@ var CompressedMacro = /*#__PURE__*/function () {
   }, {
     key: "compile",
     value: function compile() {
-      var result = new combat_Macro();
+      var result = new Macro();
       this.components.forEach((monsters, macro) => {
         var condition = monsters.map(mon => "monsterid ".concat(mon.id)).join(" || ");
         result.if_(condition, macro);
@@ -8833,8 +8833,8 @@ var CombatResources = /*#__PURE__*/function () {
     value: function getMacro(action) {
       var resource = this.resources.get(action);
       if (resource === undefined) return undefined;
-      if (resource.do instanceof external_kolmafia_namespaceObject.Item) return new combat_Macro().item(resource.do);
-      if (resource.do instanceof external_kolmafia_namespaceObject.Skill) return new combat_Macro().skill(resource.do);
+      if (resource.do instanceof external_kolmafia_namespaceObject.Item) return new Macro().item(resource.do);
+      if (resource.do instanceof external_kolmafia_namespaceObject.Skill) return new Macro().skill(resource.do);
       return resource.do;
     }
   }]);
@@ -9681,7 +9681,7 @@ var Outfit = /*#__PURE__*/function () {
       }
 
       if (this.equips.has($slot(outfit_templateObject14 || (outfit_templateObject14 = outfit_taggedTemplateLiteral(["off-hand"]))))) return false;
-      if (!have(template_string_$skill(outfit_templateObject15 || (outfit_templateObject15 = outfit_taggedTemplateLiteral(["Double-Fisted Skull Smashing"]))))) return false;
+      if (!have($skill(outfit_templateObject15 || (outfit_templateObject15 = outfit_taggedTemplateLiteral(["Double-Fisted Skull Smashing"]))))) return false;
       if (weaponHands(item) !== 1) return false;
       if (!(0,external_kolmafia_namespaceObject.canEquip)(item)) return false;
       this.equips.set($slot(outfit_templateObject16 || (outfit_templateObject16 = outfit_taggedTemplateLiteral(["off-hand"]))), item);
@@ -10454,7 +10454,7 @@ var Engine = /*#__PURE__*/function () {
   return Engine;
 }();
 function maxSongs() {
-  return have(template_string_$skill(engine_templateObject || (engine_templateObject = engine_taggedTemplateLiteral(["Mariachi Memory"])))) ? 4 : 3;
+  return have($skill(engine_templateObject || (engine_templateObject = engine_taggedTemplateLiteral(["Mariachi Memory"])))) ? 4 : 3;
 }
 var wanderingNCs = new Set(["Wooof! Wooooooof!", "Playing Fetch*", "A Pound of Cure", "Aunts not Ants", "Bath Time", "Beware of Aligator", "Delicious Sprouts", "Hypnotic Master", "Lost and Found", "Poetic Justice", "Summer Days", "Teacher's Pet"]);
 /**
@@ -10740,22 +10740,22 @@ function enquiry(rolloverBuff) {
 
 var Skills = {
   /** Collect Source essence from enemies once per combat */
-  Extract: template_string_$skill(SourceTerminal_templateObject12 || (SourceTerminal_templateObject12 = SourceTerminal_taggedTemplateLiteral(["Extract"]))),
+  Extract: $skill(SourceTerminal_templateObject12 || (SourceTerminal_templateObject12 = SourceTerminal_taggedTemplateLiteral(["Extract"]))),
 
   /** Stagger and create a wandering monster 1-3 times per day */
-  Digitize: template_string_$skill(SourceTerminal_templateObject13 || (SourceTerminal_templateObject13 = SourceTerminal_taggedTemplateLiteral(["Digitize"]))),
+  Digitize: $skill(SourceTerminal_templateObject13 || (SourceTerminal_templateObject13 = SourceTerminal_taggedTemplateLiteral(["Digitize"]))),
 
   /** Stagger and deal 25% of enemy HP in damage once per combat */
-  Compress: template_string_$skill(SourceTerminal_templateObject14 || (SourceTerminal_templateObject14 = SourceTerminal_taggedTemplateLiteral(["Compress"]))),
+  Compress: $skill(SourceTerminal_templateObject14 || (SourceTerminal_templateObject14 = SourceTerminal_taggedTemplateLiteral(["Compress"]))),
 
   /** Double monster's HP, attack, defence, attacks per round and item drops once per fight and once per day (five in The Source) */
-  Duplicate: template_string_$skill(SourceTerminal_templateObject15 || (SourceTerminal_templateObject15 = SourceTerminal_taggedTemplateLiteral(["Duplicate"]))),
+  Duplicate: $skill(SourceTerminal_templateObject15 || (SourceTerminal_templateObject15 = SourceTerminal_taggedTemplateLiteral(["Duplicate"]))),
 
   /** Causes government agent/Source Agent wanderer next turn once per combat and three times per day */
-  Portscan: template_string_$skill(SourceTerminal_templateObject16 || (SourceTerminal_templateObject16 = SourceTerminal_taggedTemplateLiteral(["Portscan"]))),
+  Portscan: $skill(SourceTerminal_templateObject16 || (SourceTerminal_templateObject16 = SourceTerminal_taggedTemplateLiteral(["Portscan"]))),
 
   /** Increase Max MP by 100% and recover 1000 MP once per combat with a 30 turn cooldown */
-  Turbo: template_string_$skill(SourceTerminal_templateObject17 || (SourceTerminal_templateObject17 = SourceTerminal_taggedTemplateLiteral(["Turbo"])))
+  Turbo: $skill(SourceTerminal_templateObject17 || (SourceTerminal_templateObject17 = SourceTerminal_taggedTemplateLiteral(["Turbo"])))
 };
 /**
  * Make a skill available.
@@ -11039,10 +11039,234 @@ function mergeModifiers() {
 
   return modifierss.reduce((a, b) => pairwiseMerge(a, b), {});
 }
+;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2017/AsdonMartin.js
+var AsdonMartin_templateObject, AsdonMartin_templateObject2, AsdonMartin_templateObject3, AsdonMartin_templateObject4, AsdonMartin_templateObject5, AsdonMartin_templateObject6, AsdonMartin_templateObject7, AsdonMartin_templateObject8, AsdonMartin_templateObject9, AsdonMartin_templateObject10, AsdonMartin_templateObject11, AsdonMartin_templateObject12, AsdonMartin_templateObject13, AsdonMartin_templateObject14;
+
+function AsdonMartin_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+
+
+var PriceAge;
+
+(function (PriceAge) {
+  PriceAge[PriceAge["HISTORICAL"] = 0] = "HISTORICAL";
+  PriceAge[PriceAge["RECENT"] = 1] = "RECENT";
+  PriceAge[PriceAge["TODAY"] = 2] = "TODAY";
+})(PriceAge || (PriceAge = {}));
+/**
+ * Returns whether or not we have the Asdon installed in the workshed at present.
+ */
+
+
+function installed() {
+  return (0,external_kolmafia_namespaceObject.getWorkshed)() === template_string_$item(AsdonMartin_templateObject || (AsdonMartin_templateObject = AsdonMartin_taggedTemplateLiteral(["Asdon Martin keyfob"])));
+}
+/**
+ * Returns true if we have the Asdon or if it's installed.
+ */
+
+function AsdonMartin_have() {
+  return installed() || haveItem($item(AsdonMartin_templateObject2 || (AsdonMartin_templateObject2 = AsdonMartin_taggedTemplateLiteral(["Asdon Martin keyfob"]))));
+}
+var fuelSkiplist = template_string_$items(AsdonMartin_templateObject3 || (AsdonMartin_templateObject3 = AsdonMartin_taggedTemplateLiteral(["cup of \"tea\", thermos of \"whiskey\", Lucky Lindy, Bee's Knees, Sockdollager, Ish Kabibble, Hot Socks, Phonus Balonus, Flivver, Sloppy Jalopy, glass of \"milk\""])));
+
+function priceTooOld(item) {
+  return (0,external_kolmafia_namespaceObject.historicalPrice)(item) === 0 || (0,external_kolmafia_namespaceObject.historicalAge)(item) >= 7;
+} // Return mall max if historicalPrice returns -1.
+
+
+function historicalPriceOrMax(item) {
+  var historical = (0,external_kolmafia_namespaceObject.historicalPrice)(item);
+  return historical < 0 ? 999999999 : historical;
+} // Return mall max if mallPrice returns -1.
+
+
+function mallPriceOrMax(item) {
+  var mall = (0,external_kolmafia_namespaceObject.mallPrice)(item);
+  return mall < 0 ? 999999999 : mall;
+}
+
+function price(item, priceAge) {
+  switch (priceAge) {
+    case PriceAge.HISTORICAL:
+      {
+        var historical = historicalPriceOrMax(item);
+        return historical === 0 ? mallPriceOrMax(item) : historical;
+      }
+
+    case PriceAge.RECENT:
+      return priceTooOld(item) ? mallPriceOrMax(item) : historicalPriceOrMax(item);
+
+    case PriceAge.TODAY:
+      return mallPriceOrMax(item);
+  }
+}
+
+function inventoryItems() {
+  return external_kolmafia_namespaceObject.Item.all().filter(isFuelItem).filter(item => have(item) && [100, (0,external_kolmafia_namespaceObject.autosellPrice)(item)].includes(price(item, PriceAge.RECENT)));
+} // Efficiency in meat per fuel.
+
+
+function calculateFuelUnitCost(it, targetUnits) {
+  var priceAge = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : PriceAge.RECENT;
+  var units = getAverageAdventures(it);
+  return price(it, priceAge) / Math.min(targetUnits, units);
+}
+
+function isFuelItem(it) {
+  return !(0,external_kolmafia_namespaceObject.isNpcItem)(it) && it.fullness + it.inebriety > 0 && getAverageAdventures(it) > 0 && it.tradeable && it.discardable && !fuelSkiplist.includes(it);
+}
+
+function getBestFuel(targetUnits) {
+  // Three stages.
+  // 1. Filter to reasonable items using historical cost (within 5x of historical best).
+  var allFuel = template_string_$items(AsdonMartin_templateObject4 || (AsdonMartin_templateObject4 = AsdonMartin_taggedTemplateLiteral([""]))).filter(isFuelItem);
+
+  if (allFuel.filter(item => (0,external_kolmafia_namespaceObject.historicalPrice)(item) === 0).length > 100) {
+    (0,external_kolmafia_namespaceObject.mallPrices)("food");
+    (0,external_kolmafia_namespaceObject.mallPrices)("booze");
+  }
+
+  var keyHistorical = item => calculateFuelUnitCost(item, targetUnits, PriceAge.HISTORICAL);
+
+  allFuel.sort((x, y) => keyHistorical(x) - keyHistorical(y));
+  var bestUnitCost = keyHistorical(allFuel[0]);
+  var firstBadIndex = allFuel.findIndex(item => keyHistorical(item) > 5 * bestUnitCost);
+  var potentialFuel = firstBadIndex > 0 ? allFuel.slice(0, firstBadIndex) : allFuel; // 2. Filter to top 10 candidates using prices at most a week old.
+
+  if (potentialFuel.filter(item => priceTooOld(item)).length > 100) {
+    (0,external_kolmafia_namespaceObject.mallPrices)("food");
+    (0,external_kolmafia_namespaceObject.mallPrices)("booze");
+  }
+
+  var key1 = item => -getAverageAdventures(item);
+
+  var key2 = item => calculateFuelUnitCost(item, targetUnits, PriceAge.RECENT);
+
+  potentialFuel.sort((x, y) => key1(x) - key1(y));
+  potentialFuel.sort((x, y) => key2(x) - key2(y)); // 3. Find result using precise price for those top candidates.
+
+  var candidates = potentialFuel.slice(0, 10);
+
+  var key3 = item => calculateFuelUnitCost(item, targetUnits, PriceAge.TODAY);
+
+  candidates.sort((x, y) => key3(x) - key3(y));
+
+  if (calculateFuelUnitCost(candidates[0], targetUnits, PriceAge.TODAY) > 100) {
+    throw new Error("Could not identify any fuel with efficiency better than 100 meat per fuel. " + "This means something went wrong.");
+  }
+
+  return candidates[0];
+}
+/**
+ * Fuel your Asdon Martin with a given quantity of a given item
+ * @param it Item to fuel with.
+ * @param quantity Number of items to fuel with.
+ * @returns Whether we succeeded at fueling with the given items.
+ */
+
+
+function insertFuel(it) {
+  var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var result = (0,external_kolmafia_namespaceObject.visitUrl)("campground.php?action=fuelconvertor&pwd&qty=".concat(quantity, "&iid=").concat((0,external_kolmafia_namespaceObject.toInt)(it), "&go=Convert%21"));
+  return result.includes("The display updates with a");
+}
+/**
+ * Fill your Asdon Martin to the given fuel level in the cheapest way possible
+ * @param targetUnits Fuel level to attempt to reach.
+ * @returns Whether we succeeded at filling to the target fuel level.
+ */
+
+function fillTo(targetUnits) {
+  if (!installed()) return false;
+
+  while ((0,external_kolmafia_namespaceObject.getFuel)() < targetUnits) {
+    var remaining = targetUnits - (0,external_kolmafia_namespaceObject.getFuel)(); // if in Hardcore/ronin, skip the price calculation and just use soda bread
+
+    var fuel = void 0;
+    if ((0,external_kolmafia_namespaceObject.canInteract)()) fuel = getBestFuel(remaining);else fuel = template_string_$item(AsdonMartin_templateObject5 || (AsdonMartin_templateObject5 = AsdonMartin_taggedTemplateLiteral(["loaf of soda bread"])));
+    var count = Math.ceil(targetUnits / getAverageAdventures(fuel));
+    (0,external_kolmafia_namespaceObject.retrieveItem)(count, fuel);
+
+    if (!insertFuel(fuel, count)) {
+      throw new Error("Failed to fuel Asdon Martin.");
+    }
+  }
+
+  return (0,external_kolmafia_namespaceObject.getFuel)() >= targetUnits;
+}
+
+function fillWithBestInventoryItem(targetUnits) {
+  var options = inventoryItems().sort((a, b) => getAverageAdventures(b) / (0,external_kolmafia_namespaceObject.autosellPrice)(b) - getAverageAdventures(a) / (0,external_kolmafia_namespaceObject.autosellPrice)(a));
+  if (options.length === 0) return false;
+  var best = options[0];
+  if ((0,external_kolmafia_namespaceObject.autosellPrice)(best) / getAverageAdventures(best) > 100) return false;
+  var amountToUse = clamp(Math.ceil(targetUnits / getAverageAdventures(best)), 0, (0,external_kolmafia_namespaceObject.itemAmount)(best));
+  return insertFuel(best, amountToUse);
+}
+/**
+ * Fill your Asdon Martin by prioritizing mallmin items in your inventory. Default to the behavior of fillTo.
+ * @param targetUnits Fuel level to attempt to reach.
+ * @returns Whether we succeeded at filling to the target fuel level.
+ */
+
+
+function fillWithInventoryTo(targetUnits) {
+  if (!installed()) return false;
+  var continueFuelingFromInventory = true;
+
+  while ((0,external_kolmafia_namespaceObject.getFuel)() < targetUnits && continueFuelingFromInventory) {
+    continueFuelingFromInventory && (continueFuelingFromInventory = fillWithBestInventoryItem(targetUnits));
+  }
+
+  return fillTo(targetUnits);
+}
+/**
+ * Object consisting of the various Asdon driving styles
+ */
+
+var Driving = {
+  Obnoxiously: $effect(AsdonMartin_templateObject6 || (AsdonMartin_templateObject6 = AsdonMartin_taggedTemplateLiteral(["Driving Obnoxiously"]))),
+  Stealthily: $effect(AsdonMartin_templateObject7 || (AsdonMartin_templateObject7 = AsdonMartin_taggedTemplateLiteral(["Driving Stealthily"]))),
+  Wastefully: $effect(AsdonMartin_templateObject8 || (AsdonMartin_templateObject8 = AsdonMartin_taggedTemplateLiteral(["Driving Wastefully"]))),
+  Safely: $effect(AsdonMartin_templateObject9 || (AsdonMartin_templateObject9 = AsdonMartin_taggedTemplateLiteral(["Driving Safely"]))),
+  Recklessly: $effect(AsdonMartin_templateObject10 || (AsdonMartin_templateObject10 = AsdonMartin_taggedTemplateLiteral(["Driving Recklessly"]))),
+  Intimidatingly: $effect(AsdonMartin_templateObject11 || (AsdonMartin_templateObject11 = AsdonMartin_taggedTemplateLiteral(["Driving Intimidatingly"]))),
+  Quickly: $effect(AsdonMartin_templateObject12 || (AsdonMartin_templateObject12 = AsdonMartin_taggedTemplateLiteral(["Driving Quickly"]))),
+  Observantly: $effect(AsdonMartin_templateObject13 || (AsdonMartin_templateObject13 = AsdonMartin_taggedTemplateLiteral(["Driving Observantly"]))),
+  Waterproofly: $effect(AsdonMartin_templateObject14 || (AsdonMartin_templateObject14 = AsdonMartin_taggedTemplateLiteral(["Driving Waterproofly"])))
+};
+/**
+ * Attempt to drive with a particular style for a particular number of turns.
+ * @param style The driving style to use.
+ * @param turns The number of turns to attempt to get.
+ * @param preferInventory Whether we should preferentially value items currently in our inventory.
+ * @returns Whether we have at least as many turns as requested of said driving style.
+ */
+
+function drive(style) {
+  var turns = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var preferInventory = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  if (!Object.values(Driving).includes(style)) return false;
+  if (!installed()) return false;
+  if ((0,external_kolmafia_namespaceObject.haveEffect)(style) >= turns) return true;
+  var fuelNeeded = 37 * Math.ceil((turns - (0,external_kolmafia_namespaceObject.haveEffect)(style)) / 30);
+  (preferInventory ? fillWithInventoryTo : fillTo)(fuelNeeded);
+
+  while ((0,external_kolmafia_namespaceObject.getFuel)() >= 37 && (0,external_kolmafia_namespaceObject.haveEffect)(style) < turns) {
+    (0,external_kolmafia_namespaceObject.cliExecute)("asdonmartin drive ".concat(style.name.replace("Driving ", "")));
+  }
+
+  return (0,external_kolmafia_namespaceObject.haveEffect)(style) >= turns;
+}
 ;// CONCATENATED MODULE: ./src/effects.ts
-var effects_templateObject, effects_templateObject2, effects_templateObject3, effects_templateObject4, effects_templateObject5, effects_templateObject6, effects_templateObject7, effects_templateObject8, effects_templateObject9, effects_templateObject10, effects_templateObject11, effects_templateObject12, effects_templateObject13, effects_templateObject14, effects_templateObject15;
+var effects_templateObject, effects_templateObject2, effects_templateObject3, effects_templateObject4, effects_templateObject5, effects_templateObject6, effects_templateObject7, effects_templateObject8, effects_templateObject9, effects_templateObject10, effects_templateObject11, effects_templateObject12, effects_templateObject13, effects_templateObject14, effects_templateObject15, effects_templateObject16;
 
 function effects_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
 
 
 
@@ -11069,20 +11293,20 @@ var effectResources = [{
   name: "Favorite Bird",
   available: () => have(template_string_$item(effects_templateObject4 || (effects_templateObject4 = effects_taggedTemplateLiteral(["Bird-a-Day calendar"])))) && !property_get("_favoriteBirdVisited") && (modifier_get("Item Drop", $effect(effects_templateObject5 || (effects_templateObject5 = effects_taggedTemplateLiteral(["Blessing of your favorite Bird"])))) > 0 || modifier_get("Familiar Weight", $effect(effects_templateObject6 || (effects_templateObject6 = effects_taggedTemplateLiteral(["Blessing of your favorite Bird"])))) > 0),
   prepare: () => {
-    if (!have(template_string_$skill(effects_templateObject7 || (effects_templateObject7 = effects_taggedTemplateLiteral(["Seek out a Bird"]))))) {
+    if (!have($skill(effects_templateObject7 || (effects_templateObject7 = effects_taggedTemplateLiteral(["Seek out a Bird"]))))) {
       (0,external_kolmafia_namespaceObject.use)(1, template_string_$item(effects_templateObject8 || (effects_templateObject8 = effects_taggedTemplateLiteral(["Bird-a-Day calendar"]))));
     }
   },
-  do: () => (0,external_kolmafia_namespaceObject.useSkill)(template_string_$skill(effects_templateObject9 || (effects_templateObject9 = effects_taggedTemplateLiteral(["Visit your Favorite Bird"]))))
+  do: () => (0,external_kolmafia_namespaceObject.useSkill)($skill(effects_templateObject9 || (effects_templateObject9 = effects_taggedTemplateLiteral(["Visit your Favorite Bird"]))))
 }, {
   name: "Bird",
   available: () => property_get("_birdsSoughtToday") < 6 && (modifier_get("Item Drop", $effect(effects_templateObject10 || (effects_templateObject10 = effects_taggedTemplateLiteral(["Blessing of the Bird"])))) > 0 || modifier_get("Familiar Weight", $effect(effects_templateObject11 || (effects_templateObject11 = effects_taggedTemplateLiteral(["Blessing of the Bird"])))) > 0),
   prepare: () => {
-    if (!have(template_string_$skill(effects_templateObject12 || (effects_templateObject12 = effects_taggedTemplateLiteral(["Seek out a Bird"]))))) {
+    if (!have($skill(effects_templateObject12 || (effects_templateObject12 = effects_taggedTemplateLiteral(["Seek out a Bird"]))))) {
       (0,external_kolmafia_namespaceObject.use)(1, template_string_$item(effects_templateObject13 || (effects_templateObject13 = effects_taggedTemplateLiteral(["Bird-a-Day calendar"]))));
     }
   },
-  do: () => (0,external_kolmafia_namespaceObject.useSkill)(template_string_$skill(effects_templateObject14 || (effects_templateObject14 = effects_taggedTemplateLiteral(["Seek out a Bird"]))), 6 - property_get("_birdsSoughtToday"))
+  do: () => (0,external_kolmafia_namespaceObject.useSkill)($skill(effects_templateObject14 || (effects_templateObject14 = effects_taggedTemplateLiteral(["Seek out a Bird"]))), 6 - property_get("_birdsSoughtToday"))
 }, {
   name: "Pool Table",
   available: () => template_string_$item(effects_templateObject15 || (effects_templateObject15 = effects_taggedTemplateLiteral(["Clan pool table"]))).name in (0,external_kolmafia_namespaceObject.getClanLounge)() && property_get("_poolGames") < 3,
@@ -11091,7 +11315,77 @@ var effectResources = [{
       (0,external_kolmafia_namespaceObject.cliExecute)("pool stylish");
     }
   }
+}, {
+  name: "Asdon Martin",
+  available: () => installed(),
+  do: () => drive($effect(effects_templateObject16 || (effects_templateObject16 = effects_taggedTemplateLiteral(["Driving Observantly"]))), turnsRemaining())
 }];
+;// CONCATENATED MODULE: ./src/engine/combat.ts
+var engine_combat_templateObject, engine_combat_templateObject2, combat_templateObject3, combat_templateObject4, combat_templateObject5, combat_templateObject6, combat_templateObject7;
+
+function engine_combat_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+function engine_combat_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function engine_combat_createClass(Constructor, protoProps, staticProps) { if (protoProps) engine_combat_defineProperties(Constructor.prototype, protoProps); if (staticProps) engine_combat_defineProperties(Constructor, staticProps); return Constructor; }
+
+function engine_combat_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function engine_combat_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) engine_combat_setPrototypeOf(subClass, superClass); }
+
+function engine_combat_setPrototypeOf(o, p) { engine_combat_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return engine_combat_setPrototypeOf(o, p); }
+
+function engine_combat_createSuper(Derived) { var hasNativeReflectConstruct = engine_combat_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = engine_combat_getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = engine_combat_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return engine_combat_possibleConstructorReturn(this, result); }; }
+
+function engine_combat_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return engine_combat_assertThisInitialized(self); }
+
+function engine_combat_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function engine_combat_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function engine_combat_getPrototypeOf(o) { engine_combat_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return engine_combat_getPrototypeOf(o); }
+
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
+
+var myActions = ["kill", "banish"];
+var combat_CombatStrategy = /*#__PURE__*/function (_BaseCombatStrategy$w) {
+  engine_combat_inherits(CombatStrategy, _BaseCombatStrategy$w);
+
+  var _super = engine_combat_createSuper(CombatStrategy);
+
+  function CombatStrategy() {
+    engine_combat_classCallCheck(this, CombatStrategy);
+
+    return _super.apply(this, arguments);
+  }
+
+  return CombatStrategy;
+}(CombatStrategy.withActions(myActions));
+var MyActionDefaults = /*#__PURE__*/function () {
+  function MyActionDefaults() {
+    engine_combat_classCallCheck(this, MyActionDefaults);
+  }
+
+  engine_combat_createClass(MyActionDefaults, [{
+    key: "kill",
+    value: function kill() {
+      return this.delevel().trySkill($skill(engine_combat_templateObject || (engine_combat_templateObject = engine_combat_taggedTemplateLiteral(["Sing Along"])))).trySkill($skill(engine_combat_templateObject2 || (engine_combat_templateObject2 = engine_combat_taggedTemplateLiteral(["Bowl Straight Up"])))).attack().repeat();
+    }
+  }, {
+    key: "banish",
+    value: function banish() {
+      return Macro.abort(); // Abort if no resource provided
+    }
+  }, {
+    key: "delevel",
+    value: function delevel() {
+      return Macro.skill($skill(combat_templateObject3 || (combat_templateObject3 = engine_combat_taggedTemplateLiteral(["Curse of Weaksauce"])))).trySkill($skill(combat_templateObject4 || (combat_templateObject4 = engine_combat_taggedTemplateLiteral(["Micrometeorite"])))).tryItem(template_string_$item(combat_templateObject5 || (combat_templateObject5 = engine_combat_taggedTemplateLiteral(["Rain-Doh indigo cup"])))).trySkill($skill(combat_templateObject6 || (combat_templateObject6 = engine_combat_taggedTemplateLiteral(["Summon Love Mosquito"])))).tryItem(template_string_$item(combat_templateObject7 || (combat_templateObject7 = engine_combat_taggedTemplateLiteral(["Time-Spinner"]))));
+    }
+  }]);
+
+  return MyActionDefaults;
+}();
 ;// CONCATENATED MODULE: ./src/engine/outfit.ts
 function engine_outfit_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = engine_outfit_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
@@ -11190,8 +11484,8 @@ function unusedBanishes(to_banish) {
     } else {
       used_banishes.add(banished_with); // Map strange banish tracking to our resources
 
-      if (banished_with === template_string_$item(resources_templateObject7 || (resources_templateObject7 = resources_taggedTemplateLiteral(["training scroll:  Snokebomb"])))) used_banishes.add(template_string_$skill(resources_templateObject8 || (resources_templateObject8 = resources_taggedTemplateLiteral(["Snokebomb"]))));
-      if (banished_with === template_string_$item(resources_templateObject9 || (resources_templateObject9 = resources_taggedTemplateLiteral(["tomayohawk-style reflex hammer"])))) used_banishes.add(template_string_$skill(resources_templateObject10 || (resources_templateObject10 = resources_taggedTemplateLiteral(["Reflex Hammer"]))));
+      if (banished_with === template_string_$item(resources_templateObject7 || (resources_templateObject7 = resources_taggedTemplateLiteral(["training scroll:  Snokebomb"])))) used_banishes.add($skill(resources_templateObject8 || (resources_templateObject8 = resources_taggedTemplateLiteral(["Snokebomb"]))));
+      if (banished_with === template_string_$item(resources_templateObject9 || (resources_templateObject9 = resources_taggedTemplateLiteral(["tomayohawk-style reflex hammer"])))) used_banishes.add($skill(resources_templateObject10 || (resources_templateObject10 = resources_taggedTemplateLiteral(["Reflex Hammer"]))));
     }
   });
   if (to_banish.length === 0) return []; // All monsters banished.
@@ -11233,15 +11527,18 @@ function engine_getPrototypeOf(o) { engine_getPrototypeOf = Object.setPrototypeO
 
 
 
+
 var engine_Engine = /*#__PURE__*/function (_BaseEngine) {
   engine_inherits(Engine, _BaseEngine);
 
   var _super = engine_createSuper(Engine);
 
-  function Engine() {
+  function Engine(tasks) {
     engine_engine_classCallCheck(this, Engine);
 
-    return _super.apply(this, arguments);
+    return _super.call(this, tasks, {
+      combat_defaults: new MyActionDefaults()
+    });
   }
 
   engine_engine_createClass(Engine, [{
@@ -11659,77 +11956,6 @@ var UpSeaDaisy = new Flower("Up Sea Daisy", 40, "underwater", {
   Experience: 30
 });
 var Florist_all = Object.freeze([RabidDogwood, Rutabeggar, RadishRadish, Artichoker, SmokeRa, SkunkCabbage, DeadlyCinnamon, CeleryStalker, LettuceSpray, SeltzerWatercress, WarLily, StealingMagnolia, CannedSpinach, Impatiens, SpiderPlant, RedFern, BamBoo, ArcticMoss, AloeGuvnor, PitcherPlant, BlusteryPuffball, HornOfPlenty, WizardsWig, ShuffleTruffle, DisLichen, LooseMorels, FoulToadstool, Chillterelle, Portlybella, MaxHeadshroom, Spankton, Kelptomaniac, Crookweed, ElectricEelgrass, Duckweed, OrcaOrchid, Sargassum, SubSeaRose, Snori, UpSeaDaisy]);
-;// CONCATENATED MODULE: ./src/engine/combat.ts
-var engine_combat_templateObject, engine_combat_templateObject2, combat_templateObject3, combat_templateObject4, combat_templateObject5;
-
-function engine_combat_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-function engine_combat_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function engine_combat_createClass(Constructor, protoProps, staticProps) { if (protoProps) engine_combat_defineProperties(Constructor.prototype, protoProps); if (staticProps) engine_combat_defineProperties(Constructor, staticProps); return Constructor; }
-
-function engine_combat_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function engine_combat_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) engine_combat_setPrototypeOf(subClass, superClass); }
-
-function engine_combat_setPrototypeOf(o, p) { engine_combat_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return engine_combat_setPrototypeOf(o, p); }
-
-function engine_combat_createSuper(Derived) { var hasNativeReflectConstruct = engine_combat_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = engine_combat_getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = engine_combat_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return engine_combat_possibleConstructorReturn(this, result); }; }
-
-function engine_combat_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return engine_combat_assertThisInitialized(self); }
-
-function engine_combat_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function engine_combat_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function engine_combat_getPrototypeOf(o) { engine_combat_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return engine_combat_getPrototypeOf(o); }
-
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
-
-var myActions = ["kill", "banish", "abort"];
-var combat_CombatStrategy = /*#__PURE__*/function (_BaseCombatStrategy$w) {
-  engine_combat_inherits(CombatStrategy, _BaseCombatStrategy$w);
-
-  var _super = engine_combat_createSuper(CombatStrategy);
-
-  function CombatStrategy() {
-    engine_combat_classCallCheck(this, CombatStrategy);
-
-    return _super.apply(this, arguments);
-  }
-
-  return CombatStrategy;
-}(CombatStrategy.withActions(myActions));
-var MyActionDefaults = /*#__PURE__*/(/* unused pure expression or super */ null && (function () {
-  function MyActionDefaults() {
-    engine_combat_classCallCheck(this, MyActionDefaults);
-  }
-
-  engine_combat_createClass(MyActionDefaults, [{
-    key: "kill",
-    value: function kill() {
-      return this.delevel().attack().repeat();
-    }
-  }, {
-    key: "banish",
-    value: function banish() {
-      return this.abort(); // Abort if no resource provided
-    }
-  }, {
-    key: "abort",
-    value: function abort() {
-      return Macro.abort();
-    }
-  }, {
-    key: "delevel",
-    value: function delevel() {
-      return new Macro().skill($skill(engine_combat_templateObject || (engine_combat_templateObject = engine_combat_taggedTemplateLiteral(["Curse of Weaksauce"])))).trySkill($skill(engine_combat_templateObject2 || (engine_combat_templateObject2 = engine_combat_taggedTemplateLiteral(["Micrometeorite"])))).tryItem($item(combat_templateObject3 || (combat_templateObject3 = engine_combat_taggedTemplateLiteral(["Rain-Doh indigo cup"])))).trySkill($skill(combat_templateObject4 || (combat_templateObject4 = engine_combat_taggedTemplateLiteral(["Summon Love Mosquito"])))).tryItem($item(combat_templateObject5 || (combat_templateObject5 = engine_combat_taggedTemplateLiteral(["Time-Spinner"]))));
-    }
-  }]);
-
-  return MyActionDefaults;
-}()));
 ;// CONCATENATED MODULE: ./src/tasks.ts
 var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33;
 
@@ -11820,12 +12046,11 @@ var BaggoQuest = {
         modifier: "0.0014familiar weight 0.04item drop"
       };
     },
-    effects: [template_string_$skill(tasks_templateObject24 || (tasks_templateObject24 = tasks_taggedTemplateLiteral(["Blood Bond"]))), template_string_$skill(tasks_templateObject25 || (tasks_templateObject25 = tasks_taggedTemplateLiteral(["Leash of Linguini"]))), template_string_$skill(tasks_templateObject26 || (tasks_templateObject26 = tasks_taggedTemplateLiteral(["Empathy of the Newt"]))), template_string_$skill(tasks_templateObject27 || (tasks_templateObject27 = tasks_taggedTemplateLiteral(["The Spirit of Taking"]))), template_string_$skill(tasks_templateObject28 || (tasks_templateObject28 = tasks_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), template_string_$skill(tasks_templateObject29 || (tasks_templateObject29 = tasks_taggedTemplateLiteral(["Singer's Faithful Ocelot"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
+    effects: [$skill(tasks_templateObject24 || (tasks_templateObject24 = tasks_taggedTemplateLiteral(["Blood Bond"]))), $skill(tasks_templateObject25 || (tasks_templateObject25 = tasks_taggedTemplateLiteral(["Leash of Linguini"]))), $skill(tasks_templateObject26 || (tasks_templateObject26 = tasks_taggedTemplateLiteral(["Empathy of the Newt"]))), $skill(tasks_templateObject27 || (tasks_templateObject27 = tasks_taggedTemplateLiteral(["The Spirit of Taking"]))), $skill(tasks_templateObject28 || (tasks_templateObject28 = tasks_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), $skill(tasks_templateObject29 || (tasks_templateObject29 = tasks_taggedTemplateLiteral(["Singer's Faithful Ocelot"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
     choices: {
       1324: 5
     },
-    combat: new combat_CombatStrategy().banish($monsters(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(combat_Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject31 || (tasks_templateObject31 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject32 || (tasks_templateObject32 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), combat_Macro.runaway()).attack().repeat(), $monsters(tasks_templateObject33 || (tasks_templateObject33 = tasks_taggedTemplateLiteral(["burnout, jock"])))) // .kill($monsters`burnout, jock`),
-
+    combat: new combat_CombatStrategy().banish($monsters(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject31 || (tasks_templateObject31 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject32 || (tasks_templateObject32 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), Macro.runaway()), $monsters(tasks_templateObject33 || (tasks_templateObject33 = tasks_taggedTemplateLiteral(["burnout, jock"])))).kill()
   }]
 };
 ;// CONCATENATED MODULE: ./src/main.ts
