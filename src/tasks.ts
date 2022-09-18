@@ -4,8 +4,10 @@ import {
   expectedColdMedicineCabinet,
   getWorkshed,
   Item,
+  itemAmount,
   myClass,
   myLocation,
+  putCloset,
   runChoice,
   toEffect,
   totalTurnsPlayed,
@@ -89,6 +91,11 @@ export const BaggoQuest: Quest = {
         else runChoice(2);
       },
       limit: { tries: 1 },
+    },
+    {
+      name: "Closet Massagers",
+      completed: () => itemAmount($item`personal massager`) === 0,
+      do: () => putCloset(itemAmount($item`personal massager`), $item`personal massager`),
     },
     {
       name: "Collect Bags",

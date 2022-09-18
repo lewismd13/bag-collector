@@ -1,4 +1,5 @@
 import { Engine as BaseEngine, CombatResources, CombatStrategy, Outfit } from "grimoire-kolmafia";
+import { haveEffect, myAdventures } from "kolmafia";
 import { $effect, have } from "libram";
 import { CombatActions, MyActionDefaults } from "./combat";
 import { equipFirst } from "./outfit";
@@ -11,8 +12,20 @@ export class Engine extends BaseEngine<CombatActions, Task> {
   }
 
   execute(task: Task): void {
+    const beaten_turns = haveEffect($effect`Beaten Up`);
+    const start_advs = myAdventures();
     super.execute(task);
-    if (have($effect`Beaten Up`)) throw "You are beaten up";
+    // Crash if we unexpectedly lost the fight
+    if (have($effect`Beaten Up`) && haveEffect($effect`Beaten Up`) !== 5) {
+      // Poetic Justice gives 5
+      if (
+        haveEffect($effect`Beaten Up`) > beaten_turns || // Turns of beaten-up increased, so we lost
+        (haveEffect($effect`Beaten Up`) === beaten_turns && myAdventures() < start_advs) // Turns of beaten-up was constant but adventures went down, so we lost fight while already beaten up
+      )
+        throw `Fight was lost (debug info: ${beaten_turns} => ${haveEffect(
+          $effect`Beaten Up`
+        )}, (${start_advs} => ${myAdventures()}); stop.`;
+    }
   }
 
   customize(

@@ -11495,7 +11495,7 @@ function unusedBanishes(to_banish) {
   return banishSources.filter(banish => banish.available() && !used_banishes.has(banish.do));
 }
 ;// CONCATENATED MODULE: ./src/engine/engine.ts
-var engine_engine_templateObject;
+var engine_engine_templateObject, engine_templateObject2, engine_templateObject3, engine_templateObject4, engine_templateObject5, engine_templateObject6;
 
 function engine_engine_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -11528,6 +11528,7 @@ function engine_getPrototypeOf(o) { engine_getPrototypeOf = Object.setPrototypeO
 
 
 
+
 var engine_Engine = /*#__PURE__*/function (_BaseEngine) {
   engine_inherits(Engine, _BaseEngine);
 
@@ -11544,9 +11545,17 @@ var engine_Engine = /*#__PURE__*/function (_BaseEngine) {
   engine_engine_createClass(Engine, [{
     key: "execute",
     value: function execute(task) {
-      engine_get(engine_getPrototypeOf(Engine.prototype), "execute", this).call(this, task);
+      var beaten_turns = (0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_engine_templateObject || (engine_engine_templateObject = engine_engine_taggedTemplateLiteral(["Beaten Up"]))));
+      var start_advs = (0,external_kolmafia_namespaceObject.myAdventures)();
 
-      if (have($effect(engine_engine_templateObject || (engine_engine_templateObject = engine_engine_taggedTemplateLiteral(["Beaten Up"]))))) throw "You are beaten up";
+      engine_get(engine_getPrototypeOf(Engine.prototype), "execute", this).call(this, task); // Crash if we unexpectedly lost the fight
+
+
+      if (have($effect(engine_templateObject2 || (engine_templateObject2 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) && (0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_templateObject3 || (engine_templateObject3 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) !== 5) {
+        // Poetic Justice gives 5
+        if ((0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_templateObject4 || (engine_templateObject4 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) > beaten_turns || (0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_templateObject5 || (engine_templateObject5 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))) === beaten_turns && (0,external_kolmafia_namespaceObject.myAdventures)() < start_advs // Turns of beaten-up was constant but adventures went down, so we lost fight while already beaten up
+        ) throw "Fight was lost (debug info: ".concat(beaten_turns, " => ").concat((0,external_kolmafia_namespaceObject.haveEffect)($effect(engine_templateObject6 || (engine_templateObject6 = engine_engine_taggedTemplateLiteral(["Beaten Up"])))), ", (").concat(start_advs, " => ").concat((0,external_kolmafia_namespaceObject.myAdventures)(), "); stop.");
+      }
     }
   }, {
     key: "customize",
@@ -11957,7 +11966,7 @@ var UpSeaDaisy = new Flower("Up Sea Daisy", 40, "underwater", {
 });
 var Florist_all = Object.freeze([RabidDogwood, Rutabeggar, RadishRadish, Artichoker, SmokeRa, SkunkCabbage, DeadlyCinnamon, CeleryStalker, LettuceSpray, SeltzerWatercress, WarLily, StealingMagnolia, CannedSpinach, Impatiens, SpiderPlant, RedFern, BamBoo, ArcticMoss, AloeGuvnor, PitcherPlant, BlusteryPuffball, HornOfPlenty, WizardsWig, ShuffleTruffle, DisLichen, LooseMorels, FoulToadstool, Chillterelle, Portlybella, MaxHeadshroom, Spankton, Kelptomaniac, Crookweed, ElectricEelgrass, Duckweed, OrcaOrchid, Sargassum, SubSeaRose, Snori, UpSeaDaisy]);
 ;// CONCATENATED MODULE: ./src/tasks.ts
-var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33;
+var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33, tasks_templateObject34, tasks_templateObject35, tasks_templateObject36;
 
 function tasks_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -12016,11 +12025,15 @@ var BaggoQuest = {
       tries: 1
     }
   }, {
+    name: "Closet Massagers",
+    completed: () => (0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["personal massager"])))) === 0,
+    do: () => (0,external_kolmafia_namespaceObject.putCloset)((0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject14 || (tasks_templateObject14 = tasks_taggedTemplateLiteral(["personal massager"])))), template_string_$item(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["personal massager"]))))
+  }, {
     name: "Collect Bags",
     after: ["Acquire Kgnee", "Handle Quest"],
     completed: () => turnsRemaining() <= 0,
     prepare: () => bubbleVision(),
-    do: $location(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["The Neverending Party"]))),
+    do: $location(tasks_templateObject16 || (tasks_templateObject16 = tasks_taggedTemplateLiteral(["The Neverending Party"]))),
     post: () => {
       coldMedicineCabinet();
       floristFriar();
@@ -12028,29 +12041,29 @@ var BaggoQuest = {
     outfit: () => {
       var toEquip = [runwaySource()];
 
-      if ((0,external_kolmafia_namespaceObject.myClass)().primestat === $stat(tasks_templateObject14 || (tasks_templateObject14 = tasks_taggedTemplateLiteral(["moxie"])))) {
-        toEquip.push(template_string_$item(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["carnivorous potted plant"]))));
-      } else if ((0,external_kolmafia_namespaceObject.canEquip)(template_string_$item(tasks_templateObject16 || (tasks_templateObject16 = tasks_taggedTemplateLiteral(["mime army infiltration glove"]))))) {
-        toEquip.push(template_string_$item(tasks_templateObject17 || (tasks_templateObject17 = tasks_taggedTemplateLiteral(["mime army infiltration glove"]))));
+      if ((0,external_kolmafia_namespaceObject.myClass)().primestat === $stat(tasks_templateObject17 || (tasks_templateObject17 = tasks_taggedTemplateLiteral(["moxie"])))) {
         toEquip.push(template_string_$item(tasks_templateObject18 || (tasks_templateObject18 = tasks_taggedTemplateLiteral(["carnivorous potted plant"]))));
+      } else if ((0,external_kolmafia_namespaceObject.canEquip)(template_string_$item(tasks_templateObject19 || (tasks_templateObject19 = tasks_taggedTemplateLiteral(["mime army infiltration glove"]))))) {
+        toEquip.push(template_string_$item(tasks_templateObject20 || (tasks_templateObject20 = tasks_taggedTemplateLiteral(["mime army infiltration glove"]))));
+        toEquip.push(template_string_$item(tasks_templateObject21 || (tasks_templateObject21 = tasks_taggedTemplateLiteral(["carnivorous potted plant"]))));
       } else {
-        toEquip.push(template_string_$item(tasks_templateObject19 || (tasks_templateObject19 = tasks_taggedTemplateLiteral(["tiny black hole"]))));
+        toEquip.push(template_string_$item(tasks_templateObject22 || (tasks_templateObject22 = tasks_taggedTemplateLiteral(["tiny black hole"]))));
       }
 
       return {
-        weapon: template_string_$item(tasks_templateObject20 || (tasks_templateObject20 = tasks_taggedTemplateLiteral(["June cleaver"]))),
-        acc1: template_string_$item(tasks_templateObject21 || (tasks_templateObject21 = tasks_taggedTemplateLiteral(["mafia thumb ring"]))),
-        familiar: template_string_$familiar(tasks_templateObject22 || (tasks_templateObject22 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"]))),
-        famequip: template_string_$item(tasks_templateObject23 || (tasks_templateObject23 = tasks_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))),
+        weapon: template_string_$item(tasks_templateObject23 || (tasks_templateObject23 = tasks_taggedTemplateLiteral(["June cleaver"]))),
+        acc1: template_string_$item(tasks_templateObject24 || (tasks_templateObject24 = tasks_taggedTemplateLiteral(["mafia thumb ring"]))),
+        familiar: template_string_$familiar(tasks_templateObject25 || (tasks_templateObject25 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"]))),
+        famequip: template_string_$item(tasks_templateObject26 || (tasks_templateObject26 = tasks_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))),
         equip: toEquip,
         modifier: "0.0014familiar weight 0.04item drop"
       };
     },
-    effects: [$skill(tasks_templateObject24 || (tasks_templateObject24 = tasks_taggedTemplateLiteral(["Blood Bond"]))), $skill(tasks_templateObject25 || (tasks_templateObject25 = tasks_taggedTemplateLiteral(["Leash of Linguini"]))), $skill(tasks_templateObject26 || (tasks_templateObject26 = tasks_taggedTemplateLiteral(["Empathy of the Newt"]))), $skill(tasks_templateObject27 || (tasks_templateObject27 = tasks_taggedTemplateLiteral(["The Spirit of Taking"]))), $skill(tasks_templateObject28 || (tasks_templateObject28 = tasks_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), $skill(tasks_templateObject29 || (tasks_templateObject29 = tasks_taggedTemplateLiteral(["Singer's Faithful Ocelot"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
+    effects: [$skill(tasks_templateObject27 || (tasks_templateObject27 = tasks_taggedTemplateLiteral(["Blood Bond"]))), $skill(tasks_templateObject28 || (tasks_templateObject28 = tasks_taggedTemplateLiteral(["Leash of Linguini"]))), $skill(tasks_templateObject29 || (tasks_templateObject29 = tasks_taggedTemplateLiteral(["Empathy of the Newt"]))), $skill(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["The Spirit of Taking"]))), $skill(tasks_templateObject31 || (tasks_templateObject31 = tasks_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), $skill(tasks_templateObject32 || (tasks_templateObject32 = tasks_taggedTemplateLiteral(["Singer's Faithful Ocelot"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
     choices: {
       1324: 5
     },
-    combat: new combat_CombatStrategy().banish($monsters(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject31 || (tasks_templateObject31 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject32 || (tasks_templateObject32 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), Macro.runaway()), $monsters(tasks_templateObject33 || (tasks_templateObject33 = tasks_taggedTemplateLiteral(["burnout, jock"])))).kill()
+    combat: new combat_CombatStrategy().banish($monsters(tasks_templateObject33 || (tasks_templateObject33 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject34 || (tasks_templateObject34 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject35 || (tasks_templateObject35 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), Macro.runaway()), $monsters(tasks_templateObject36 || (tasks_templateObject36 = tasks_taggedTemplateLiteral(["burnout, jock"])))).kill()
   }]
 };
 ;// CONCATENATED MODULE: ./src/main.ts
