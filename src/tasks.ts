@@ -1,6 +1,7 @@
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
   canEquip,
+  cliExecute,
   expectedColdMedicineCabinet,
   getWorkshed,
   Item,
@@ -83,6 +84,12 @@ export const BaggoQuest: Quest = {
       limit: { tries: 1 },
     },
     {
+      name: "Upgrade Saber",
+      completed: () => get("_saberMod") > 0,
+      do: () => cliExecute("saber familiar"),
+      limit: { tries: 1 },
+    },
+    {
       name: "Handle Quest",
       completed: () => get("_questPartyFair") !== "unstarted",
       do: (): void => {
@@ -119,7 +126,9 @@ export const BaggoQuest: Quest = {
         }
 
         return {
-          weapon: $item`June cleaver`,
+          weapon: have($item`June cleaver`)
+            ? $item`June cleaver`
+            : $item`Fourth of May Cosplay Saber`,
           acc1: $item`mafia thumb ring`,
           familiar: $familiar`Reagnimated Gnome`,
           famequip: $item`gnomish housemaid's kgnee`,

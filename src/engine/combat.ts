@@ -15,12 +15,11 @@ export class MyActionDefaults implements ActionDefaults<CombatActions> {
   }
 
   banish() {
-    return Macro.runaway(); // Runaway if no resource provided
+    return Macro.runaway(); // If no resource provided
   }
 
   private delevel() {
-    return Macro.skill($skill`Curse of Weaksauce`)
-      .trySkill($skill`Micrometeorite`)
+    return Macro.trySkill($skill`Micrometeorite`)
       .tryItem($item`Rain-Doh indigo cup`)
       .trySkill($skill`Summon Love Mosquito`)
       .tryItem($item`Time-Spinner`);
