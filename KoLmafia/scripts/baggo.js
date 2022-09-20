@@ -11449,7 +11449,7 @@ function expectedBagsPerAdv(familiarWeight, itemDrop) {
   return 6 / 7 * b + 1 / 7 * (2 / 5 * b + 3 / 5 * (0.2 + 0.8 * a) * b);
 }
 ;// CONCATENATED MODULE: ./src/engine/resources.ts
-var resources_templateObject, resources_templateObject2, resources_templateObject3, resources_templateObject4, resources_templateObject5, resources_templateObject6, resources_templateObject7, resources_templateObject8, resources_templateObject9, resources_templateObject10;
+var resources_templateObject, resources_templateObject2, resources_templateObject3, resources_templateObject4, resources_templateObject5, resources_templateObject6, resources_templateObject7, resources_templateObject8, resources_templateObject9, resources_templateObject10, resources_templateObject11, resources_templateObject12, resources_templateObject13, resources_templateObject14, resources_templateObject15, resources_templateObject16, resources_templateObject17, resources_templateObject18;
 
 function resources_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -11463,14 +11463,28 @@ var banishSources = [{
   do: template_string_$item(resources_templateObject2 || (resources_templateObject2 = resources_taggedTemplateLiteral(["human musk"])))
 }, {
   name: "Ice House",
-  available: () => true,
-  prepare: () => (0,external_kolmafia_namespaceObject.retrieveItem)(template_string_$item(resources_templateObject3 || (resources_templateObject3 = resources_taggedTemplateLiteral(["ice house"])))),
-  do: template_string_$item(resources_templateObject4 || (resources_templateObject4 = resources_taggedTemplateLiteral(["ice house"])))
+  available: () => (0,external_kolmafia_namespaceObject.retrievePrice)(template_string_$item(resources_templateObject3 || (resources_templateObject3 = resources_taggedTemplateLiteral(["ice house"])))) < 50000,
+  prepare: () => (0,external_kolmafia_namespaceObject.retrieveItem)(template_string_$item(resources_templateObject4 || (resources_templateObject4 = resources_taggedTemplateLiteral(["ice house"])))),
+  do: template_string_$item(resources_templateObject5 || (resources_templateObject5 = resources_taggedTemplateLiteral(["ice house"])))
+}, {
+  name: "Asdon Martin",
+  available: () => installed(),
+  prepare: () => fillTo(50),
+  do: $skill(resources_templateObject6 || (resources_templateObject6 = resources_taggedTemplateLiteral(["Asdon Martin: Spring-Loaded Front Bumper"])))
 }, {
   name: "Tryptophan Dart",
-  available: () => true,
-  prepare: () => (0,external_kolmafia_namespaceObject.retrieveItem)(template_string_$item(resources_templateObject5 || (resources_templateObject5 = resources_taggedTemplateLiteral(["tryptophan dart"])))),
-  do: template_string_$item(resources_templateObject6 || (resources_templateObject6 = resources_taggedTemplateLiteral(["tryptophan dart"])))
+  available: () => (0,external_kolmafia_namespaceObject.retrievePrice)(template_string_$item(resources_templateObject7 || (resources_templateObject7 = resources_taggedTemplateLiteral(["tryptophan dart"])))) < 100000,
+  prepare: () => (0,external_kolmafia_namespaceObject.retrieveItem)(template_string_$item(resources_templateObject8 || (resources_templateObject8 = resources_taggedTemplateLiteral(["tryptophan dart"])))),
+  do: template_string_$item(resources_templateObject9 || (resources_templateObject9 = resources_taggedTemplateLiteral(["tryptophan dart"])))
+}, {
+  name: "Tennis Ball",
+  available: () => (0,external_kolmafia_namespaceObject.retrievePrice)(template_string_$item(resources_templateObject10 || (resources_templateObject10 = resources_taggedTemplateLiteral(["tennis ball"])))) < 15000,
+  prepare: () => (0,external_kolmafia_namespaceObject.retrieveItem)(template_string_$item(resources_templateObject11 || (resources_templateObject11 = resources_taggedTemplateLiteral(["tennis ball"])))),
+  do: template_string_$item(resources_templateObject12 || (resources_templateObject12 = resources_taggedTemplateLiteral(["tennis ball"])))
+}, {
+  name: "Cosmic Bowling Ball",
+  available: () => have(template_string_$item(resources_templateObject13 || (resources_templateObject13 = resources_taggedTemplateLiteral(["cosmic bowling ball"])))),
+  do: $skill(resources_templateObject14 || (resources_templateObject14 = resources_taggedTemplateLiteral(["Bowl a Curveball"])))
 }];
 function unusedBanishes(to_banish) {
   var used_banishes = new Set();
@@ -11484,8 +11498,8 @@ function unusedBanishes(to_banish) {
     } else {
       used_banishes.add(banished_with); // Map strange banish tracking to our resources
 
-      if (banished_with === template_string_$item(resources_templateObject7 || (resources_templateObject7 = resources_taggedTemplateLiteral(["training scroll:  Snokebomb"])))) used_banishes.add($skill(resources_templateObject8 || (resources_templateObject8 = resources_taggedTemplateLiteral(["Snokebomb"]))));
-      if (banished_with === template_string_$item(resources_templateObject9 || (resources_templateObject9 = resources_taggedTemplateLiteral(["tomayohawk-style reflex hammer"])))) used_banishes.add($skill(resources_templateObject10 || (resources_templateObject10 = resources_taggedTemplateLiteral(["Reflex Hammer"]))));
+      if (banished_with === template_string_$item(resources_templateObject15 || (resources_templateObject15 = resources_taggedTemplateLiteral(["training scroll:  Snokebomb"])))) used_banishes.add($skill(resources_templateObject16 || (resources_templateObject16 = resources_taggedTemplateLiteral(["Snokebomb"]))));
+      if (banished_with === template_string_$item(resources_templateObject17 || (resources_templateObject17 = resources_taggedTemplateLiteral(["tomayohawk-style reflex hammer"])))) used_banishes.add($skill(resources_templateObject18 || (resources_templateObject18 = resources_taggedTemplateLiteral(["Reflex Hammer"]))));
     }
   });
   if (to_banish.length === 0) return []; // All monsters banished.

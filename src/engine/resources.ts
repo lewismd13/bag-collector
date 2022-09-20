@@ -1,6 +1,6 @@
 import { CombatResource as BaseCombatResource, OutfitSpec } from "grimoire-kolmafia";
-import { Familiar, Item, Monster, retrieveItem, Skill } from "kolmafia";
-import { $item, $skill, getBanishedMonsters } from "libram";
+import { Familiar, Item, Monster, retrieveItem, retrievePrice, Skill } from "kolmafia";
+import { $item, $skill, AsdonMartin, getBanishedMonsters, have } from "libram";
 import { debug } from "../lib";
 
 export interface Resource {
@@ -26,15 +26,32 @@ export const banishSources: BanishSource[] = [
   },
   {
     name: "Ice House",
-    available: () => true,
+    available: () => retrievePrice($item`ice house`) < 50_000,
     prepare: () => retrieveItem($item`ice house`),
     do: $item`ice house`,
   },
   {
+    name: "Asdon Martin",
+    available: () => AsdonMartin.installed(),
+    prepare: () => AsdonMartin.fillTo(50),
+    do: $skill`Asdon Martin: Spring-Loaded Front Bumper`,
+  },
+  {
     name: "Tryptophan Dart",
-    available: () => true,
+    available: () => retrievePrice($item`tryptophan dart`) < 100_000,
     prepare: () => retrieveItem($item`tryptophan dart`),
     do: $item`tryptophan dart`,
+  },
+  {
+    name: "Tennis Ball",
+    available: () => retrievePrice($item`tennis ball`) < 15_000,
+    prepare: () => retrieveItem($item`tennis ball`),
+    do: $item`tennis ball`,
+  },
+  {
+    name: "Cosmic Bowling Ball",
+    available: () => have($item`cosmic bowling ball`),
+    do: $skill`Bowl a Curveball`,
   },
 ];
 
