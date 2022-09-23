@@ -87,14 +87,10 @@ export const BaggoQuest: Quest = {
     {
       name: "Upgrade Saber",
       completed: () =>
-        !have($item`June cleaver`) &&
-        have($item`Fourth of May Cosplay Saber`) &&
-        get("_saberMod") > 0,
-      do: () => {
-        if( get("_saberMod") === 0) {
-        cliExecute("saber familiar");
-        }
-      },
+        get("_saberMod") > 0 || 
+        !have($item`Fourth of May Cosplay Saber`) || 
+        have($item`June cleaver`),
+      do: () => cliExecute("saber familiar"),
       limit: { tries: 1 },
     },
     {
