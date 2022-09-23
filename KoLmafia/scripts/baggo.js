@@ -11784,7 +11784,7 @@ var BaggoQuest = {
     }
   }, {
     name: "Upgrade Saber",
-    completed: () => !have(template_string_$item(tasks_templateObject12 || (tasks_templateObject12 = tasks_taggedTemplateLiteral(["June cleaver"])))) && have(template_string_$item(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))) && property_get("_saberMod") > 0,
+    completed: () => have(template_string_$item(tasks_templateObject12 || (tasks_templateObject12 = tasks_taggedTemplateLiteral(["June cleaver"])))) || have(template_string_$item(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))) && property_get("_saberMod") > 0,
     do: () => (0,external_kolmafia_namespaceObject.cliExecute)("saber familiar"),
     limit: {
       tries: 1
