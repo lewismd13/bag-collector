@@ -2,7 +2,7 @@ import { Args, getTasks } from "grimoire-kolmafia";
 import { myAdventures } from "kolmafia";
 import { effectResources } from "./effects";
 import { Engine } from "./engine/engine";
-import { setupPotions } from "./potions";
+import { bubbleVision, setupPotions } from "./potions";
 import { BaggoQuest } from "./tasks";
 
 export const args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
@@ -20,6 +20,7 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
     ],
     default: "none",
   }),
+  buff: Args.flag({ help: "Only buff up, do not spend any adventures.", default: false }),
 });
 
 export const initialAdvs = myAdventures();
@@ -40,12 +41,14 @@ export function main(command?: string): void {
 
   if (engine.getNextTask()) {
     setupPotions();
+    bubbleVision();
     for (const resource of effectResources) {
       if (resource.available()) {
         resource.prepare?.();
         resource.do();
       }
     }
+    if (args.buff) return;
   }
 
   try {

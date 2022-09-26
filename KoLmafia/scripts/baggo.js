@@ -11871,6 +11871,10 @@ var args = Args.create("baggo", "A script for farming duffel bags and van keys."
     help: "Which monster to olfact.",
     options: [["none", ""], ["burnout", "Drops van key (food)."], ["jock", "Drops duffel bag (booze)."]],
     default: "none"
+  }),
+  buff: Args.flag({
+    help: "Only buff up, do not spend any adventures.",
+    default: false
   })
 });
 var initialAdvs = (0,external_kolmafia_namespaceObject.myAdventures)();
@@ -11890,6 +11894,7 @@ function main(command) {
 
   if (engine.getNextTask()) {
     setupPotions();
+    bubbleVision();
 
     var _iterator = main_createForOfIteratorHelper(effectResources),
         _step;
@@ -11910,6 +11915,8 @@ function main(command) {
     } finally {
       _iterator.f();
     }
+
+    if (args.buff) return;
   }
 
   try {
