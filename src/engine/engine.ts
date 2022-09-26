@@ -1,6 +1,6 @@
 import { Engine as BaseEngine, CombatResources, CombatStrategy, Outfit } from "grimoire-kolmafia";
 import { haveEffect, myAdventures } from "kolmafia";
-import { $effect, have } from "libram";
+import { $effect, getBanishedMonsters, have, Macro } from "libram";
 import { CombatActions, MyActionDefaults } from "./combat";
 import { equipFirst } from "./outfit";
 import { unusedBanishes } from "./resources";
@@ -36,5 +36,11 @@ export class Engine extends BaseEngine<CombatActions, Task> {
   ): void {
     const banishSources = unusedBanishes(combat.where("banish"));
     if (combat.can("banish")) resources.provide("banish", equipFirst(outfit, banishSources));
+
+    const alreadyBanished = [...getBanishedMonsters().values()];
+    for (const monster of alreadyBanished) {
+      const strategy = combat.currentStrategy(monster);
+      if (strategy === "banish") combat.macro(Macro.runaway(), monster);
+    }
   }
 }
