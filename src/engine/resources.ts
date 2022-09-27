@@ -19,6 +19,11 @@ export interface BanishSource extends CombatResource {
 
 export const banishSources: BanishSource[] = [
   {
+    name: "System Sweep",
+    available: () => have($skill`System Sweep`),
+    do: $skill`System Sweep`,
+  },
+  {
     name: "Human Musk",
     available: () => true,
     prepare: () => retrieveItem($item`human musk`),
