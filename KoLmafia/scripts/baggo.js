@@ -11875,9 +11875,9 @@ var BaggoQuest = {
     choices: {
       1324: 5
     },
-    combat: new combat_CombatStrategy().startingMacro(() => {
-      return args.olfact !== "none" ? Macro.if_(external_kolmafia_namespaceObject.Monster.get(args.olfact), Macro.trySkill($skill(tasks_templateObject37 || (tasks_templateObject37 = tasks_taggedTemplateLiteral(["Transcendent Olfaction"]))))) : new Macro();
-    }).banish($monsters(tasks_templateObject38 || (tasks_templateObject38 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(Macro.step("pickpocket").if_([template_string_$item(tasks_templateObject39 || (tasks_templateObject39 = tasks_taggedTemplateLiteral(["van key"]))), template_string_$item(tasks_templateObject40 || (tasks_templateObject40 = tasks_taggedTemplateLiteral(["unremarkable duffel bag"])))].map(item => "match \"".concat(item, "\"")).join(" || "), Macro.runaway()), $monsters(tasks_templateObject41 || (tasks_templateObject41 = tasks_taggedTemplateLiteral(["burnout, jock"])))).kill()
+    combat: new combat_CombatStrategy().banish($monsters(tasks_templateObject37 || (tasks_templateObject37 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(Macro.step("pickpocket").if_("match \"unremarkable duffel bag\" || match \"van key\"", Macro.runaway()).trySkill($skill(tasks_templateObject38 || (tasks_templateObject38 = tasks_taggedTemplateLiteral(["Double Nanovision"])))).trySkill($skill(tasks_templateObject39 || (tasks_templateObject39 = tasks_taggedTemplateLiteral(["Double Nanovision"])))), $monsters(tasks_templateObject40 || (tasks_templateObject40 = tasks_taggedTemplateLiteral(["burnout, jock"])))).macro(() => {
+      return args.olfact !== "none" ? Macro.if_(external_kolmafia_namespaceObject.Monster.get(args.olfact), Macro.trySkill($skill(tasks_templateObject41 || (tasks_templateObject41 = tasks_taggedTemplateLiteral(["Transcendent Olfaction"]))))) : new Macro();
+    }).kill()
   }]
 };
 ;// CONCATENATED MODULE: ./src/main.ts
