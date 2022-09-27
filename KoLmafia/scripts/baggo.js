@@ -11904,7 +11904,7 @@ var args = Args.create("baggo", "A script for farming duffel bags and van keys."
   }),
   olfact: Args.string({
     help: "Which monster to olfact.",
-    options: [["none", ""], ["burnout", "Drops van key (food)."], ["jock", "Drops duffel bag (booze)."]],
+    options: [["none", "Do no olfact."], ["burnout", "Drops van key (food)."], ["jock", "Drops duffel bag (booze)."]],
     default: "none"
   }),
   buff: Args.flag({

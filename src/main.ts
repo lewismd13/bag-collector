@@ -14,7 +14,7 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
   olfact: Args.string({
     help: "Which monster to olfact.",
     options: [
-      ["none", ""],
+      ["none", "Do no olfact."],
       ["burnout", "Drops van key (food)."],
       ["jock", "Drops duffel bag (booze)."],
     ],
