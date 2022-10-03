@@ -11568,6 +11568,7 @@ function engine_getPrototypeOf(o) { engine_getPrototypeOf = Object.setPrototypeO
 
 
 
+var engine_grimoireCCS = "grimoire_macro";
 var engine_Engine = /*#__PURE__*/function (_BaseEngine) {
   engine_inherits(Engine, _BaseEngine);
 
@@ -11617,6 +11618,46 @@ var engine_Engine = /*#__PURE__*/function (_BaseEngine) {
         _iterator.e(err);
       } finally {
         _iterator.f();
+      }
+    }
+  }, {
+    key: "initPropertiesManager",
+    value: function initPropertiesManager(manager) {
+      // Properties adapted from garbo
+      manager.set({
+        logPreferenceChange: true,
+        logPreferenceChangeFilter: engine_engine_toConsumableArray(new Set([].concat(engine_engine_toConsumableArray(property_get("logPreferenceChangeFilter").split(",")), ["libram_savedMacro", "maximizerMRUList", "testudinalTeachings", "_lastCombatStarted"]))).sort().filter(a => a).join(","),
+        battleAction: "custom combat script",
+        autoSatisfyWithMall: true,
+        autoSatisfyWithNPCs: true,
+        autoSatisfyWithCoinmasters: true,
+        autoSatisfyWithStash: false,
+        dontStopForCounters: true,
+        maximizerFoldables: true,
+        afterAdventureScript: "",
+        betweenBattleScript: "",
+        choiceAdventureScript: "",
+        familiarScript: "",
+        currentMood: "apathetic",
+        autoTuxedo: true,
+        autoPinkyRing: true,
+        autoGarish: true,
+        allowNonMoodBurning: false,
+        allowSummonBurning: true,
+        libramSkillsSoftcore: "none"
+      });
+
+      if (this.options.ccs !== "") {
+        var _this$options$ccs;
+
+        if (this.options.ccs === undefined && (0,external_kolmafia_namespaceObject.readCcs)(engine_grimoireCCS) === "") {
+          // Write a simple CCS so we can switch to it
+          (0,external_kolmafia_namespaceObject.writeCcs)("[ default ]\nabort", engine_grimoireCCS);
+        }
+
+        manager.set({
+          customCombatScript: (_this$options$ccs = this.options.ccs) !== null && _this$options$ccs !== void 0 ? _this$options$ccs : engine_grimoireCCS
+        });
       }
     }
   }]);

@@ -1,10 +1,12 @@
 import { Engine as BaseEngine, CombatResources, CombatStrategy, Outfit } from "grimoire-kolmafia";
-import { haveEffect, myAdventures } from "kolmafia";
-import { $effect, getBanishedMonsters, have, Macro } from "libram";
+import { haveEffect, myAdventures, readCcs, writeCcs } from "kolmafia";
+import { $effect, get, getBanishedMonsters, have, Macro, PropertiesManager } from "libram";
 import { CombatActions, MyActionDefaults } from "./combat";
 import { equipFirst } from "./outfit";
 import { unusedBanishes } from "./resources";
 import { Task } from "./task";
+
+const grimoireCCS = "grimoire_macro";
 
 export class Engine extends BaseEngine<CombatActions, Task> {
   constructor(tasks: Task[]) {
@@ -41,6 +43,50 @@ export class Engine extends BaseEngine<CombatActions, Task> {
     for (const monster of alreadyBanished) {
       const strategy = combat.currentStrategy(monster);
       if (strategy === "banish") combat.macro(Macro.runaway(), monster);
+    }
+  }
+
+  initPropertiesManager(manager: PropertiesManager): void {
+    // Properties adapted from garbo
+    manager.set({
+      logPreferenceChange: true,
+      logPreferenceChangeFilter: [
+        ...new Set([
+          ...get("logPreferenceChangeFilter").split(","),
+          "libram_savedMacro",
+          "maximizerMRUList",
+          "testudinalTeachings",
+          "_lastCombatStarted",
+        ]),
+      ]
+        .sort()
+        .filter((a) => a)
+        .join(","),
+      battleAction: "custom combat script",
+      autoSatisfyWithMall: true,
+      autoSatisfyWithNPCs: true,
+      autoSatisfyWithCoinmasters: true,
+      autoSatisfyWithStash: false,
+      dontStopForCounters: true,
+      maximizerFoldables: true,
+      afterAdventureScript: "",
+      betweenBattleScript: "",
+      choiceAdventureScript: "",
+      familiarScript: "",
+      currentMood: "apathetic",
+      autoTuxedo: true,
+      autoPinkyRing: true,
+      autoGarish: true,
+      allowNonMoodBurning: false,
+      allowSummonBurning: true,
+      libramSkillsSoftcore: "none",
+    });
+    if (this.options.ccs !== "") {
+      if (this.options.ccs === undefined && readCcs(grimoireCCS) === "") {
+        // Write a simple CCS so we can switch to it
+        writeCcs("[ default ]\nabort", grimoireCCS);
+      }
+      manager.set({ customCombatScript: this.options.ccs ?? grimoireCCS });
     }
   }
 }
