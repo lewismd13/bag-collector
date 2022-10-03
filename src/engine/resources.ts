@@ -1,6 +1,6 @@
 import { CombatResource as BaseCombatResource, OutfitSpec } from "grimoire-kolmafia";
-import { Familiar, Item, Monster, retrieveItem, retrievePrice, Skill } from "kolmafia";
-import { $item, $skill, AsdonMartin, getBanishedMonsters, have } from "libram";
+import { Familiar, Item, Monster, myTurncount, retrieveItem, retrievePrice, Skill } from "kolmafia";
+import { $item, $skill, AsdonMartin, get, getBanishedMonsters, have } from "libram";
 import { debug } from "../lib";
 
 export interface Resource {
@@ -37,7 +37,16 @@ export const banishSources: BanishSource[] = [
   },
   {
     name: "Asdon Martin",
-    available: () => AsdonMartin.installed(),
+    available: (): boolean => {
+      // From libram
+      if (!AsdonMartin.installed()) return false;
+      const banishes = get("banishedMonsters").split(":");
+      const bumperIndex = banishes
+        .map((string) => string.toLowerCase())
+        .indexOf("spring-loaded front bumper");
+      if (bumperIndex === -1) return true;
+      return myTurncount() - parseInt(banishes[bumperIndex + 1]) > 30;
+    },
     prepare: () => AsdonMartin.fillTo(50),
     do: $skill`Asdon Martin: Spring-Loaded Front Bumper`,
   },

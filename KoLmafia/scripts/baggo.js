@@ -11472,7 +11472,14 @@ var banishSources = [{
   do: template_string_$item(resources_templateObject7 || (resources_templateObject7 = resources_taggedTemplateLiteral(["ice house"])))
 }, {
   name: "Asdon Martin",
-  available: () => installed(),
+  available: () => {
+    // From libram
+    if (!installed()) return false;
+    var banishes = property_get("banishedMonsters").split(":");
+    var bumperIndex = banishes.map(string => string.toLowerCase()).indexOf("spring-loaded front bumper");
+    if (bumperIndex === -1) return true;
+    return (0,external_kolmafia_namespaceObject.myTurncount)() - parseInt(banishes[bumperIndex + 1]) > 30;
+  },
   prepare: () => fillTo(50),
   do: $skill(resources_templateObject8 || (resources_templateObject8 = resources_taggedTemplateLiteral(["Asdon Martin: Spring-Loaded Front Bumper"])))
 }, {
