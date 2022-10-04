@@ -17,6 +17,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $effect,
   $familiar,
   $item,
   $location,
@@ -46,7 +47,7 @@ export function coldMedicineCabinet(): void {
   if (get("_nextColdMedicineConsult") > totalTurnsPlayed()) return;
   if (expectedColdMedicineCabinet()["pill"] !== $item`Extrovermectin™`) return;
   visitUrl("campground.php?action=workshed");
-  runChoice(1);
+  runChoice(5);
 }
 
 export function floristFriar(): void {
@@ -58,7 +59,9 @@ export function floristFriar(): void {
     FloristFriar.AloeGuvnor,
     FloristFriar.PitcherPlant,
   ]) {
-    if (flower.available()) flower.plant();
+    if (!get("_floristPlantsUsed").includes(flower.name)) {
+      visitUrl(`choice.php?whichchoice=720&option=1&pwd&plant=${flower.id}`);
+    }
   }
 }
 
@@ -112,12 +115,12 @@ export const BaggoQuest: Quest = {
       name: "Collect Bags",
       after: ["Acquire Kgnee", "Handle Quest"],
       completed: () => turnsRemaining() <= 0,
-      prepare: () => bubbleVision(),
-      do: $location`The Neverending Party`,
-      post: (): void => {
+      prepare: (): void => {
+        bubbleVision();
         coldMedicineCabinet();
-        // floristFriar();
+        floristFriar();
       },
+      do: $location`The Neverending Party`,
       outfit: (): OutfitSpec => {
         const toEquip = [runwaySource()];
         if (myClass().primestat === $stat`moxie`) {
@@ -127,6 +130,9 @@ export const BaggoQuest: Quest = {
           toEquip.push($item`carnivorous potted plant`);
         } else {
           toEquip.push($item`tiny black hole`);
+        }
+        if (!have($effect`Everything Looks Yellow`) && have($item`Jurassic Parka`)) {
+          toEquip.push($item`Jurassic Parka`);
         }
 
         return {
@@ -157,7 +163,8 @@ export const BaggoQuest: Quest = {
           Macro.step("pickpocket")
             .if_(`match "unremarkable duffel bag" || match "van key"`, Macro.runaway())
             .trySkill($skill`Double Nanovision`)
-            .trySkill($skill`Double Nanovision`),
+            .trySkill($skill`Double Nanovision`)
+            .trySkill($skill`Spit jurassic acid`),
           $monsters`burnout, jock`
         )
         .macro((): Macro => {

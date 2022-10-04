@@ -2,7 +2,7 @@ import { Args, getTasks } from "grimoire-kolmafia";
 import { myAdventures } from "kolmafia";
 import { effectResources } from "./effects";
 import { Engine } from "./engine/engine";
-import { bubbleVision, setupPotions } from "./potions";
+import { setupPotions } from "./potions";
 import { BaggoQuest } from "./tasks";
 
 export const args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
@@ -41,7 +41,6 @@ export function main(command?: string): void {
 
   if (engine.getNextTask()) {
     setupPotions();
-    bubbleVision();
     for (const resource of effectResources) {
       if (resource.available()) {
         resource.prepare?.();
