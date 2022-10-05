@@ -124,10 +124,10 @@ export const BaggoQuest: Quest = {
       outfit: (): OutfitSpec => {
         const toEquip = [runwaySource()];
         if (myClass().primestat === $stat`moxie`) {
-          toEquip.push($item`carnivorous potted plant`);
+          if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
         } else if (canEquip($item`mime army infiltration glove`)) {
           toEquip.push($item`mime army infiltration glove`);
-          toEquip.push($item`carnivorous potted plant`);
+          if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
         } else {
           toEquip.push($item`tiny black hole`);
         }
