@@ -12085,6 +12085,63 @@ var UpSeaDaisy = new Flower("Up Sea Daisy", 40, "underwater", {
   Experience: 30
 });
 var Florist_all = Object.freeze([RabidDogwood, Rutabeggar, RadishRadish, Artichoker, SmokeRa, SkunkCabbage, DeadlyCinnamon, CeleryStalker, LettuceSpray, SeltzerWatercress, WarLily, StealingMagnolia, CannedSpinach, Impatiens, SpiderPlant, RedFern, BamBoo, ArcticMoss, AloeGuvnor, PitcherPlant, BlusteryPuffball, HornOfPlenty, WizardsWig, ShuffleTruffle, DisLichen, LooseMorels, FoulToadstool, Chillterelle, Portlybella, MaxHeadshroom, Spankton, Kelptomaniac, Crookweed, ElectricEelgrass, Duckweed, OrcaOrchid, Sargassum, SubSeaRose, Snori, UpSeaDaisy]);
+;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2018/SongBoom.js
+var SongBoom_templateObject;
+
+function SongBoom_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+
+var SongBoom_item = template_string_$item(SongBoom_templateObject || (SongBoom_templateObject = SongBoom_taggedTemplateLiteral(["SongBoom\u2122 BoomBox"])));
+function SongBoom_have() {
+  return have(SongBoom_item);
+}
+var keywords = {
+  "Eye of the Giger": "spooky",
+  "Food Vibrations": "food",
+  "Remainin' Alive": "dr",
+  "These Fists Were Made for Punchin'": "damage",
+  "Total Eclipse of Your Meat": "meat"
+};
+var songBoomSongs = new Set(Object.keys(keywords));
+/**
+ * Current song.
+ */
+
+function song() {
+  var stored = property_get("boomBoxSong");
+  return songBoomSongs.has(stored) ? stored : null;
+}
+/**
+ * Song changes left today.
+ */
+
+function songChangesLeft() {
+  return property_get("_boomBoxSongsLeft");
+}
+/**
+ * Change the song.
+ * @param newSong Song to change to.
+ */
+
+function setSong(newSong) {
+  if (song() !== newSong) {
+    if (songChangesLeft() === 0) throw new Error("Out of song changes!");
+    (0,external_kolmafia_namespaceObject.cliExecute)("boombox ".concat(newSong ? keywords[newSong] : "none"));
+    return true;
+  } else {
+    return false;
+  }
+}
+/**
+ * Progress to next song drop (e.g. gathered meat-clip).
+ */
+
+function dropProgress() {
+  return get("_boomBoxFights");
+}
 ;// CONCATENATED MODULE: ./src/tasks.ts
 var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32, tasks_templateObject33, tasks_templateObject34, tasks_templateObject35, tasks_templateObject36, tasks_templateObject37, tasks_templateObject38, tasks_templateObject39, tasks_templateObject40, tasks_templateObject41, tasks_templateObject42, _templateObject43, _templateObject44, _templateObject45, _templateObject46, _templateObject47;
 
@@ -12142,6 +12199,14 @@ var BaggoQuest = {
     name: "Upgrade Saber",
     completed: () => have(template_string_$item(tasks_templateObject12 || (tasks_templateObject12 = tasks_taggedTemplateLiteral(["June cleaver"])))) || have(template_string_$item(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))) && property_get("_saberMod") > 0,
     do: () => (0,external_kolmafia_namespaceObject.cliExecute)("saber familiar"),
+    limit: {
+      tries: 1
+    }
+  }, {
+    name: "Set Boombox",
+    ready: () => SongBoom_have() && songChangesLeft() !== 0,
+    completed: () => song() === "Food Vibrations",
+    do: () => setSong("Food Vibrations"),
     limit: {
       tries: 1
     }
