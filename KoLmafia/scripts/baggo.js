@@ -12115,7 +12115,8 @@ function floristFriar() {
     var flower = _arr[_i];
 
     if (!property_get("_floristPlantsUsed").includes(flower.name)) {
-      (0,external_kolmafia_namespaceObject.visitUrl)("choice.php?whichchoice=720&option=1&pwd&plant=".concat(flower.id));
+      (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=forestvillage&action=fv_friar");
+      (0,external_kolmafia_namespaceObject.runChoice)(1, "plant=".concat(flower.id));
     }
   }
 }

@@ -60,7 +60,8 @@ export function floristFriar(): void {
     FloristFriar.PitcherPlant,
   ]) {
     if (!get("_floristPlantsUsed").includes(flower.name)) {
-      visitUrl(`choice.php?whichchoice=720&option=1&pwd&plant=${flower.id}`);
+      visitUrl("place.php?whichplace=forestvillage&action=fv_friar");
+      runChoice(1, `plant=${flower.id}`);
     }
   }
 }
