@@ -36,6 +36,7 @@ export class Engine extends BaseEngine<CombatActions, Task> {
     combat: CombatStrategy<CombatActions>,
     resources: CombatResources<CombatActions>
   ): void {
+    // Set up a banish if needed
     const banishSources = unusedBanishes(combat.where("banish"));
     if (combat.can("banish")) resources.provide("banish", equipFirst(outfit, banishSources));
 

@@ -21,6 +21,10 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
     default: "none",
   }),
   buff: Args.flag({ help: "Only buff up, do not spend any adventures.", default: false }),
+  outfit: Args.string({
+    help: "Name of the outfit whose pieces to equip when farming.",
+    default: "",
+  }),
 });
 
 export const initialAdvs = myAdventures();

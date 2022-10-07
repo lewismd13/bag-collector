@@ -9,6 +9,7 @@ import {
   Monster,
   myClass,
   myLocation,
+  outfitPieces,
   putCloset,
   runChoice,
   toEffect,
@@ -129,9 +130,18 @@ export const BaggoQuest: Quest = {
         bubbleVision();
         coldMedicineCabinet();
         floristFriar();
+        if (get("parkaMode").toLowerCase() !== "dilophosaur") cliExecute("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
       },
       do: $location`The Neverending Party`,
       outfit: (): OutfitSpec => {
+        if (args.outfit !== "") {
+          return {
+            equip: outfitPieces(args.outfit),
+            familiar: $familiar`Reagnimated Gnome`,
+            famequip: $item`gnomish housemaid's kgnee`,
+          };
+        }
+
         const toEquip = [runwaySource()];
         if (myClass().primestat === $stat`moxie`) {
           if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
@@ -139,7 +149,7 @@ export const BaggoQuest: Quest = {
           toEquip.push($item`mime army infiltration glove`);
           if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
         } else {
-          toEquip.push($item`tiny black hole`);
+          // toEquip.push($item`tiny black hole`);
         }
         if (!have($effect`Everything Looks Yellow`) && have($item`Jurassic Parka`)) {
           toEquip.push($item`Jurassic Parka`);
