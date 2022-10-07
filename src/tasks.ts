@@ -29,6 +29,7 @@ import {
   have,
   Macro,
   set,
+  SongBoom,
 } from "libram";
 import { CombatStrategy } from "./engine/combat";
 import { Quest } from "./engine/task";
@@ -94,6 +95,13 @@ export const BaggoQuest: Quest = {
         have($item`June cleaver`) ||
         (have($item`Fourth of May Cosplay Saber`) && get("_saberMod") > 0),
       do: () => cliExecute("saber familiar"),
+      limit: { tries: 1 },
+    },
+    {
+      name: "Set Boombox",
+      ready: () => SongBoom.have() && SongBoom.songChangesLeft() !== 0,
+      completed: () => SongBoom.song() === "Food Vibrations",
+      do: () => SongBoom.setSong("Food Vibrations"),
       limit: { tries: 1 },
     },
     {
