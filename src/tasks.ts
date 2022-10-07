@@ -17,7 +17,6 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
-  $effect,
   $familiar,
   $item,
   $location,
@@ -29,7 +28,6 @@ import {
   have,
   Macro,
   set,
-  SongBoom,
 } from "libram";
 import { CombatStrategy } from "./engine/combat";
 import { Quest } from "./engine/task";
@@ -48,7 +46,7 @@ export function coldMedicineCabinet(): void {
   if (get("_nextColdMedicineConsult") > totalTurnsPlayed()) return;
   if (expectedColdMedicineCabinet()["pill"] !== $item`Extrovermectin™`) return;
   visitUrl("campground.php?action=workshed");
-  runChoice(5);
+  runChoice(1);
 }
 
 export function floristFriar(): void {
@@ -60,10 +58,7 @@ export function floristFriar(): void {
     FloristFriar.AloeGuvnor,
     FloristFriar.PitcherPlant,
   ]) {
-    if (!get("_floristPlantsUsed").includes(flower.name)) {
-      visitUrl("place.php?whichplace=forestvillage&action=fv_friar");
-      runChoice(1, `plant=${flower.id}`);
-    }
+    if (flower.available()) flower.plant();
   }
 }
 
@@ -92,16 +87,10 @@ export const BaggoQuest: Quest = {
     {
       name: "Upgrade Saber",
       completed: () =>
-        have($item`June cleaver`) ||
-        (have($item`Fourth of May Cosplay Saber`) && get("_saberMod") > 0),
+        get("_saberMod") > 0 || 
+        !have($item`Fourth of May Cosplay Saber`) || 
+        have($item`June cleaver`),
       do: () => cliExecute("saber familiar"),
-      limit: { tries: 1 },
-    },
-    {
-      name: "Set Boombox",
-      ready: () => SongBoom.have() && SongBoom.songChangesLeft() !== 0,
-      completed: () => SongBoom.song() === "Food Vibrations",
-      do: () => SongBoom.setSong("Food Vibrations"),
       limit: { tries: 1 },
     },
     {
@@ -124,24 +113,21 @@ export const BaggoQuest: Quest = {
       name: "Collect Bags",
       after: ["Acquire Kgnee", "Handle Quest"],
       completed: () => turnsRemaining() <= 0,
-      prepare: (): void => {
-        bubbleVision();
-        coldMedicineCabinet();
-        floristFriar();
-      },
+      prepare: () => bubbleVision(),
       do: $location`The Neverending Party`,
+      post: (): void => {
+        coldMedicineCabinet();
+        // floristFriar();
+      },
       outfit: (): OutfitSpec => {
         const toEquip = [runwaySource()];
         if (myClass().primestat === $stat`moxie`) {
-          if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
+          toEquip.push($item`carnivorous potted plant`);
         } else if (canEquip($item`mime army infiltration glove`)) {
           toEquip.push($item`mime army infiltration glove`);
-          if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
+          toEquip.push($item`carnivorous potted plant`);
         } else {
           toEquip.push($item`tiny black hole`);
-        }
-        if (!have($effect`Everything Looks Yellow`) && have($item`Jurassic Parka`)) {
-          toEquip.push($item`Jurassic Parka`);
         }
 
         return {
@@ -167,20 +153,21 @@ export const BaggoQuest: Quest = {
         .map((skill) => toEffect(skill)),
       choices: { 1324: 5 },
       combat: new CombatStrategy()
-        .banish($monsters`biker, party girl, "plain" girl`)
-        .macro(
-          Macro.step("pickpocket")
-            .if_(`match "unremarkable duffel bag" || match "van key"`, Macro.runaway())
-            .trySkill($skill`Double Nanovision`)
-            .trySkill($skill`Double Nanovision`)
-            .trySkill($skill`Spit jurassic acid`),
-          $monsters`burnout, jock`
-        )
-        .macro((): Macro => {
+        .startingMacro((): Macro => {
           return args.olfact !== "none"
             ? Macro.if_(Monster.get(args.olfact), Macro.trySkill($skill`Transcendent Olfaction`))
             : new Macro();
         })
+        .banish($monsters`biker, party girl, "plain" girl`)
+        .macro(
+          Macro.step("pickpocket").if_(
+            [$item`van key`, $item`unremarkable duffel bag`]
+              .map((item) => `match "${item}"`)
+              .join(" || "),
+            Macro.runaway()
+          ),
+          $monsters`burnout, jock`
+        )
         .kill(),
     },
   ],
