@@ -22,6 +22,7 @@ export class MyActionDefaults implements ActionDefaults<CombatActions> {
     return Macro.trySkill($skill`Micrometeorite`)
       .tryItem($item`Rain-Doh indigo cup`)
       .trySkill($skill`Summon Love Mosquito`)
-      .tryItem($item`Time-Spinner`);
+      .tryItem($item`Time-Spinner`)
+      .tryItem($item`HOA citation pad`);
   }
 }

@@ -149,7 +149,7 @@ export const BaggoQuest: Quest = {
           toEquip.push($item`mime army infiltration glove`);
           if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
         } else {
-          // toEquip.push($item`tiny black hole`);
+          toEquip.push($item`tiny black hole`);
         }
         if (!have($effect`Everything Looks Yellow`) && have($item`Jurassic Parka`)) {
           toEquip.push($item`Jurassic Parka`);
