@@ -1,15 +1,10 @@
-import { OutfitSpec } from "grimoire-kolmafia";
 import {
-  canEquip,
   cliExecute,
   expectedColdMedicineCabinet,
   getWorkshed,
-  Item,
   itemAmount,
   Monster,
-  myClass,
   myLocation,
-  outfitPieces,
   putCloset,
   runChoice,
   toEffect,
@@ -18,13 +13,11 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
-  $effect,
   $familiar,
   $item,
   $location,
   $monsters,
   $skill,
-  $stat,
   FloristFriar,
   get,
   have,
@@ -33,15 +26,10 @@ import {
   SongBoom,
 } from "libram";
 import { CombatStrategy } from "./engine/combat";
+import { createFarmingOutfit } from "./engine/outfit";
 import { Quest } from "./engine/task";
 import { args, turnsRemaining } from "./main";
 import { bubbleVision } from "./potions";
-
-export function runwaySource(): Item {
-  return have($item`Greatest American Pants`)
-    ? $item`Greatest American Pants`
-    : $item`navel ring of navel gazing`;
-}
 
 export function coldMedicineCabinet(): void {
   if (getWorkshed() !== $item`cold medicine cabinet`) return;
@@ -133,39 +121,7 @@ export const BaggoQuest: Quest = {
         if (get("parkaMode").toLowerCase() !== "dilophosaur") cliExecute("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
       },
       do: $location`The Neverending Party`,
-      outfit: (): OutfitSpec => {
-        if (args.outfit !== "") {
-          return {
-            equip: outfitPieces(args.outfit),
-            familiar: $familiar`Reagnimated Gnome`,
-            famequip: $item`gnomish housemaid's kgnee`,
-          };
-        }
-
-        const toEquip = [runwaySource()];
-        if (myClass().primestat === $stat`moxie`) {
-          if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
-        } else if (canEquip($item`mime army infiltration glove`)) {
-          toEquip.push($item`mime army infiltration glove`);
-          if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
-        } else {
-          toEquip.push($item`tiny black hole`);
-        }
-        if (!have($effect`Everything Looks Yellow`) && have($item`Jurassic Parka`)) {
-          toEquip.push($item`Jurassic Parka`);
-        }
-
-        return {
-          weapon: have($item`June cleaver`)
-            ? $item`June cleaver`
-            : $item`Fourth of May Cosplay Saber`,
-          acc1: $item`mafia thumb ring`,
-          familiar: $familiar`Reagnimated Gnome`,
-          famequip: $item`gnomish housemaid's kgnee`,
-          equip: toEquip,
-          modifier: "0.0014familiar weight 0.04item drop",
-        };
-      },
+      outfit: createFarmingOutfit(),
       effects: [
         $skill`Blood Bond`,
         $skill`Leash of Linguini`,
