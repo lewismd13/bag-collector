@@ -6735,7 +6735,7 @@ var $slots = createPluralConstant(external_kolmafia_namespaceObject.Slot);
  * @category In-game constant
  */
 
-var $stat = createSingleConstant(external_kolmafia_namespaceObject.Stat);
+var template_string_$stat = createSingleConstant(external_kolmafia_namespaceObject.Stat);
 /**
  * A list of Stats specified by a comma-separated list of names.
  * For a list of all possible Stats, leave the template string blank.
@@ -7473,7 +7473,7 @@ function damageTakenByElement(baseDamage, element) {
   var res = elementalResistance(element);
   return Math.max(1, Math.ceil(baseDamage - baseDamage * res / 100));
 }
-var telescopeStats = new Map([["standing around flexing their muscles and using grip exercisers", $stat(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["Muscle"])))], ["sitting around playing chess and solving complicated-looking logic puzzles", $stat(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["Mysticality"])))], ["all wearing sunglasses and dancing", $stat(_templateObject13 || (_templateObject13 = _taggedTemplateLiteral(["Moxie"])))]]);
+var telescopeStats = new Map([["standing around flexing their muscles and using grip exercisers", template_string_$stat(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["Muscle"])))], ["sitting around playing chess and solving complicated-looking logic puzzles", template_string_$stat(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["Mysticality"])))], ["all wearing sunglasses and dancing", template_string_$stat(_templateObject13 || (_templateObject13 = _taggedTemplateLiteral(["Moxie"])))]]);
 var telescopeElements = new Map([["people, all of whom appear to be on fire", $element(_templateObject14 || (_templateObject14 = _taggedTemplateLiteral(["hot"])))], ["people, surrounded by a cloud of eldritch mist", $element(_templateObject15 || (_templateObject15 = _taggedTemplateLiteral(["spooky"])))], ["greasy-looking people furtively skulking around", $element(_templateObject16 || (_templateObject16 = _taggedTemplateLiteral(["sleaze"])))], ["people, surrounded by garbage and clouds of flies", $element(_templateObject17 || (_templateObject17 = _taggedTemplateLiteral(["stench"])))], ["people, clustered around a group of igloos", $element(_templateObject18 || (_templateObject18 = _taggedTemplateLiteral(["cold"])))]]);
 var hedgeTrap1 = new Map([["smoldering bushes on the outskirts of a hedge maze", $element(_templateObject19 || (_templateObject19 = _taggedTemplateLiteral(["hot"])))], ["creepy-looking black bushes on the outskirts of a hedge maze", $element(_templateObject20 || (_templateObject20 = _taggedTemplateLiteral(["spooky"])))], ["purplish, greasy-looking hedges", $element(_templateObject21 || (_templateObject21 = _taggedTemplateLiteral(["sleaze"])))], ["nasty-looking, dripping green bushes on the outskirts of a hedge maze", $element(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral(["stench"])))], ["frost-rimed bushes on the outskirts of a hedge maze", $element(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral(["cold"])))]]);
 var hedgeTrap2 = new Map([["smoke rising from deeper within the maze", $element(_templateObject24 || (_templateObject24 = _taggedTemplateLiteral(["hot"])))], ["a miasma of eldritch vapors rising from deeper within the maze", $element(_templateObject25 || (_templateObject25 = _taggedTemplateLiteral(["spooky"])))], ["a greasy purple cloud hanging over the center of the maze", $element(_templateObject26 || (_templateObject26 = _taggedTemplateLiteral(["sleaze"])))], ["a cloud of green gas hovering over the maze", $element(_templateObject27 || (_templateObject27 = _taggedTemplateLiteral(["stench"])))], ["wintry mists rising from deeper within the maze", $element(_templateObject28 || (_templateObject28 = _taggedTemplateLiteral(["cold"])))]]);
@@ -11657,6 +11657,10 @@ function createFarmingOutfit() {
   return spec;
 }
 ;// CONCATENATED MODULE: ./src/lib.ts
+var lib_templateObject, lib_templateObject2, lib_templateObject3;
+
+function lib_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
 
 
 function debug(message, color) {
@@ -11688,6 +11692,9 @@ function expectedBagsPerAdv(familiarWeight, itemDrop) {
   var b = 0.25 / (1 - (0.2 + 0.8 * a)) + 0.75 * (0.05 * (1 + bonusItem)) / (1 - a); // expected bags from combat with a burnout or jock
 
   return 6 / 7 * b + 1 / 7 * (2 / 5 * b + 3 / 5 * (0.2 + 0.8 * a) * b);
+}
+function canPickpocket() {
+  return myClass().primestat === $stat(lib_templateObject || (lib_templateObject = lib_taggedTemplateLiteral(["Moxie"]))) || [$item(lib_templateObject2 || (lib_templateObject2 = lib_taggedTemplateLiteral(["mime army infiltration glove"]))), $item(lib_templateObject3 || (lib_templateObject3 = lib_taggedTemplateLiteral(["tiny black hole"])))].some(item => haveEquipped(item));
 }
 ;// CONCATENATED MODULE: ./src/engine/resources.ts
 var resources_templateObject, resources_templateObject2, resources_templateObject3, resources_templateObject4, resources_templateObject5, resources_templateObject6, resources_templateObject7, resources_templateObject8, resources_templateObject9, resources_templateObject10, resources_templateObject11, resources_templateObject12, resources_templateObject13, resources_templateObject14, resources_templateObject15, resources_templateObject16, resources_templateObject17, resources_templateObject18, resources_templateObject19, resources_templateObject20, resources_templateObject21, resources_templateObject22, resources_templateObject23, resources_templateObject24, resources_templateObject25, resources_templateObject26, resources_templateObject27, resources_templateObject28, resources_templateObject29, resources_templateObject30, resources_templateObject31;
@@ -12478,7 +12485,7 @@ var BaggoQuest = {
       if (property_get("parkaMode").toLowerCase() !== "dilophosaur") (0,external_kolmafia_namespaceObject.cliExecute)("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
     },
     do: $location(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["The Neverending Party"]))),
-    outfit: createFarmingOutfit(),
+    outfit: createFarmingOutfit,
     effects: [$skill(tasks_templateObject16 || (tasks_templateObject16 = tasks_taggedTemplateLiteral(["Blood Bond"]))), $skill(tasks_templateObject17 || (tasks_templateObject17 = tasks_taggedTemplateLiteral(["Leash of Linguini"]))), $skill(tasks_templateObject18 || (tasks_templateObject18 = tasks_taggedTemplateLiteral(["Empathy of the Newt"]))), $skill(tasks_templateObject19 || (tasks_templateObject19 = tasks_taggedTemplateLiteral(["The Spirit of Taking"]))), $skill(tasks_templateObject20 || (tasks_templateObject20 = tasks_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), $skill(tasks_templateObject21 || (tasks_templateObject21 = tasks_taggedTemplateLiteral(["Singer's Faithful Ocelot"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
     choices: {
       1324: 5

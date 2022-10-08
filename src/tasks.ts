@@ -121,7 +121,7 @@ export const BaggoQuest: Quest = {
         if (get("parkaMode").toLowerCase() !== "dilophosaur") cliExecute("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
       },
       do: $location`The Neverending Party`,
-      outfit: createFarmingOutfit(),
+      outfit: createFarmingOutfit,
       effects: [
         $skill`Blood Bond`,
         $skill`Leash of Linguini`,

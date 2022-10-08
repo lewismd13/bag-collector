@@ -1,5 +1,5 @@
-import { Item, itemAmount, print, retrieveItem } from "kolmafia";
-import { withProperty } from "libram";
+import { haveEquipped, Item, itemAmount, myClass, print, retrieveItem } from "kolmafia";
+import { $item, $stat, withProperty } from "libram";
 
 export function debug(message: string, color?: string): void {
   if (color) {
@@ -33,4 +33,11 @@ export function expectedBagsPerAdv(familiarWeight: number, itemDrop: number): nu
   const a = familiarWeight / 1000 + 0.04; // expected advs gained per combat
   const b = 0.25 / (1 - (0.2 + 0.8 * a)) + (0.75 * (0.05 * (1 + bonusItem))) / (1 - a); // expected bags from combat with a burnout or jock
   return (6 / 7) * b + (1 / 7) * ((2 / 5) * b + (3 / 5) * (0.2 + 0.8 * a) * b);
+}
+
+export function canPickpocket(): boolean {
+  return (
+    myClass().primestat === $stat`Moxie` ||
+    [$item`mime army infiltration glove`, $item`tiny black hole`].some((item) => haveEquipped(item))
+  );
 }
