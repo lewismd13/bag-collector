@@ -7,8 +7,8 @@ import { BaggoQuest } from "./tasks";
 
 export const args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
   advs: Args.number({
-    help: "Number of adventures to spend farming. Defaults to your current number of adventures.",
-    default: myAdventures(),
+    help: "Number of adventures to spend farming. A value of -1 will spend all of your adventures, including those generated.",
+    default: -1,
   }),
   itemvalue: Args.number({ help: "Value of a single duffel bag or van key.", default: 20_000 }),
   olfact: Args.string({
@@ -30,6 +30,7 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
 export const initialAdvs = myAdventures();
 
 export function turnsRemaining(): number {
+  if (args.advs === -1) return myAdventures();
   return args.advs - (initialAdvs - myAdventures());
 }
 

@@ -12510,8 +12510,8 @@ function main_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) 
 
 var args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
   advs: Args.number({
-    help: "Number of adventures to spend farming. Defaults to your current number of adventures.",
-    default: (0,external_kolmafia_namespaceObject.myAdventures)()
+    help: "Number of adventures to spend farming. A value of -1 will spend all of your adventures, including those generated.",
+    default: -1
   }),
   itemvalue: Args.number({
     help: "Value of a single duffel bag or van key.",
@@ -12533,6 +12533,7 @@ var args = Args.create("baggo", "A script for farming duffel bags and van keys."
 });
 var initialAdvs = (0,external_kolmafia_namespaceObject.myAdventures)();
 function turnsRemaining() {
+  if (args.advs === -1) return (0,external_kolmafia_namespaceObject.myAdventures)();
   return args.advs - (initialAdvs - (0,external_kolmafia_namespaceObject.myAdventures)());
 }
 function main(command) {
