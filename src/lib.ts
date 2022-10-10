@@ -1,4 +1,14 @@
-import { haveEquipped, Item, itemAmount, myClass, print, retrieveItem } from "kolmafia";
+import {
+  familiarWeight,
+  haveEquipped,
+  Item,
+  itemAmount,
+  myClass,
+  myFamiliar,
+  print,
+  retrieveItem,
+  weightAdjustment,
+} from "kolmafia";
 import { $item, $stat, withProperty } from "libram";
 
 export function debug(message: string, color?: string): void {
@@ -26,6 +36,14 @@ export function acquire(quantity: number, item: Item, maxPrice: number): number 
   const startAmount = itemAmount(item);
   withProperty("autoBuyPriceLimit", maxPrice, () => retrieveItem(item, quantity));
   return itemAmount(item) - startAmount;
+}
+
+export function expectedAdvsGainedPerCombat(): number {
+  const gnome = haveEquipped($item`gnomish housemaid's kgnee`)
+    ? familiarWeight(myFamiliar()) + weightAdjustment()
+    : 0;
+  const ring = haveEquipped($item`mafia thumb ring`) ? 0.04 : 0;
+  return gnome + ring;
 }
 
 export function expectedBagsPerAdv(familiarWeight: number, itemDrop: number): number {

@@ -18,6 +18,7 @@ import {
   $location,
   $monsters,
   $skill,
+  AutumnAton,
   FloristFriar,
   get,
   have,
@@ -79,6 +80,14 @@ export const BaggoQuest: Quest = {
       limit: { tries: 1 },
     },
     {
+      name: "Mummery Item",
+      ready: () => have($item`mumming trunk`),
+      completed: () => get("_mummeryMods").includes("Item Drop"),
+      do: () => cliExecute("mummery item"),
+      outfit: { familiar: $familiar`Reagnimated Gnome` },
+      limit: { tries: 1 },
+    },
+    {
       name: "Upgrade Saber",
       completed: () =>
         get("_saberMod") > 0 ||
@@ -92,6 +101,13 @@ export const BaggoQuest: Quest = {
       ready: () => SongBoom.have() && SongBoom.songChangesLeft() !== 0,
       completed: () => SongBoom.song() === "Food Vibrations",
       do: () => SongBoom.setSong("Food Vibrations"),
+      limit: { tries: 1 },
+    },
+    {
+      name: "Horsery",
+      ready: () => get("horseryAvailable"),
+      completed: () => get("_horsery") === "dark horse",
+      do: () => cliExecute("horsery dark"),
       limit: { tries: 1 },
     },
     {
@@ -118,6 +134,7 @@ export const BaggoQuest: Quest = {
         bubbleVision();
         coldMedicineCabinet();
         floristFriar();
+        AutumnAton.sendTo($location`The Neverending Party`);
         if (get("parkaMode").toLowerCase() !== "dilophosaur") cliExecute("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
       },
       do: $location`The Neverending Party`,
