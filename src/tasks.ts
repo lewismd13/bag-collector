@@ -23,7 +23,6 @@ import {
   get,
   have,
   Macro,
-  set,
   SongBoom,
 } from "libram";
 import { CombatStrategy } from "./engine/combat";
@@ -62,19 +61,18 @@ export const BaggoQuest: Quest = {
   tasks: [
     {
       name: "Acquire Kgnee",
-      after: [],
-      ready: () =>
-        have($familiar`Reagnimated Gnome`) &&
-        !have($item`gnomish housemaid's kgnee`) &&
-        !get("_baggo_checkedGnome", false),
+      ready: () => have($familiar`Reagnimated Gnome`),
       completed: () =>
-        !have($familiar`Reagnimated Gnome`) ||
-        have($item`gnomish housemaid's kgnee`) ||
-        get("_baggo_checkedGnome", false),
+        [
+          $item`gnomish swimmer's ears`,
+          $item`gnomish coal miner's lung`,
+          $item`gnomish tennis elbow`,
+          $item`gnomish housemaid's kgnee`,
+          $item`gnomish athlete's foot`,
+        ].some((item) => have(item)),
       do: (): void => {
         visitUrl("arena.php");
         runChoice(4);
-        set("_baggo_checkedGnome", true);
       },
       outfit: { familiar: $familiar`Reagnimated Gnome` },
       limit: { tries: 1 },

@@ -12622,7 +12622,7 @@ function seasonalItems() {
   return currentUpgrades().includes("cowcatcher") ? 2 : 1;
 }
 ;// CONCATENATED MODULE: ./src/tasks.ts
-var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, tasks_templateObject30;
+var tasks_templateObject, tasks_templateObject2, tasks_templateObject3, tasks_templateObject4, tasks_templateObject5, tasks_templateObject6, tasks_templateObject7, tasks_templateObject8, tasks_templateObject9, tasks_templateObject10, tasks_templateObject11, tasks_templateObject12, tasks_templateObject13, tasks_templateObject14, tasks_templateObject15, tasks_templateObject16, tasks_templateObject17, tasks_templateObject18, tasks_templateObject19, tasks_templateObject20, tasks_templateObject21, tasks_templateObject22, tasks_templateObject23, tasks_templateObject24, tasks_templateObject25, tasks_templateObject26, tasks_templateObject27, tasks_templateObject28, tasks_templateObject29, tasks_templateObject30, tasks_templateObject31, tasks_templateObject32;
 
 function tasks_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -12658,25 +12658,12 @@ var BaggoQuest = {
   name: "Baggo",
   tasks: [{
     name: "Acquire Kgnee",
-    after: [],
-    ready: () => have(template_string_$familiar(tasks_templateObject4 || (tasks_templateObject4 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))) && !have(template_string_$item(tasks_templateObject5 || (tasks_templateObject5 = tasks_taggedTemplateLiteral(["gnomish housemaid's kgnee"])))) && !property_get("_baggo_checkedGnome", false),
-    completed: () => !have(template_string_$familiar(tasks_templateObject6 || (tasks_templateObject6 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))) || have(template_string_$item(tasks_templateObject7 || (tasks_templateObject7 = tasks_taggedTemplateLiteral(["gnomish housemaid's kgnee"])))) || property_get("_baggo_checkedGnome", false),
+    ready: () => have(template_string_$familiar(tasks_templateObject4 || (tasks_templateObject4 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))),
+    completed: () => [template_string_$item(tasks_templateObject5 || (tasks_templateObject5 = tasks_taggedTemplateLiteral(["gnomish swimmer's ears"]))), template_string_$item(tasks_templateObject6 || (tasks_templateObject6 = tasks_taggedTemplateLiteral(["gnomish coal miner's lung"]))), template_string_$item(tasks_templateObject7 || (tasks_templateObject7 = tasks_taggedTemplateLiteral(["gnomish tennis elbow"]))), template_string_$item(tasks_templateObject8 || (tasks_templateObject8 = tasks_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))), template_string_$item(tasks_templateObject9 || (tasks_templateObject9 = tasks_taggedTemplateLiteral(["gnomish athlete's foot"])))].some(item => have(item)),
     do: () => {
       (0,external_kolmafia_namespaceObject.visitUrl)("arena.php");
       (0,external_kolmafia_namespaceObject.runChoice)(4);
-      _set("_baggo_checkedGnome", true);
     },
-    outfit: {
-      familiar: template_string_$familiar(tasks_templateObject8 || (tasks_templateObject8 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))
-    },
-    limit: {
-      tries: 1
-    }
-  }, {
-    name: "Mummery Item",
-    ready: () => have(template_string_$item(tasks_templateObject9 || (tasks_templateObject9 = tasks_taggedTemplateLiteral(["mumming trunk"])))),
-    completed: () => property_get("_mummeryMods").includes("Item Drop"),
-    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("mummery item"),
     outfit: {
       familiar: template_string_$familiar(tasks_templateObject10 || (tasks_templateObject10 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))
     },
@@ -12684,8 +12671,19 @@ var BaggoQuest = {
       tries: 1
     }
   }, {
+    name: "Mummery Item",
+    ready: () => have(template_string_$item(tasks_templateObject11 || (tasks_templateObject11 = tasks_taggedTemplateLiteral(["mumming trunk"])))),
+    completed: () => property_get("_mummeryMods").includes("Item Drop"),
+    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("mummery item"),
+    outfit: {
+      familiar: template_string_$familiar(tasks_templateObject12 || (tasks_templateObject12 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))
+    },
+    limit: {
+      tries: 1
+    }
+  }, {
     name: "Upgrade Saber",
-    completed: () => property_get("_saberMod") > 0 || !have(template_string_$item(tasks_templateObject11 || (tasks_templateObject11 = tasks_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))) || have(template_string_$item(tasks_templateObject12 || (tasks_templateObject12 = tasks_taggedTemplateLiteral(["June cleaver"])))),
+    completed: () => property_get("_saberMod") > 0 || !have(template_string_$item(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))) || have(template_string_$item(tasks_templateObject14 || (tasks_templateObject14 = tasks_taggedTemplateLiteral(["June cleaver"])))),
     do: () => (0,external_kolmafia_namespaceObject.cliExecute)("saber familiar"),
     limit: {
       tries: 1
@@ -12710,7 +12708,7 @@ var BaggoQuest = {
     name: "Handle Quest",
     completed: () => property_get("_questPartyFair") !== "unstarted",
     do: () => {
-      (0,external_kolmafia_namespaceObject.visitUrl)((0,external_kolmafia_namespaceObject.toUrl)($location(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["The Neverending Party"])))));
+      (0,external_kolmafia_namespaceObject.visitUrl)((0,external_kolmafia_namespaceObject.toUrl)($location(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["The Neverending Party"])))));
       if (["food", "booze"].includes(property_get("_questPartyFairQuest"))) (0,external_kolmafia_namespaceObject.runChoice)(1);else (0,external_kolmafia_namespaceObject.runChoice)(2);
     },
     limit: {
@@ -12718,8 +12716,8 @@ var BaggoQuest = {
     }
   }, {
     name: "Closet Massagers",
-    completed: () => (0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject14 || (tasks_templateObject14 = tasks_taggedTemplateLiteral(["personal massager"])))) === 0,
-    do: () => (0,external_kolmafia_namespaceObject.putCloset)((0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["personal massager"])))), template_string_$item(tasks_templateObject16 || (tasks_templateObject16 = tasks_taggedTemplateLiteral(["personal massager"])))),
+    completed: () => (0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject16 || (tasks_templateObject16 = tasks_taggedTemplateLiteral(["personal massager"])))) === 0,
+    do: () => (0,external_kolmafia_namespaceObject.putCloset)((0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject17 || (tasks_templateObject17 = tasks_taggedTemplateLiteral(["personal massager"])))), template_string_$item(tasks_templateObject18 || (tasks_templateObject18 = tasks_taggedTemplateLiteral(["personal massager"])))),
     limit: {
       tries: 1
     }
@@ -12731,17 +12729,17 @@ var BaggoQuest = {
       bubbleVision();
       coldMedicineCabinet();
       floristFriar();
-      sendTo($location(tasks_templateObject17 || (tasks_templateObject17 = tasks_taggedTemplateLiteral(["The Neverending Party"]))));
+      sendTo($location(tasks_templateObject19 || (tasks_templateObject19 = tasks_taggedTemplateLiteral(["The Neverending Party"]))));
       if (property_get("parkaMode").toLowerCase() !== "dilophosaur") (0,external_kolmafia_namespaceObject.cliExecute)("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
     },
-    do: $location(tasks_templateObject18 || (tasks_templateObject18 = tasks_taggedTemplateLiteral(["The Neverending Party"]))),
+    do: $location(tasks_templateObject20 || (tasks_templateObject20 = tasks_taggedTemplateLiteral(["The Neverending Party"]))),
     outfit: createFarmingOutfit,
-    effects: [$skill(tasks_templateObject19 || (tasks_templateObject19 = tasks_taggedTemplateLiteral(["Blood Bond"]))), $skill(tasks_templateObject20 || (tasks_templateObject20 = tasks_taggedTemplateLiteral(["Leash of Linguini"]))), $skill(tasks_templateObject21 || (tasks_templateObject21 = tasks_taggedTemplateLiteral(["Empathy of the Newt"]))), $skill(tasks_templateObject22 || (tasks_templateObject22 = tasks_taggedTemplateLiteral(["The Spirit of Taking"]))), $skill(tasks_templateObject23 || (tasks_templateObject23 = tasks_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), $skill(tasks_templateObject24 || (tasks_templateObject24 = tasks_taggedTemplateLiteral(["Singer's Faithful Ocelot"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
+    effects: [$skill(tasks_templateObject21 || (tasks_templateObject21 = tasks_taggedTemplateLiteral(["Blood Bond"]))), $skill(tasks_templateObject22 || (tasks_templateObject22 = tasks_taggedTemplateLiteral(["Leash of Linguini"]))), $skill(tasks_templateObject23 || (tasks_templateObject23 = tasks_taggedTemplateLiteral(["Empathy of the Newt"]))), $skill(tasks_templateObject24 || (tasks_templateObject24 = tasks_taggedTemplateLiteral(["The Spirit of Taking"]))), $skill(tasks_templateObject25 || (tasks_templateObject25 = tasks_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), $skill(tasks_templateObject26 || (tasks_templateObject26 = tasks_taggedTemplateLiteral(["Singer's Faithful Ocelot"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
     choices: {
       1324: 5
     },
-    combat: new combat_CombatStrategy().banish($monsters(tasks_templateObject25 || (tasks_templateObject25 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(Macro.step("pickpocket").if_("match \"unremarkable duffel bag\" || match \"van key\"", Macro.runaway()).trySkill($skill(tasks_templateObject26 || (tasks_templateObject26 = tasks_taggedTemplateLiteral(["Double Nanovision"])))).trySkill($skill(tasks_templateObject27 || (tasks_templateObject27 = tasks_taggedTemplateLiteral(["Double Nanovision"])))).trySkill($skill(tasks_templateObject28 || (tasks_templateObject28 = tasks_taggedTemplateLiteral(["Spit jurassic acid"])))), $monsters(tasks_templateObject29 || (tasks_templateObject29 = tasks_taggedTemplateLiteral(["burnout, jock"])))).macro(() => {
-      return args.olfact !== "none" ? Macro.if_(external_kolmafia_namespaceObject.Monster.get(args.olfact), Macro.trySkill($skill(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["Transcendent Olfaction"]))))) : new Macro();
+    combat: new combat_CombatStrategy().banish($monsters(tasks_templateObject27 || (tasks_templateObject27 = tasks_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).macro(Macro.step("pickpocket").if_("match \"unremarkable duffel bag\" || match \"van key\"", Macro.runaway()).trySkill($skill(tasks_templateObject28 || (tasks_templateObject28 = tasks_taggedTemplateLiteral(["Double Nanovision"])))).trySkill($skill(tasks_templateObject29 || (tasks_templateObject29 = tasks_taggedTemplateLiteral(["Double Nanovision"])))).trySkill($skill(tasks_templateObject30 || (tasks_templateObject30 = tasks_taggedTemplateLiteral(["Spit jurassic acid"])))), $monsters(tasks_templateObject31 || (tasks_templateObject31 = tasks_taggedTemplateLiteral(["burnout, jock"])))).macro(() => {
+      return args.olfact !== "none" ? Macro.if_(external_kolmafia_namespaceObject.Monster.get(args.olfact), Macro.trySkill($skill(tasks_templateObject32 || (tasks_templateObject32 = tasks_taggedTemplateLiteral(["Transcendent Olfaction"]))))) : new Macro();
     }).kill()
   }]
 };
