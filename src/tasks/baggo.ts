@@ -13,7 +13,6 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
-  $familiar,
   $item,
   $location,
   $monsters,
@@ -23,13 +22,12 @@ import {
   get,
   have,
   Macro,
-  SongBoom,
 } from "libram";
-import { CombatStrategy } from "./engine/combat";
-import { createFarmingOutfit } from "./engine/outfit";
-import { Quest } from "./engine/task";
-import { args, turnsRemaining } from "./main";
-import { bubbleVision } from "./potions";
+import { CombatStrategy } from "../engine/combat";
+import { createFarmingOutfit } from "../engine/outfit";
+import { Quest } from "../engine/task";
+import { args, turnsRemaining } from "../main";
+import { bubbleVision } from "../potions";
 
 export function coldMedicineCabinet(): void {
   if (getWorkshed() !== $item`cold medicine cabinet`) return;
@@ -43,63 +41,6 @@ export function coldMedicineCabinet(): void {
 export const BaggoQuest: Quest = {
   name: "Baggo",
   tasks: [
-    {
-      name: "Acquire Kgnee",
-      ready: () => have($familiar`Reagnimated Gnome`),
-      completed: () =>
-        [
-          $item`gnomish swimmer's ears`,
-          $item`gnomish coal miner's lung`,
-          $item`gnomish tennis elbow`,
-          $item`gnomish housemaid's kgnee`,
-          $item`gnomish athlete's foot`,
-        ].some((item) => have(item)),
-      do: (): void => {
-        visitUrl("arena.php");
-        runChoice(4);
-      },
-      outfit: { familiar: $familiar`Reagnimated Gnome` },
-      limit: { tries: 1 },
-    },
-    {
-      name: "Mummery Item",
-      ready: () => have($item`mumming trunk`),
-      completed: () => get("_mummeryMods").includes("Item Drop"),
-      do: () => cliExecute("mummery item"),
-      outfit: { familiar: $familiar`Reagnimated Gnome` },
-      limit: { tries: 1 },
-    },
-    {
-      name: "Upgrade Cosplay Saber",
-      ready: () => have($item`Fourth of May Cosplay Saber`),
-      completed: () => get("_saberMod") !== 0,
-      do: () => cliExecute("saber familiar"),
-      limit: { tries: 1 },
-    },
-    {
-      name: "SongBoom Buff",
-      ready: () => SongBoom.have() && SongBoom.songChangesLeft() > 0,
-      completed: () => SongBoom.song() === "Food Vibrations",
-      do: () => SongBoom.setSong("Food Vibrations"),
-      limit: { tries: 1 },
-    },
-    {
-      name: "Horsery",
-      ready: () => get("horseryAvailable"),
-      completed: () => get("_horsery") === "dark horse",
-      do: () => cliExecute("horsery dark"),
-      limit: { tries: 1 },
-    },
-    {
-      name: "Party Fair",
-      completed: () => get("_questPartyFair") !== "unstarted",
-      do: (): void => {
-        visitUrl(toUrl($location`The Neverending Party`));
-        if (["food", "booze"].includes(get("_questPartyFairQuest"))) runChoice(1);
-        else runChoice(2);
-      },
-      limit: { tries: 1 },
-    },
     {
       name: "Closet Massagers",
       completed: () => itemAmount($item`personal massager`) === 0,
@@ -126,8 +67,18 @@ export const BaggoQuest: Quest = {
       do: () => AutumnAton.sendTo($location`The Neverending Party`),
     },
     {
+      name: "Party Fair",
+      completed: () => get("_questPartyFair") !== "unstarted",
+      do: (): void => {
+        visitUrl(toUrl($location`The Neverending Party`));
+        if (["food", "booze"].includes(get("_questPartyFairQuest"))) runChoice(1);
+        else runChoice(2);
+      },
+      limit: { tries: 1 },
+    },
+    {
       name: "Collect Bags",
-      after: ["Acquire Kgnee", "Party Fair"],
+      after: ["Dailies/Kgnee", "Party Fair"],
       completed: () => turnsRemaining() <= 0,
       prepare: (): void => {
         bubbleVision();

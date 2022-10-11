@@ -3,7 +3,8 @@ import { myAdventures } from "kolmafia";
 import { effectResources } from "./effects";
 import { Engine } from "./engine/engine";
 import { setupPotions } from "./potions";
-import { BaggoQuest } from "./tasks";
+import { BaggoQuest } from "./tasks/baggo";
+import { DailiesQuest } from "./tasks/dailies";
 
 export const args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
   advs: Args.number({
@@ -41,7 +42,7 @@ export function main(command?: string): void {
     return;
   }
 
-  const tasks = getTasks([BaggoQuest]);
+  const tasks = getTasks([DailiesQuest, BaggoQuest]);
   const engine = new Engine(tasks);
 
   if (engine.getNextTask()) {
