@@ -86,17 +86,15 @@ export const BaggoQuest: Quest = {
       limit: { tries: 1 },
     },
     {
-      name: "Upgrade Saber",
-      completed: () =>
-        get("_saberMod") > 0 ||
-        !have($item`Fourth of May Cosplay Saber`) ||
-        have($item`June cleaver`),
+      name: "Upgrade Cosplay Saber",
+      ready: () => have($item`Fourth of May Cosplay Saber`),
+      completed: () => get("_saberMod") !== 0,
       do: () => cliExecute("saber familiar"),
       limit: { tries: 1 },
     },
     {
-      name: "Set Boombox",
-      ready: () => SongBoom.have() && SongBoom.songChangesLeft() !== 0,
+      name: "SongBoom Buff",
+      ready: () => SongBoom.have() && SongBoom.songChangesLeft() > 0,
       completed: () => SongBoom.song() === "Food Vibrations",
       do: () => SongBoom.setSong("Food Vibrations"),
       limit: { tries: 1 },
@@ -109,7 +107,7 @@ export const BaggoQuest: Quest = {
       limit: { tries: 1 },
     },
     {
-      name: "Handle Quest",
+      name: "Party Fair",
       completed: () => get("_questPartyFair") !== "unstarted",
       do: (): void => {
         visitUrl(toUrl($location`The Neverending Party`));
@@ -126,7 +124,7 @@ export const BaggoQuest: Quest = {
     },
     {
       name: "Collect Bags",
-      after: ["Acquire Kgnee", "Handle Quest"],
+      after: ["Acquire Kgnee", "Party Fair"],
       completed: () => turnsRemaining() <= 0,
       prepare: (): void => {
         bubbleVision();
