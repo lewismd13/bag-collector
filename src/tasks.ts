@@ -40,22 +40,6 @@ export function coldMedicineCabinet(): void {
   runChoice(5);
 }
 
-export function floristFriar(): void {
-  if (!FloristFriar.have()) return;
-  if (myLocation() !== $location`The Neverending Party`) return;
-  if (FloristFriar.isFull()) return;
-  for (const flower of [
-    FloristFriar.StealingMagnolia,
-    FloristFriar.AloeGuvnor,
-    FloristFriar.PitcherPlant,
-  ]) {
-    if (!get("_floristPlantsUsed").includes(flower.name)) {
-      visitUrl("place.php?whichplace=forestvillage&action=fv_friar");
-      runChoice(1, `plant=${flower.id}`);
-    }
-  }
-}
-
 export const BaggoQuest: Quest = {
   name: "Baggo",
   tasks: [
@@ -123,14 +107,31 @@ export const BaggoQuest: Quest = {
       limit: { tries: 1 },
     },
     {
+      name: "Florist Friar",
+      ready: () => FloristFriar.have() && myLocation() === $location`The Neverending Party`,
+      completed: () =>
+        FloristFriar.isFull() ||
+        [FloristFriar.StealingMagnolia, FloristFriar.AloeGuvnor, FloristFriar.PitcherPlant].every(
+          (flower) => !flower.available()
+        ),
+      do: () =>
+        [FloristFriar.StealingMagnolia, FloristFriar.AloeGuvnor, FloristFriar.PitcherPlant].forEach(
+          (flower) => flower.plant()
+        ),
+    },
+    {
+      name: "Autumn-Aton",
+      ready: () => AutumnAton.available(),
+      completed: () => AutumnAton.currentlyIn() !== null,
+      do: () => AutumnAton.sendTo($location`The Neverending Party`),
+    },
+    {
       name: "Collect Bags",
       after: ["Acquire Kgnee", "Party Fair"],
       completed: () => turnsRemaining() <= 0,
       prepare: (): void => {
         bubbleVision();
         coldMedicineCabinet();
-        floristFriar();
-        AutumnAton.sendTo($location`The Neverending Party`);
         if (get("parkaMode").toLowerCase() !== "dilophosaur") cliExecute("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
       },
       do: $location`The Neverending Party`,

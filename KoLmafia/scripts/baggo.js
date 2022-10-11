@@ -12189,6 +12189,63 @@ function bubbleVision() {
     (0,external_kolmafia_namespaceObject.use)(1, potion.item);
   }
 }
+;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2018/SongBoom.js
+var SongBoom_templateObject;
+
+function SongBoom_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+
+var SongBoom_item = template_string_$item(SongBoom_templateObject || (SongBoom_templateObject = SongBoom_taggedTemplateLiteral(["SongBoom\u2122 BoomBox"])));
+function SongBoom_have() {
+  return have(SongBoom_item);
+}
+var keywords = {
+  "Eye of the Giger": "spooky",
+  "Food Vibrations": "food",
+  "Remainin' Alive": "dr",
+  "These Fists Were Made for Punchin'": "damage",
+  "Total Eclipse of Your Meat": "meat"
+};
+var songBoomSongs = new Set(Object.keys(keywords));
+/**
+ * Current song.
+ */
+
+function song() {
+  var stored = property_get("boomBoxSong");
+  return songBoomSongs.has(stored) ? stored : null;
+}
+/**
+ * Song changes left today.
+ */
+
+function songChangesLeft() {
+  return property_get("_boomBoxSongsLeft");
+}
+/**
+ * Change the song.
+ * @param newSong Song to change to.
+ */
+
+function setSong(newSong) {
+  if (song() !== newSong) {
+    if (songChangesLeft() === 0) throw new Error("Out of song changes!");
+    (0,external_kolmafia_namespaceObject.cliExecute)("boombox ".concat(newSong ? keywords[newSong] : "none"));
+    return true;
+  } else {
+    return false;
+  }
+}
+/**
+ * Progress to next song drop (e.g. gathered meat-clip).
+ */
+
+function dropProgress() {
+  return get("_boomBoxFights");
+}
 ;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2013/Florist.js
 function Florist_toConsumableArray(arr) { return Florist_arrayWithoutHoles(arr) || Florist_iterableToArray(arr) || Florist_unsupportedIterableToArray(arr) || Florist_nonIterableSpread(); }
 
@@ -12442,63 +12499,6 @@ var UpSeaDaisy = new Flower("Up Sea Daisy", 40, "underwater", {
   Experience: 30
 });
 var Florist_all = Object.freeze([RabidDogwood, Rutabeggar, RadishRadish, Artichoker, SmokeRa, SkunkCabbage, DeadlyCinnamon, CeleryStalker, LettuceSpray, SeltzerWatercress, WarLily, StealingMagnolia, CannedSpinach, Impatiens, SpiderPlant, RedFern, BamBoo, ArcticMoss, AloeGuvnor, PitcherPlant, BlusteryPuffball, HornOfPlenty, WizardsWig, ShuffleTruffle, DisLichen, LooseMorels, FoulToadstool, Chillterelle, Portlybella, MaxHeadshroom, Spankton, Kelptomaniac, Crookweed, ElectricEelgrass, Duckweed, OrcaOrchid, Sargassum, SubSeaRose, Snori, UpSeaDaisy]);
-;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2018/SongBoom.js
-var SongBoom_templateObject;
-
-function SongBoom_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-
-
-
-
-var SongBoom_item = template_string_$item(SongBoom_templateObject || (SongBoom_templateObject = SongBoom_taggedTemplateLiteral(["SongBoom\u2122 BoomBox"])));
-function SongBoom_have() {
-  return have(SongBoom_item);
-}
-var keywords = {
-  "Eye of the Giger": "spooky",
-  "Food Vibrations": "food",
-  "Remainin' Alive": "dr",
-  "These Fists Were Made for Punchin'": "damage",
-  "Total Eclipse of Your Meat": "meat"
-};
-var songBoomSongs = new Set(Object.keys(keywords));
-/**
- * Current song.
- */
-
-function song() {
-  var stored = property_get("boomBoxSong");
-  return songBoomSongs.has(stored) ? stored : null;
-}
-/**
- * Song changes left today.
- */
-
-function songChangesLeft() {
-  return property_get("_boomBoxSongsLeft");
-}
-/**
- * Change the song.
- * @param newSong Song to change to.
- */
-
-function setSong(newSong) {
-  if (song() !== newSong) {
-    if (songChangesLeft() === 0) throw new Error("Out of song changes!");
-    (0,external_kolmafia_namespaceObject.cliExecute)("boombox ".concat(newSong ? keywords[newSong] : "none"));
-    return true;
-  } else {
-    return false;
-  }
-}
-/**
- * Progress to next song drop (e.g. gathered meat-clip).
- */
-
-function dropProgress() {
-  return get("_boomBoxFights");
-}
 ;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2022/AutumnAton.js
 
 
@@ -12529,7 +12529,7 @@ var use = () => (0,external_kolmafia_namespaceObject.visitUrl)("inv_use.php?pwd&
 
 
 function currentlyIn() {
-  return get("autumnatonQuestLocation");
+  return property_get("autumnatonQuestLocation");
 }
 /**
  * Deploy the autumn-aton to a location of your choosing.
@@ -12640,50 +12640,36 @@ function coldMedicineCabinet() {
   (0,external_kolmafia_namespaceObject.visitUrl)("campground.php?action=workshed");
   (0,external_kolmafia_namespaceObject.runChoice)(5);
 }
-function floristFriar() {
-  if (!Florist_have()) return;
-  if ((0,external_kolmafia_namespaceObject.myLocation)() !== $location(tasks_templateObject3 || (tasks_templateObject3 = tasks_taggedTemplateLiteral(["The Neverending Party"])))) return;
-  if (isFull()) return;
-
-  for (var _i = 0, _arr = [StealingMagnolia, AloeGuvnor, PitcherPlant]; _i < _arr.length; _i++) {
-    var flower = _arr[_i];
-
-    if (!property_get("_floristPlantsUsed").includes(flower.name)) {
-      (0,external_kolmafia_namespaceObject.visitUrl)("place.php?whichplace=forestvillage&action=fv_friar");
-      (0,external_kolmafia_namespaceObject.runChoice)(1, "plant=".concat(flower.id));
-    }
-  }
-}
 var BaggoQuest = {
   name: "Baggo",
   tasks: [{
     name: "Acquire Kgnee",
-    ready: () => have(template_string_$familiar(tasks_templateObject4 || (tasks_templateObject4 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))),
-    completed: () => [template_string_$item(tasks_templateObject5 || (tasks_templateObject5 = tasks_taggedTemplateLiteral(["gnomish swimmer's ears"]))), template_string_$item(tasks_templateObject6 || (tasks_templateObject6 = tasks_taggedTemplateLiteral(["gnomish coal miner's lung"]))), template_string_$item(tasks_templateObject7 || (tasks_templateObject7 = tasks_taggedTemplateLiteral(["gnomish tennis elbow"]))), template_string_$item(tasks_templateObject8 || (tasks_templateObject8 = tasks_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))), template_string_$item(tasks_templateObject9 || (tasks_templateObject9 = tasks_taggedTemplateLiteral(["gnomish athlete's foot"])))].some(item => have(item)),
+    ready: () => have(template_string_$familiar(tasks_templateObject3 || (tasks_templateObject3 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))),
+    completed: () => [template_string_$item(tasks_templateObject4 || (tasks_templateObject4 = tasks_taggedTemplateLiteral(["gnomish swimmer's ears"]))), template_string_$item(tasks_templateObject5 || (tasks_templateObject5 = tasks_taggedTemplateLiteral(["gnomish coal miner's lung"]))), template_string_$item(tasks_templateObject6 || (tasks_templateObject6 = tasks_taggedTemplateLiteral(["gnomish tennis elbow"]))), template_string_$item(tasks_templateObject7 || (tasks_templateObject7 = tasks_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))), template_string_$item(tasks_templateObject8 || (tasks_templateObject8 = tasks_taggedTemplateLiteral(["gnomish athlete's foot"])))].some(item => have(item)),
     do: () => {
       (0,external_kolmafia_namespaceObject.visitUrl)("arena.php");
       (0,external_kolmafia_namespaceObject.runChoice)(4);
     },
     outfit: {
-      familiar: template_string_$familiar(tasks_templateObject10 || (tasks_templateObject10 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))
+      familiar: template_string_$familiar(tasks_templateObject9 || (tasks_templateObject9 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))
     },
     limit: {
       tries: 1
     }
   }, {
     name: "Mummery Item",
-    ready: () => have(template_string_$item(tasks_templateObject11 || (tasks_templateObject11 = tasks_taggedTemplateLiteral(["mumming trunk"])))),
+    ready: () => have(template_string_$item(tasks_templateObject10 || (tasks_templateObject10 = tasks_taggedTemplateLiteral(["mumming trunk"])))),
     completed: () => property_get("_mummeryMods").includes("Item Drop"),
     do: () => (0,external_kolmafia_namespaceObject.cliExecute)("mummery item"),
     outfit: {
-      familiar: template_string_$familiar(tasks_templateObject12 || (tasks_templateObject12 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))
+      familiar: template_string_$familiar(tasks_templateObject11 || (tasks_templateObject11 = tasks_taggedTemplateLiteral(["Reagnimated Gnome"])))
     },
     limit: {
       tries: 1
     }
   }, {
     name: "Upgrade Cosplay Saber",
-    ready: () => have(template_string_$item(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))),
+    ready: () => have(template_string_$item(tasks_templateObject12 || (tasks_templateObject12 = tasks_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))),
     completed: () => property_get("_saberMod") !== 0,
     do: () => (0,external_kolmafia_namespaceObject.cliExecute)("saber familiar"),
     limit: {
@@ -12709,7 +12695,7 @@ var BaggoQuest = {
     name: "Party Fair",
     completed: () => property_get("_questPartyFair") !== "unstarted",
     do: () => {
-      (0,external_kolmafia_namespaceObject.visitUrl)((0,external_kolmafia_namespaceObject.toUrl)($location(tasks_templateObject14 || (tasks_templateObject14 = tasks_taggedTemplateLiteral(["The Neverending Party"])))));
+      (0,external_kolmafia_namespaceObject.visitUrl)((0,external_kolmafia_namespaceObject.toUrl)($location(tasks_templateObject13 || (tasks_templateObject13 = tasks_taggedTemplateLiteral(["The Neverending Party"])))));
       if (["food", "booze"].includes(property_get("_questPartyFairQuest"))) (0,external_kolmafia_namespaceObject.runChoice)(1);else (0,external_kolmafia_namespaceObject.runChoice)(2);
     },
     limit: {
@@ -12717,11 +12703,21 @@ var BaggoQuest = {
     }
   }, {
     name: "Closet Massagers",
-    completed: () => (0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["personal massager"])))) === 0,
-    do: () => (0,external_kolmafia_namespaceObject.putCloset)((0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject16 || (tasks_templateObject16 = tasks_taggedTemplateLiteral(["personal massager"])))), template_string_$item(tasks_templateObject17 || (tasks_templateObject17 = tasks_taggedTemplateLiteral(["personal massager"])))),
+    completed: () => (0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject14 || (tasks_templateObject14 = tasks_taggedTemplateLiteral(["personal massager"])))) === 0,
+    do: () => (0,external_kolmafia_namespaceObject.putCloset)((0,external_kolmafia_namespaceObject.itemAmount)(template_string_$item(tasks_templateObject15 || (tasks_templateObject15 = tasks_taggedTemplateLiteral(["personal massager"])))), template_string_$item(tasks_templateObject16 || (tasks_templateObject16 = tasks_taggedTemplateLiteral(["personal massager"])))),
     limit: {
       tries: 1
     }
+  }, {
+    name: "Florist Friar",
+    ready: () => Florist_have() && (0,external_kolmafia_namespaceObject.myLocation)() === $location(tasks_templateObject17 || (tasks_templateObject17 = tasks_taggedTemplateLiteral(["The Neverending Party"]))),
+    completed: () => isFull() || [StealingMagnolia, AloeGuvnor, PitcherPlant].every(flower => !flower.available()),
+    do: () => [StealingMagnolia, AloeGuvnor, PitcherPlant].forEach(flower => flower.plant())
+  }, {
+    name: "Autumn-Aton",
+    ready: () => available(),
+    completed: () => currentlyIn() !== null,
+    do: () => sendTo($location(tasks_templateObject18 || (tasks_templateObject18 = tasks_taggedTemplateLiteral(["The Neverending Party"]))))
   }, {
     name: "Collect Bags",
     after: ["Acquire Kgnee", "Party Fair"],
@@ -12729,8 +12725,6 @@ var BaggoQuest = {
     prepare: () => {
       bubbleVision();
       coldMedicineCabinet();
-      floristFriar();
-      sendTo($location(tasks_templateObject18 || (tasks_templateObject18 = tasks_taggedTemplateLiteral(["The Neverending Party"]))));
       if (property_get("parkaMode").toLowerCase() !== "dilophosaur") (0,external_kolmafia_namespaceObject.cliExecute)("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
     },
     do: $location(tasks_templateObject19 || (tasks_templateObject19 = tasks_taggedTemplateLiteral(["The Neverending Party"]))),
