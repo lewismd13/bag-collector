@@ -19,6 +19,7 @@ export function createFarmingOutfit(): OutfitSpec {
     familiar: $familiar`Reagnimated Gnome`,
     famequip: $item`gnomish housemaid's kgnee`,
     modifier: "0.0014familiar weight 0.04item drop",
+    avoid: [$item`time-twitching toolbelt`],
   };
 
   if (args.outfit !== "") {
