@@ -10886,161 +10886,99 @@ function orderByRoute(tasks, routing, ignore_missing_tasks) {
 
 
 
-// EXTERNAL MODULE: ./node_modules/libram/node_modules/core-js/modules/es.object.values.js
-var es_object_values = __webpack_require__(2231);
-// EXTERNAL MODULE: ./node_modules/lodash/isEqual.js
-var isEqual = __webpack_require__(7120);
-var isEqual_default = /*#__PURE__*/__webpack_require__.n(isEqual);
-;// CONCATENATED MODULE: ./node_modules/libram/dist/Copier.js
-function Copier_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+;// CONCATENATED MODULE: ./src/engine/combat.ts
+var engine_combat_templateObject, engine_combat_templateObject2, combat_templateObject3, combat_templateObject4, combat_templateObject5, combat_templateObject6, combat_templateObject7;
 
-function Copier_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function engine_combat_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-var Copier = function Copier(couldCopy, prepare, canCopy, copiedMonster, fightCopy) {
-  Copier_classCallCheck(this, Copier);
+function engine_combat_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  Copier_defineProperty(this, "couldCopy", void 0);
+function engine_combat_createClass(Constructor, protoProps, staticProps) { if (protoProps) engine_combat_defineProperties(Constructor.prototype, protoProps); if (staticProps) engine_combat_defineProperties(Constructor, staticProps); return Constructor; }
 
-  Copier_defineProperty(this, "prepare", void 0);
+function engine_combat_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  Copier_defineProperty(this, "canCopy", void 0);
+function engine_combat_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) engine_combat_setPrototypeOf(subClass, superClass); }
 
-  Copier_defineProperty(this, "copiedMonster", void 0);
+function engine_combat_setPrototypeOf(o, p) { engine_combat_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return engine_combat_setPrototypeOf(o, p); }
 
-  Copier_defineProperty(this, "fightCopy", null);
+function engine_combat_createSuper(Derived) { var hasNativeReflectConstruct = engine_combat_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = engine_combat_getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = engine_combat_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return engine_combat_possibleConstructorReturn(this, result); }; }
 
-  this.couldCopy = couldCopy;
-  this.prepare = prepare;
-  this.canCopy = canCopy;
-  this.copiedMonster = copiedMonster;
-  if (fightCopy) this.fightCopy = fightCopy;
-};
-;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2016/SourceTerminal.js
-var SourceTerminal_templateObject, SourceTerminal_templateObject2, SourceTerminal_templateObject3, SourceTerminal_templateObject4, SourceTerminal_templateObject5, SourceTerminal_templateObject6, SourceTerminal_templateObject7, SourceTerminal_templateObject8, SourceTerminal_templateObject9, SourceTerminal_templateObject10, SourceTerminal_templateObject11, SourceTerminal_templateObject12, SourceTerminal_templateObject13, SourceTerminal_templateObject14, SourceTerminal_templateObject15, SourceTerminal_templateObject16, SourceTerminal_templateObject17, SourceTerminal_templateObject18, SourceTerminal_templateObject19, SourceTerminal_templateObject20, SourceTerminal_templateObject21, SourceTerminal_templateObject22, SourceTerminal_templateObject23, SourceTerminal_templateObject24, SourceTerminal_templateObject25, SourceTerminal_templateObject26, SourceTerminal_templateObject27;
+function engine_combat_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return engine_combat_assertThisInitialized(self); }
 
-function SourceTerminal_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = SourceTerminal_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+function engine_combat_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function SourceTerminal_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return SourceTerminal_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return SourceTerminal_arrayLikeToArray(o, minLen); }
+function engine_combat_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
-function SourceTerminal_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function engine_combat_getPrototypeOf(o) { engine_combat_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return engine_combat_getPrototypeOf(o); }
 
-function SourceTerminal_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 
+var myActions = ["kill", "banish"];
+var combat_CombatStrategy = /*#__PURE__*/function (_BaseCombatStrategy$w) {
+  engine_combat_inherits(CombatStrategy, _BaseCombatStrategy$w);
 
+  var _super = engine_combat_createSuper(CombatStrategy);
 
+  function CombatStrategy() {
+    engine_combat_classCallCheck(this, CombatStrategy);
 
-
-
-
-var item = template_string_$item(SourceTerminal_templateObject || (SourceTerminal_templateObject = SourceTerminal_taggedTemplateLiteral(["Source terminal"])));
-function SourceTerminal_have() {
-  return haveInCampground(item);
-}
-/**
- * Buffs that can be acquired from Enhance
- *
- * - Items: +30% Item Drop
- * - Meat: +60% Meat Drop
- * - Init: +50% Initiative
- * - Critical: +10% chance of Critical Hit, +10% chance of Spell Critical Hit
- * - Damage: +5 Prismatic Damage
- * - Substats: +3 Stats Per Fight
- */
-
-var Buffs = {
-  Items: $effect(SourceTerminal_templateObject2 || (SourceTerminal_templateObject2 = SourceTerminal_taggedTemplateLiteral(["items.enh"]))),
-  Meat: $effect(SourceTerminal_templateObject3 || (SourceTerminal_templateObject3 = SourceTerminal_taggedTemplateLiteral(["meat.enh"]))),
-  Init: $effect(SourceTerminal_templateObject4 || (SourceTerminal_templateObject4 = SourceTerminal_taggedTemplateLiteral(["init.enh"]))),
-  Critical: $effect(SourceTerminal_templateObject5 || (SourceTerminal_templateObject5 = SourceTerminal_taggedTemplateLiteral(["critical.enh"]))),
-  Damage: $effect(SourceTerminal_templateObject6 || (SourceTerminal_templateObject6 = SourceTerminal_taggedTemplateLiteral(["damage.enh"]))),
-  Substats: $effect(SourceTerminal_templateObject7 || (SourceTerminal_templateObject7 = SourceTerminal_taggedTemplateLiteral(["substats.enh"])))
-};
-/**
- * Acquire a buff from the Source Terminal
- * @param buff The buff to acquire
- * @see Buffs
- */
-
-function enhance(buff) {
-  if (!Object.values(Buffs).includes(buff)) {
-    return false;
+    return _super.apply(this, arguments);
   }
 
-  return (0,external_kolmafia_namespaceObject.cliExecute)("terminal enhance ".concat(buff.name));
-}
-/**
- * Rollover buffs that can be acquired from Enquiry
- */
-
-var RolloverBuffs = {
-  /** +5 Familiar Weight */
-  Familiar: $effect(SourceTerminal_templateObject8 || (SourceTerminal_templateObject8 = SourceTerminal_taggedTemplateLiteral(["familiar.enq"]))),
-
-  /** +25 ML */
-  Monsters: $effect(SourceTerminal_templateObject9 || (SourceTerminal_templateObject9 = SourceTerminal_taggedTemplateLiteral(["monsters.enq"]))),
-
-  /** +5 Prismatic Resistance */
-  Protect: $effect(SourceTerminal_templateObject10 || (SourceTerminal_templateObject10 = SourceTerminal_taggedTemplateLiteral(["protect.enq"]))),
-
-  /** +100% Muscle, +100% Mysticality, +100% Moxie */
-  Stats: $effect(SourceTerminal_templateObject11 || (SourceTerminal_templateObject11 = SourceTerminal_taggedTemplateLiteral(["stats.enq"])))
-};
-/**
- * Acquire a buff from the Source Terminal
- * @param buff The buff to acquire
- * @see RolloverBuffs
- */
-
-function enquiry(rolloverBuff) {
-  if (!Object.values(RolloverBuffs).includes(rolloverBuff)) {
-    return false;
+  return CombatStrategy;
+}(CombatStrategy.withActions(myActions));
+var MyActionDefaults = /*#__PURE__*/function () {
+  function MyActionDefaults() {
+    engine_combat_classCallCheck(this, MyActionDefaults);
   }
 
-  return cliExecute("terminal enquiry ".concat(rolloverBuff.name));
-}
-/**
- * Skills that can be acquired from Enhance
- */
+  engine_combat_createClass(MyActionDefaults, [{
+    key: "kill",
+    value: function kill() {
+      return this.delevel().trySkill($skill(engine_combat_templateObject || (engine_combat_templateObject = engine_combat_taggedTemplateLiteral(["Sing Along"])))).trySkill($skill(engine_combat_templateObject2 || (engine_combat_templateObject2 = engine_combat_taggedTemplateLiteral(["Bowl Straight Up"])))).attack().repeat();
+    }
+  }, {
+    key: "banish",
+    value: function banish() {
+      return Macro.runaway(); // If no resource provided
+    }
+  }, {
+    key: "delevel",
+    value: function delevel() {
+      return Macro.trySkill($skill(combat_templateObject3 || (combat_templateObject3 = engine_combat_taggedTemplateLiteral(["Micrometeorite"])))).tryItem(template_string_$item(combat_templateObject4 || (combat_templateObject4 = engine_combat_taggedTemplateLiteral(["Rain-Doh indigo cup"])))).trySkill($skill(combat_templateObject5 || (combat_templateObject5 = engine_combat_taggedTemplateLiteral(["Summon Love Mosquito"])))).tryItem(template_string_$item(combat_templateObject6 || (combat_templateObject6 = engine_combat_taggedTemplateLiteral(["Time-Spinner"])))).tryItem(template_string_$item(combat_templateObject7 || (combat_templateObject7 = engine_combat_taggedTemplateLiteral(["HOA citation pad"]))));
+    }
+  }]);
 
-var Skills = {
-  /** Collect Source essence from enemies once per combat */
-  Extract: $skill(SourceTerminal_templateObject12 || (SourceTerminal_templateObject12 = SourceTerminal_taggedTemplateLiteral(["Extract"]))),
+  return MyActionDefaults;
+}();
+;// CONCATENATED MODULE: ./src/engine/outfit.ts
+var engine_outfit_templateObject, engine_outfit_templateObject2, engine_outfit_templateObject3, engine_outfit_templateObject4, engine_outfit_templateObject5, engine_outfit_templateObject6, engine_outfit_templateObject7, engine_outfit_templateObject8, engine_outfit_templateObject9, engine_outfit_templateObject10, engine_outfit_templateObject11, engine_outfit_templateObject12, engine_outfit_templateObject13, engine_outfit_templateObject14, engine_outfit_templateObject15, engine_outfit_templateObject16, engine_outfit_templateObject17, engine_outfit_templateObject18, engine_outfit_templateObject19, engine_outfit_templateObject20, engine_outfit_templateObject21, engine_outfit_templateObject22;
 
-  /** Stagger and create a wandering monster 1-3 times per day */
-  Digitize: $skill(SourceTerminal_templateObject13 || (SourceTerminal_templateObject13 = SourceTerminal_taggedTemplateLiteral(["Digitize"]))),
+function engine_outfit_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-  /** Stagger and deal 25% of enemy HP in damage once per combat */
-  Compress: $skill(SourceTerminal_templateObject14 || (SourceTerminal_templateObject14 = SourceTerminal_taggedTemplateLiteral(["Compress"]))),
+function engine_outfit_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = engine_outfit_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
-  /** Double monster's HP, attack, defence, attacks per round and item drops once per fight and once per day (five in The Source) */
-  Duplicate: $skill(SourceTerminal_templateObject15 || (SourceTerminal_templateObject15 = SourceTerminal_taggedTemplateLiteral(["Duplicate"]))),
+function engine_outfit_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return engine_outfit_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return engine_outfit_arrayLikeToArray(o, minLen); }
 
-  /** Causes government agent/Source Agent wanderer next turn once per combat and three times per day */
-  Portscan: $skill(SourceTerminal_templateObject16 || (SourceTerminal_templateObject16 = SourceTerminal_taggedTemplateLiteral(["Portscan"]))),
+function engine_outfit_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-  /** Increase Max MP by 100% and recover 1000 MP once per combat with a 30 turn cooldown */
-  Turbo: $skill(SourceTerminal_templateObject17 || (SourceTerminal_templateObject17 = SourceTerminal_taggedTemplateLiteral(["Turbo"])))
-};
-/**
- * Make a skill available.
- * The Source Terminal can give the player access to two skills at any time
- * @param skill Skill to learn
- * @see Skills
- */
 
-function educate(skills) {
-  var skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
-  if (isEqual_default()(skillsArray, getSkills())) return true;
 
-  var _iterator = SourceTerminal_createForOfIteratorHelper(skillsArray),
+
+function equipFirst(outfit, resources) {
+  var _iterator = engine_outfit_createForOfIteratorHelper(resources),
       _step;
 
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var skill = _step.value;
-      if (!Object.values(Skills).includes(skill)) return false;
-      (0,external_kolmafia_namespaceObject.cliExecute)("terminal educate ".concat(skill.name.toLowerCase(), ".edu"));
+      var _resource$equip, _resource$equip2;
+
+      var resource = _step.value;
+      if (!resource.available()) continue;
+      if (!outfit.canEquip((_resource$equip = resource.equip) !== null && _resource$equip !== void 0 ? _resource$equip : [])) continue;
+      if (!outfit.equip((_resource$equip2 = resource.equip) !== null && _resource$equip2 !== void 0 ? _resource$equip2 : [])) continue;
+      return resource;
     }
   } catch (err) {
     _iterator.e(err);
@@ -11048,262 +10986,49 @@ function educate(skills) {
     _iterator.f();
   }
 
-  return true;
+  return undefined;
 }
-/**
- * Return the Skills currently available from Source Terminal
- */
+function createFarmingOutfit() {
+  var spec = {
+    familiar: template_string_$familiar(engine_outfit_templateObject || (engine_outfit_templateObject = engine_outfit_taggedTemplateLiteral(["Reagnimated Gnome"]))),
+    famequip: template_string_$item(engine_outfit_templateObject2 || (engine_outfit_templateObject2 = engine_outfit_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))),
+    modifier: "0.0014familiar weight 0.04item drop"
+  };
 
-function getSkills() {
-  return ["sourceTerminalEducate1", "sourceTerminalEducate2"].map(p => property_get(p)).filter(s => s !== "").map(s => external_kolmafia_namespaceObject.Skill.get(s.slice(0, -4)));
-}
-function isCurrentSkill(skills) {
-  var currentSkills = getSkills();
-  var skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
-  return skillsArray.every(skill => currentSkills.includes(skill));
-}
-/**
- * Items that can be generated by the Source Terminal
- */
+  if (args.outfit !== "") {
+    spec.equip = (0,external_kolmafia_namespaceObject.outfitPieces)(args.outfit);
+    return spec;
+  } // Free runaway source
 
-var Items = new Map([[template_string_$item(SourceTerminal_templateObject18 || (SourceTerminal_templateObject18 = SourceTerminal_taggedTemplateLiteral(["browser cookie"]))), "food.ext"], [template_string_$item(SourceTerminal_templateObject19 || (SourceTerminal_templateObject19 = SourceTerminal_taggedTemplateLiteral(["hacked gibson"]))), "booze.ext"], [template_string_$item(SourceTerminal_templateObject20 || (SourceTerminal_templateObject20 = SourceTerminal_taggedTemplateLiteral(["Source shades"]))), "goggles.ext"], [template_string_$item(SourceTerminal_templateObject21 || (SourceTerminal_templateObject21 = SourceTerminal_taggedTemplateLiteral(["Source terminal GRAM chip"]))), "gram.ext"], [template_string_$item(SourceTerminal_templateObject22 || (SourceTerminal_templateObject22 = SourceTerminal_taggedTemplateLiteral(["Source terminal PRAM chip"]))), "pram.ext"], [template_string_$item(SourceTerminal_templateObject23 || (SourceTerminal_templateObject23 = SourceTerminal_taggedTemplateLiteral(["Source terminal SPAM chip"]))), "spam.ext"], [template_string_$item(SourceTerminal_templateObject24 || (SourceTerminal_templateObject24 = SourceTerminal_taggedTemplateLiteral(["Source terminal CRAM chip"]))), "cram.ext"], [template_string_$item(SourceTerminal_templateObject25 || (SourceTerminal_templateObject25 = SourceTerminal_taggedTemplateLiteral(["Source terminal DRAM chip"]))), "dram.ext"], [template_string_$item(SourceTerminal_templateObject26 || (SourceTerminal_templateObject26 = SourceTerminal_taggedTemplateLiteral(["Source terminal TRAM chip"]))), "tram.ext"], [template_string_$item(SourceTerminal_templateObject27 || (SourceTerminal_templateObject27 = SourceTerminal_taggedTemplateLiteral(["software bug"]))), "familiar.ext"]]);
-/**
- * Collect an item from the Source Terminal (up to three times a day)
- * @param item Item to collect
- * @see Items
- */
 
-function extrude(item) {
-  var fileName = Items.get(item);
-  if (!fileName) return false;
-  return cliExecute("terminal extrude ".concat(fileName));
-}
-/**
- * Return chips currently installed to player's Source Terminal
- */
+  var toEquip = [have(template_string_$item(engine_outfit_templateObject3 || (engine_outfit_templateObject3 = engine_outfit_taggedTemplateLiteral(["Greatest American Pants"])))) ? template_string_$item(engine_outfit_templateObject4 || (engine_outfit_templateObject4 = engine_outfit_taggedTemplateLiteral(["Greatest American Pants"]))) : template_string_$item(engine_outfit_templateObject5 || (engine_outfit_templateObject5 = engine_outfit_taggedTemplateLiteral(["navel ring of navel gazing"])))]; // Pickpocket source
 
-function getChips() {
-  return property_get("sourceTerminalChips").split(",");
-}
-/**
- * Return number of times digitize was cast today
- */
-
-function getDigitizeUses() {
-  return property_get("_sourceTerminalDigitizeUses");
-}
-/**
- * Return Monster that is currently digitized, else null
- */
-
-function getDigitizeMonster() {
-  return property_get("_sourceTerminalDigitizeMonster");
-}
-/**
- * Return number of digitized monsters encountered since it was last cast
- */
-
-function getDigitizeMonsterCount() {
-  return get("_sourceTerminalDigitizeMonsterCount");
-}
-/**
- * Return maximum number of digitizes player can cast
- */
-
-function getMaximumDigitizeUses() {
-  var chips = getChips();
-  return 1 + (chips.includes("TRAM") ? 1 : 0) + (chips.includes("TRIGRAM") ? 1 : 0);
-}
-/**
- * Returns the current day's number of remaining digitize uses
- */
-
-function getDigitizeUsesRemaining() {
-  return getMaximumDigitizeUses() - getDigitizeUses();
-}
-/**
- * Returns whether the player could theoretically cast Digitize
- */
-
-function couldDigitize() {
-  return getDigitizeUses() < getMaximumDigitizeUses();
-}
-function prepareDigitize() {
-  if (!isCurrentSkill(Skills.Digitize)) {
-    return educate(Skills.Digitize);
+  if ($classes(engine_outfit_templateObject6 || (engine_outfit_templateObject6 = engine_outfit_taggedTemplateLiteral(["Disco Bandit, Accordion Thief"]))).includes((0,external_kolmafia_namespaceObject.myClass)())) {
+    if (have(template_string_$item(engine_outfit_templateObject7 || (engine_outfit_templateObject7 = engine_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))))) toEquip.push(template_string_$item(engine_outfit_templateObject8 || (engine_outfit_templateObject8 = engine_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))));
+  } else if ((0,external_kolmafia_namespaceObject.canEquip)(template_string_$item(engine_outfit_templateObject9 || (engine_outfit_templateObject9 = engine_outfit_taggedTemplateLiteral(["mime army infiltration glove"]))))) {
+    toEquip.push(template_string_$item(engine_outfit_templateObject10 || (engine_outfit_templateObject10 = engine_outfit_taggedTemplateLiteral(["mime army infiltration glove"]))));
+    if (have(template_string_$item(engine_outfit_templateObject11 || (engine_outfit_templateObject11 = engine_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))))) toEquip.push(template_string_$item(engine_outfit_templateObject12 || (engine_outfit_templateObject12 = engine_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))));
+  } else {
+    toEquip.push(template_string_$item(engine_outfit_templateObject13 || (engine_outfit_templateObject13 = engine_outfit_taggedTemplateLiteral(["tiny black hole"]))));
   }
 
-  return true;
-}
-/**
- * Returns whether the player can cast Digitize immediately
- * This only considers whether the player has learned the skill
- * and has sufficient daily casts remaining, not whether they have sufficient MP
- */
+  spec.equip = toEquip;
 
-function canDigitize() {
-  return couldDigitize() && getSkills().includes(Skills.Digitize);
-}
-var Digitize = new Copier(() => couldDigitize(), () => prepareDigitize(), () => canDigitize(), () => getDigitizeMonster());
-/**
- * Return number of times duplicate was cast today
- */
-
-function getDuplicateUses() {
-  return get("_sourceTerminalDuplicateUses");
-}
-/**
- * Return number of times enhance was cast today
- */
-
-function getEnhanceUses() {
-  return property_get("_sourceTerminalEnhanceUses");
-}
-/**
- * Return number of times portscan was cast today
- */
-
-function getPortscanUses() {
-  return get("_sourceTerminalPortscanUses");
-}
-/**
- * Returns maximum number of times duplicate can be used
- */
-
-function maximumDuplicateUses() {
-  return myPath() === Path.get("The Source") ? 5 : 1;
-}
-/**
- * Returns number of remaining times duplicate can be used today
- */
-
-function duplicateUsesRemaining() {
-  return maximumDuplicateUses() - getDuplicateUses();
-}
-/**
- * Return number of times enhance can be used per day
- */
-
-function maximumEnhanceUses() {
-  return 1 + getChips().filter(chip => ["CRAM", "SCRAM"].includes(chip)).length;
-}
-/**
- * Returns number of remaining times enahce can be used today
- */
-
-function enhanceUsesRemaining() {
-  return maximumEnhanceUses() - getEnhanceUses();
-}
-/**
- * Returns expected duration of an enhance buff
- */
-
-function enhanceBuffDuration() {
-  return 25 + get("sourceTerminalPram") * 5 + (getChips().includes("INGRAM") ? 25 : 0);
-}
-/**
- * Returns expected duration of an enquiry buff
- */
-
-function enquiryBuffDuration() {
-  return 50 + 10 * get("sourceTerminalGram") + (getChips().includes("DIAGRAM") ? 50 : 0);
-}
-;// CONCATENATED MODULE: ./node_modules/libram/dist/modifierTypes.js
-// THIS FILE IS AUTOMATICALLY GENERATED. See tools/parseModifiers.ts for more information
-var booleanModifiers = ["Softcore Only", "Single Equip", "Never Fumble", "Weakens Monster", "Free Pull", "Variable", "Nonstackable Watch", "Cold Immunity", "Hot Immunity", "Sleaze Immunity", "Spooky Immunity", "Stench Immunity", "Cold Vulnerability", "Hot Vulnerability", "Sleaze Vulnerability", "Spooky Vulnerability", "Stench Vulnerability", "Moxie Controls MP", "Moxie May Control MP", "Four Songs", "Adventure Underwater", "Underwater Familiar", "Generic", "Unarmed", "No Pull", "Lasts Until Rollover", "Attacks Can't Miss", "Pirate", "Breakable", "Drops Items", "Drops Meat"];
-var classModifiers = ["Class"];
-var numericModifiers = ["Familiar Weight", "Monster Level", "Combat Rate", "Initiative", "Experience", "Item Drop", "Meat Drop", "Damage Absorption", "Damage Reduction", "Cold Resistance", "Hot Resistance", "Sleaze Resistance", "Spooky Resistance", "Stench Resistance", "Mana Cost", "Moxie", "Moxie Percent", "Muscle", "Muscle Percent", "Mysticality", "Mysticality Percent", "Maximum HP", "Maximum HP Percent", "Maximum MP", "Maximum MP Percent", "Weapon Damage", "Ranged Damage", "Spell Damage", "Spell Damage Percent", "Cold Damage", "Hot Damage", "Sleaze Damage", "Spooky Damage", "Stench Damage", "Cold Spell Damage", "Hot Spell Damage", "Sleaze Spell Damage", "Spooky Spell Damage", "Stench Spell Damage", "Underwater Combat Rate", "Fumble", "HP Regen Min", "HP Regen Max", "MP Regen Min", "MP Regen Max", "Adventures", "Familiar Weight Percent", "Weapon Damage Percent", "Ranged Damage Percent", "Stackable Mana Cost", "Hobo Power", "Base Resting HP", "Resting HP Percent", "Bonus Resting HP", "Base Resting MP", "Resting MP Percent", "Bonus Resting MP", "Critical Hit Percent", "PvP Fights", "Volleyball", "Sombrero", "Leprechaun", "Fairy", "Meat Drop Penalty", "Hidden Familiar Weight", "Item Drop Penalty", "Initiative Penalty", "Food Drop", "Booze Drop", "Hat Drop", "Weapon Drop", "Offhand Drop", "Shirt Drop", "Pants Drop", "Accessory Drop", "Volleyball Effectiveness", "Sombrero Effectiveness", "Leprechaun Effectiveness", "Fairy Effectiveness", "Familiar Weight Cap", "Slime Resistance", "Slime Hates It", "Spell Critical Percent", "Muscle Experience", "Mysticality Experience", "Moxie Experience", "Effect Duration", "Candy Drop", "DB Combat Damage", "Sombrero Bonus", "Familiar Experience", "Sporadic Meat Drop", "Sporadic Item Drop", "Meat Bonus", "Pickpocket Chance", "Combat Mana Cost", "Muscle Experience Percent", "Mysticality Experience Percent", "Moxie Experience Percent", "Minstrel Level", "Muscle Limit", "Mysticality Limit", "Moxie Limit", "Song Duration", "Prismatic Damage", "Smithsness", "Supercold Resistance", "Reduce Enemy Defense", "Pool Skill", "Surgeonosity", "Familiar Damage", "Gear Drop", "Maximum Hooch", "Water Level", "Crimbot Outfit Power", "Familiar Tuning Muscle", "Familiar Tuning Mysticality", "Familiar Tuning Moxie", "Random Monster Modifiers", "Luck", "Othello Skill", "Disco Style", "Rollover Effect Duration", "Sixgun Damage", "Fishing Skill", "Additional Song", "Sprinkle Drop", "Absorb Adventures", "Absorb Stats", "Rubee Drop", "Kruegerand Drop", "WarBear Armor Penetration", "Clowniness", "Maximum PP", "Plumber Power", "Drippy Damage", "Drippy Resistance", "Energy", "Scrap", "Familiar Action Bonus", "Water"];
-var effectModifiers = ["Effect", "Rollover Effect"];
-var monsterModifiers = ["Avatar"];
-var skillModifiers = ["Skill"];
-var statModifiers = ["Plumber Stat"];
-var stringModifiers = ["Intrinsic Effect", "Equalize", "Wiki Name", "Modifiers", "Outfit", "Stat Tuning", "Equips On", "Familiar Effect", "Jiggle", "Equalize Muscle", "Equalize Mysticality", "Equalize Moxie", "Floor Buffed Muscle", "Floor Buffed Mysticality", "Floor Buffed Moxie"];
-;// CONCATENATED MODULE: ./node_modules/libram/dist/modifier.js
-function modifier_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function modifier_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { modifier_ownKeys(Object(source), true).forEach(function (key) { modifier_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { modifier_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function modifier_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-
-
-
-function modifier_get(name, subject) {
-  if (arrayContains(name, booleanModifiers)) {
-    return subject === undefined ? (0,external_kolmafia_namespaceObject.booleanModifier)(name) : (0,external_kolmafia_namespaceObject.booleanModifier)(subject, name);
+  if (have(template_string_$item(engine_outfit_templateObject14 || (engine_outfit_templateObject14 = engine_outfit_taggedTemplateLiteral(["Jurassic Parka"])))) && !have($effect(engine_outfit_templateObject15 || (engine_outfit_templateObject15 = engine_outfit_taggedTemplateLiteral(["Everything Looks Yellow"]))))) {
+    spec.shirt = template_string_$item(engine_outfit_templateObject16 || (engine_outfit_templateObject16 = engine_outfit_taggedTemplateLiteral(["Jurassic Parka"])));
   }
 
-  if (arrayContains(name, classModifiers)) {
-    return (0,external_kolmafia_namespaceObject.classModifier)(subject, name);
+  if (have(template_string_$item(engine_outfit_templateObject17 || (engine_outfit_templateObject17 = engine_outfit_taggedTemplateLiteral(["June cleaver"]))))) {
+    spec.weapon = template_string_$item(engine_outfit_templateObject18 || (engine_outfit_templateObject18 = engine_outfit_taggedTemplateLiteral(["June cleaver"])));
+  } else if (have(template_string_$item(engine_outfit_templateObject19 || (engine_outfit_templateObject19 = engine_outfit_taggedTemplateLiteral(["Fourth of May Cosplay Saber"]))))) {
+    spec.weapon = template_string_$item(engine_outfit_templateObject20 || (engine_outfit_templateObject20 = engine_outfit_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])));
   }
 
-  if (arrayContains(name, effectModifiers)) {
-    return (0,external_kolmafia_namespaceObject.effectModifier)(subject, name);
-  }
-
-  if (arrayContains(name, monsterModifiers)) {
-    return (0,external_kolmafia_namespaceObject.monsterModifier)(subject, name);
-  }
-
-  if (arrayContains(name, numericModifiers)) {
-    return subject === undefined ? (0,external_kolmafia_namespaceObject.numericModifier)(name) : (0,external_kolmafia_namespaceObject.numericModifier)(subject, name);
-  }
-
-  if (arrayContains(name, skillModifiers)) {
-    return (0,external_kolmafia_namespaceObject.skillModifier)(subject, name);
-  }
-
-  if (arrayContains(name, stringModifiers)) {
-    return subject === undefined ? (0,external_kolmafia_namespaceObject.stringModifier)(name) : (0,external_kolmafia_namespaceObject.stringModifier)(subject, name);
-  }
-
-  if (arrayContains(name, statModifiers)) {
-    return (0,external_kolmafia_namespaceObject.statModifier)(subject, name);
-  }
+  if (have(template_string_$item(engine_outfit_templateObject21 || (engine_outfit_templateObject21 = engine_outfit_taggedTemplateLiteral(["mafia thumb ring"]))))) spec.acc1 = template_string_$item(engine_outfit_templateObject22 || (engine_outfit_templateObject22 = engine_outfit_taggedTemplateLiteral(["mafia thumb ring"])));
+  return spec;
 }
-/**
- * Merge two Modifiers objects into one, summing all numeric modifiers, ||ing all boolean modifiers, and otherwise letting the second object overwrite the first.
- * @param modifiers1 Modifiers objects to be merged onto.
- * @param modifiers2 Modifiers object to merge.
- * @returns A single Modifiers object obtained by merging.
- */
-
-function pairwiseMerge(modifiers1, modifiers2) {
-  var returnValue = modifier_objectSpread(modifier_objectSpread({}, modifiers1), modifiers2);
-
-  for (var modifier in modifiers1) {
-    if (Array.from(Object.values(modifiers2)).includes(modifier)) {
-      if (arrayContains(modifier, numericModifiers)) {
-        var _modifiers1$modifier, _modifiers2$modifier;
-
-        returnValue[modifier] = ((_modifiers1$modifier = modifiers1[modifier]) !== null && _modifiers1$modifier !== void 0 ? _modifiers1$modifier : 0) + ((_modifiers2$modifier = modifiers2[modifier]) !== null && _modifiers2$modifier !== void 0 ? _modifiers2$modifier : 0);
-      }
-
-      if (arrayContains(modifier, booleanModifiers)) {
-        var _modifiers1$modifier2, _modifiers2$modifier2;
-
-        returnValue[modifier] = ((_modifiers1$modifier2 = modifiers1[modifier]) !== null && _modifiers1$modifier2 !== void 0 ? _modifiers1$modifier2 : false) || ((_modifiers2$modifier2 = modifiers2[modifier]) !== null && _modifiers2$modifier2 !== void 0 ? _modifiers2$modifier2 : false);
-      }
-    }
-  }
-
-  return returnValue;
-}
-/**
- * Merge arbitrarily many Modifiers objects into one, summing all numeric modifiers, and ||ing all boolean modifiers.
- * @param modifierss Modifiers objects to be merged together.
- * @returns A single Modifiers object obtained by merging.
- */
-
-
-function mergeModifiers() {
-  for (var _len = arguments.length, modifierss = new Array(_len), _key = 0; _key < _len; _key++) {
-    modifierss[_key] = arguments[_key];
-  }
-
-  return modifierss.reduce((a, b) => pairwiseMerge(a, b), {});
-}
+// EXTERNAL MODULE: ./node_modules/libram/node_modules/core-js/modules/es.object.values.js
+var es_object_values = __webpack_require__(2231);
 ;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2017/AsdonMartin.js
 var AsdonMartin_templateObject, AsdonMartin_templateObject2, AsdonMartin_templateObject3, AsdonMartin_templateObject4, AsdonMartin_templateObject5, AsdonMartin_templateObject6, AsdonMartin_templateObject7, AsdonMartin_templateObject8, AsdonMartin_templateObject9, AsdonMartin_templateObject10, AsdonMartin_templateObject11, AsdonMartin_templateObject12, AsdonMartin_templateObject13;
 
@@ -11552,205 +11277,6 @@ function drive(style) {
   }
 
   return (0,external_kolmafia_namespaceObject.haveEffect)(style) >= turns;
-}
-;// CONCATENATED MODULE: ./src/effects.ts
-var effects_templateObject, effects_templateObject2, effects_templateObject3, effects_templateObject4, effects_templateObject5, effects_templateObject6, effects_templateObject7, effects_templateObject8, effects_templateObject9, effects_templateObject10, effects_templateObject11, effects_templateObject12, effects_templateObject13, effects_templateObject14, effects_templateObject15, effects_templateObject16;
-
-function effects_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-
-
-
-var effectResources = [{
-  name: "Fortune",
-  available: () => template_string_$item(effects_templateObject || (effects_templateObject = effects_taggedTemplateLiteral(["Clan Carnival Game"]))).name in (0,external_kolmafia_namespaceObject.getClanLounge)() && !property_get("_clanFortuneBuffUsed"),
-  do: () => (0,external_kolmafia_namespaceObject.cliExecute)("fortune buff item")
-}, {
-  name: "Enhance",
-  available: () => SourceTerminal_have() && getEnhanceUses() < 3,
-  do: () => {
-    while (getEnhanceUses() < 3) {
-      enhance($effect(effects_templateObject2 || (effects_templateObject2 = effects_taggedTemplateLiteral(["items.enh"]))));
-    }
-  }
-}, {
-  name: "KGB",
-  available: () => have(template_string_$item(effects_templateObject3 || (effects_templateObject3 = effects_taggedTemplateLiteral(["Kremlin's Greatest Briefcase"])))) && property_get("_kgbClicksUsed") < 22,
-  do: () => {
-    var buffTries = Math.ceil((22 - property_get("_kgbClicksUsed")) / 3);
-    (0,external_kolmafia_namespaceObject.cliExecute)("Briefcase buff ".concat(new Array(buffTries).fill("item").join(" ")));
-  }
-}, {
-  name: "Favorite Bird",
-  available: () => have(template_string_$item(effects_templateObject4 || (effects_templateObject4 = effects_taggedTemplateLiteral(["Bird-a-Day calendar"])))) && !property_get("_favoriteBirdVisited") && (modifier_get("Item Drop", $effect(effects_templateObject5 || (effects_templateObject5 = effects_taggedTemplateLiteral(["Blessing of your favorite Bird"])))) > 0 || modifier_get("Familiar Weight", $effect(effects_templateObject6 || (effects_templateObject6 = effects_taggedTemplateLiteral(["Blessing of your favorite Bird"])))) > 0),
-  prepare: () => {
-    if (!have($skill(effects_templateObject7 || (effects_templateObject7 = effects_taggedTemplateLiteral(["Seek out a Bird"]))))) {
-      (0,external_kolmafia_namespaceObject.use)(1, template_string_$item(effects_templateObject8 || (effects_templateObject8 = effects_taggedTemplateLiteral(["Bird-a-Day calendar"]))));
-    }
-  },
-  do: () => (0,external_kolmafia_namespaceObject.useSkill)($skill(effects_templateObject9 || (effects_templateObject9 = effects_taggedTemplateLiteral(["Visit your Favorite Bird"]))))
-}, {
-  name: "Bird",
-  available: () => property_get("_birdsSoughtToday") < 6 && (modifier_get("Item Drop", $effect(effects_templateObject10 || (effects_templateObject10 = effects_taggedTemplateLiteral(["Blessing of the Bird"])))) > 0 || modifier_get("Familiar Weight", $effect(effects_templateObject11 || (effects_templateObject11 = effects_taggedTemplateLiteral(["Blessing of the Bird"])))) > 0),
-  prepare: () => {
-    if (!have($skill(effects_templateObject12 || (effects_templateObject12 = effects_taggedTemplateLiteral(["Seek out a Bird"]))))) {
-      (0,external_kolmafia_namespaceObject.use)(1, template_string_$item(effects_templateObject13 || (effects_templateObject13 = effects_taggedTemplateLiteral(["Bird-a-Day calendar"]))));
-    }
-  },
-  do: () => (0,external_kolmafia_namespaceObject.useSkill)($skill(effects_templateObject14 || (effects_templateObject14 = effects_taggedTemplateLiteral(["Seek out a Bird"]))), 6 - property_get("_birdsSoughtToday"))
-}, {
-  name: "Pool Table",
-  available: () => template_string_$item(effects_templateObject15 || (effects_templateObject15 = effects_taggedTemplateLiteral(["Clan pool table"]))).name in (0,external_kolmafia_namespaceObject.getClanLounge)() && property_get("_poolGames") < 3,
-  do: () => {
-    while (property_get("_poolGames") < 3) {
-      (0,external_kolmafia_namespaceObject.cliExecute)("pool stylish");
-    }
-  }
-}, {
-  name: "Asdon Martin",
-  available: () => installed(),
-  do: () => drive($effect(effects_templateObject16 || (effects_templateObject16 = effects_taggedTemplateLiteral(["Driving Observantly"]))), turnsRemaining())
-}];
-;// CONCATENATED MODULE: ./src/engine/combat.ts
-var engine_combat_templateObject, engine_combat_templateObject2, combat_templateObject3, combat_templateObject4, combat_templateObject5, combat_templateObject6, combat_templateObject7;
-
-function engine_combat_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-function engine_combat_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function engine_combat_createClass(Constructor, protoProps, staticProps) { if (protoProps) engine_combat_defineProperties(Constructor.prototype, protoProps); if (staticProps) engine_combat_defineProperties(Constructor, staticProps); return Constructor; }
-
-function engine_combat_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function engine_combat_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) engine_combat_setPrototypeOf(subClass, superClass); }
-
-function engine_combat_setPrototypeOf(o, p) { engine_combat_setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return engine_combat_setPrototypeOf(o, p); }
-
-function engine_combat_createSuper(Derived) { var hasNativeReflectConstruct = engine_combat_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = engine_combat_getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = engine_combat_getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return engine_combat_possibleConstructorReturn(this, result); }; }
-
-function engine_combat_possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return engine_combat_assertThisInitialized(self); }
-
-function engine_combat_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function engine_combat_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function engine_combat_getPrototypeOf(o) { engine_combat_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return engine_combat_getPrototypeOf(o); }
-
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
-
-var myActions = ["kill", "banish"];
-var combat_CombatStrategy = /*#__PURE__*/function (_BaseCombatStrategy$w) {
-  engine_combat_inherits(CombatStrategy, _BaseCombatStrategy$w);
-
-  var _super = engine_combat_createSuper(CombatStrategy);
-
-  function CombatStrategy() {
-    engine_combat_classCallCheck(this, CombatStrategy);
-
-    return _super.apply(this, arguments);
-  }
-
-  return CombatStrategy;
-}(CombatStrategy.withActions(myActions));
-var MyActionDefaults = /*#__PURE__*/function () {
-  function MyActionDefaults() {
-    engine_combat_classCallCheck(this, MyActionDefaults);
-  }
-
-  engine_combat_createClass(MyActionDefaults, [{
-    key: "kill",
-    value: function kill() {
-      return this.delevel().trySkill($skill(engine_combat_templateObject || (engine_combat_templateObject = engine_combat_taggedTemplateLiteral(["Sing Along"])))).trySkill($skill(engine_combat_templateObject2 || (engine_combat_templateObject2 = engine_combat_taggedTemplateLiteral(["Bowl Straight Up"])))).attack().repeat();
-    }
-  }, {
-    key: "banish",
-    value: function banish() {
-      return Macro.runaway(); // If no resource provided
-    }
-  }, {
-    key: "delevel",
-    value: function delevel() {
-      return Macro.trySkill($skill(combat_templateObject3 || (combat_templateObject3 = engine_combat_taggedTemplateLiteral(["Micrometeorite"])))).tryItem(template_string_$item(combat_templateObject4 || (combat_templateObject4 = engine_combat_taggedTemplateLiteral(["Rain-Doh indigo cup"])))).trySkill($skill(combat_templateObject5 || (combat_templateObject5 = engine_combat_taggedTemplateLiteral(["Summon Love Mosquito"])))).tryItem(template_string_$item(combat_templateObject6 || (combat_templateObject6 = engine_combat_taggedTemplateLiteral(["Time-Spinner"])))).tryItem(template_string_$item(combat_templateObject7 || (combat_templateObject7 = engine_combat_taggedTemplateLiteral(["HOA citation pad"]))));
-    }
-  }]);
-
-  return MyActionDefaults;
-}();
-;// CONCATENATED MODULE: ./src/engine/outfit.ts
-var engine_outfit_templateObject, engine_outfit_templateObject2, engine_outfit_templateObject3, engine_outfit_templateObject4, engine_outfit_templateObject5, engine_outfit_templateObject6, engine_outfit_templateObject7, engine_outfit_templateObject8, engine_outfit_templateObject9, engine_outfit_templateObject10, engine_outfit_templateObject11, engine_outfit_templateObject12, engine_outfit_templateObject13, engine_outfit_templateObject14, engine_outfit_templateObject15, engine_outfit_templateObject16, engine_outfit_templateObject17, engine_outfit_templateObject18, engine_outfit_templateObject19, engine_outfit_templateObject20, engine_outfit_templateObject21, engine_outfit_templateObject22;
-
-function engine_outfit_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-function engine_outfit_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = engine_outfit_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function engine_outfit_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return engine_outfit_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return engine_outfit_arrayLikeToArray(o, minLen); }
-
-function engine_outfit_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-
-
-
-function equipFirst(outfit, resources) {
-  var _iterator = engine_outfit_createForOfIteratorHelper(resources),
-      _step;
-
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _resource$equip, _resource$equip2;
-
-      var resource = _step.value;
-      if (!resource.available()) continue;
-      if (!outfit.canEquip((_resource$equip = resource.equip) !== null && _resource$equip !== void 0 ? _resource$equip : [])) continue;
-      if (!outfit.equip((_resource$equip2 = resource.equip) !== null && _resource$equip2 !== void 0 ? _resource$equip2 : [])) continue;
-      return resource;
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-
-  return undefined;
-}
-function createFarmingOutfit() {
-  var spec = {
-    familiar: template_string_$familiar(engine_outfit_templateObject || (engine_outfit_templateObject = engine_outfit_taggedTemplateLiteral(["Reagnimated Gnome"]))),
-    famequip: template_string_$item(engine_outfit_templateObject2 || (engine_outfit_templateObject2 = engine_outfit_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))),
-    modifier: "0.0014familiar weight 0.04item drop"
-  };
-
-  if (args.outfit !== "") {
-    spec.equip = (0,external_kolmafia_namespaceObject.outfitPieces)(args.outfit);
-    return spec;
-  } // Free runaway source
-
-
-  var toEquip = [have(template_string_$item(engine_outfit_templateObject3 || (engine_outfit_templateObject3 = engine_outfit_taggedTemplateLiteral(["Greatest American Pants"])))) ? template_string_$item(engine_outfit_templateObject4 || (engine_outfit_templateObject4 = engine_outfit_taggedTemplateLiteral(["Greatest American Pants"]))) : template_string_$item(engine_outfit_templateObject5 || (engine_outfit_templateObject5 = engine_outfit_taggedTemplateLiteral(["navel ring of navel gazing"])))]; // Pickpocket source
-
-  if ($classes(engine_outfit_templateObject6 || (engine_outfit_templateObject6 = engine_outfit_taggedTemplateLiteral(["Disco Bandit, Accordion Thief"]))).includes((0,external_kolmafia_namespaceObject.myClass)())) {
-    if (have(template_string_$item(engine_outfit_templateObject7 || (engine_outfit_templateObject7 = engine_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))))) toEquip.push(template_string_$item(engine_outfit_templateObject8 || (engine_outfit_templateObject8 = engine_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))));
-  } else if ((0,external_kolmafia_namespaceObject.canEquip)(template_string_$item(engine_outfit_templateObject9 || (engine_outfit_templateObject9 = engine_outfit_taggedTemplateLiteral(["mime army infiltration glove"]))))) {
-    toEquip.push(template_string_$item(engine_outfit_templateObject10 || (engine_outfit_templateObject10 = engine_outfit_taggedTemplateLiteral(["mime army infiltration glove"]))));
-    if (have(template_string_$item(engine_outfit_templateObject11 || (engine_outfit_templateObject11 = engine_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))))) toEquip.push(template_string_$item(engine_outfit_templateObject12 || (engine_outfit_templateObject12 = engine_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))));
-  } else {
-    toEquip.push(template_string_$item(engine_outfit_templateObject13 || (engine_outfit_templateObject13 = engine_outfit_taggedTemplateLiteral(["tiny black hole"]))));
-  }
-
-  spec.equip = toEquip;
-
-  if (have(template_string_$item(engine_outfit_templateObject14 || (engine_outfit_templateObject14 = engine_outfit_taggedTemplateLiteral(["Jurassic Parka"])))) && !have($effect(engine_outfit_templateObject15 || (engine_outfit_templateObject15 = engine_outfit_taggedTemplateLiteral(["Everything Looks Yellow"]))))) {
-    spec.shirt = template_string_$item(engine_outfit_templateObject16 || (engine_outfit_templateObject16 = engine_outfit_taggedTemplateLiteral(["Jurassic Parka"])));
-  }
-
-  if (have(template_string_$item(engine_outfit_templateObject17 || (engine_outfit_templateObject17 = engine_outfit_taggedTemplateLiteral(["June cleaver"]))))) {
-    spec.weapon = template_string_$item(engine_outfit_templateObject18 || (engine_outfit_templateObject18 = engine_outfit_taggedTemplateLiteral(["June cleaver"])));
-  } else if (have(template_string_$item(engine_outfit_templateObject19 || (engine_outfit_templateObject19 = engine_outfit_taggedTemplateLiteral(["Fourth of May Cosplay Saber"]))))) {
-    spec.weapon = template_string_$item(engine_outfit_templateObject20 || (engine_outfit_templateObject20 = engine_outfit_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])));
-  }
-
-  if (have(template_string_$item(engine_outfit_templateObject21 || (engine_outfit_templateObject21 = engine_outfit_taggedTemplateLiteral(["mafia thumb ring"]))))) spec.acc1 = template_string_$item(engine_outfit_templateObject22 || (engine_outfit_templateObject22 = engine_outfit_taggedTemplateLiteral(["mafia thumb ring"])));
-  return spec;
 }
 ;// CONCATENATED MODULE: ./src/lib.ts
 var lib_templateObject, lib_templateObject2, lib_templateObject3, lib_templateObject4, lib_templateObject5;
@@ -12037,6 +11563,102 @@ var engine_Engine = /*#__PURE__*/function (_BaseEngine) {
 
   return Engine;
 }(Engine);
+;// CONCATENATED MODULE: ./node_modules/libram/dist/modifierTypes.js
+// THIS FILE IS AUTOMATICALLY GENERATED. See tools/parseModifiers.ts for more information
+var booleanModifiers = ["Softcore Only", "Single Equip", "Never Fumble", "Weakens Monster", "Free Pull", "Variable", "Nonstackable Watch", "Cold Immunity", "Hot Immunity", "Sleaze Immunity", "Spooky Immunity", "Stench Immunity", "Cold Vulnerability", "Hot Vulnerability", "Sleaze Vulnerability", "Spooky Vulnerability", "Stench Vulnerability", "Moxie Controls MP", "Moxie May Control MP", "Four Songs", "Adventure Underwater", "Underwater Familiar", "Generic", "Unarmed", "No Pull", "Lasts Until Rollover", "Attacks Can't Miss", "Pirate", "Breakable", "Drops Items", "Drops Meat"];
+var classModifiers = ["Class"];
+var numericModifiers = ["Familiar Weight", "Monster Level", "Combat Rate", "Initiative", "Experience", "Item Drop", "Meat Drop", "Damage Absorption", "Damage Reduction", "Cold Resistance", "Hot Resistance", "Sleaze Resistance", "Spooky Resistance", "Stench Resistance", "Mana Cost", "Moxie", "Moxie Percent", "Muscle", "Muscle Percent", "Mysticality", "Mysticality Percent", "Maximum HP", "Maximum HP Percent", "Maximum MP", "Maximum MP Percent", "Weapon Damage", "Ranged Damage", "Spell Damage", "Spell Damage Percent", "Cold Damage", "Hot Damage", "Sleaze Damage", "Spooky Damage", "Stench Damage", "Cold Spell Damage", "Hot Spell Damage", "Sleaze Spell Damage", "Spooky Spell Damage", "Stench Spell Damage", "Underwater Combat Rate", "Fumble", "HP Regen Min", "HP Regen Max", "MP Regen Min", "MP Regen Max", "Adventures", "Familiar Weight Percent", "Weapon Damage Percent", "Ranged Damage Percent", "Stackable Mana Cost", "Hobo Power", "Base Resting HP", "Resting HP Percent", "Bonus Resting HP", "Base Resting MP", "Resting MP Percent", "Bonus Resting MP", "Critical Hit Percent", "PvP Fights", "Volleyball", "Sombrero", "Leprechaun", "Fairy", "Meat Drop Penalty", "Hidden Familiar Weight", "Item Drop Penalty", "Initiative Penalty", "Food Drop", "Booze Drop", "Hat Drop", "Weapon Drop", "Offhand Drop", "Shirt Drop", "Pants Drop", "Accessory Drop", "Volleyball Effectiveness", "Sombrero Effectiveness", "Leprechaun Effectiveness", "Fairy Effectiveness", "Familiar Weight Cap", "Slime Resistance", "Slime Hates It", "Spell Critical Percent", "Muscle Experience", "Mysticality Experience", "Moxie Experience", "Effect Duration", "Candy Drop", "DB Combat Damage", "Sombrero Bonus", "Familiar Experience", "Sporadic Meat Drop", "Sporadic Item Drop", "Meat Bonus", "Pickpocket Chance", "Combat Mana Cost", "Muscle Experience Percent", "Mysticality Experience Percent", "Moxie Experience Percent", "Minstrel Level", "Muscle Limit", "Mysticality Limit", "Moxie Limit", "Song Duration", "Prismatic Damage", "Smithsness", "Supercold Resistance", "Reduce Enemy Defense", "Pool Skill", "Surgeonosity", "Familiar Damage", "Gear Drop", "Maximum Hooch", "Water Level", "Crimbot Outfit Power", "Familiar Tuning Muscle", "Familiar Tuning Mysticality", "Familiar Tuning Moxie", "Random Monster Modifiers", "Luck", "Othello Skill", "Disco Style", "Rollover Effect Duration", "Sixgun Damage", "Fishing Skill", "Additional Song", "Sprinkle Drop", "Absorb Adventures", "Absorb Stats", "Rubee Drop", "Kruegerand Drop", "WarBear Armor Penetration", "Clowniness", "Maximum PP", "Plumber Power", "Drippy Damage", "Drippy Resistance", "Energy", "Scrap", "Familiar Action Bonus", "Water"];
+var effectModifiers = ["Effect", "Rollover Effect"];
+var monsterModifiers = ["Avatar"];
+var skillModifiers = ["Skill"];
+var statModifiers = ["Plumber Stat"];
+var stringModifiers = ["Intrinsic Effect", "Equalize", "Wiki Name", "Modifiers", "Outfit", "Stat Tuning", "Equips On", "Familiar Effect", "Jiggle", "Equalize Muscle", "Equalize Mysticality", "Equalize Moxie", "Floor Buffed Muscle", "Floor Buffed Mysticality", "Floor Buffed Moxie"];
+;// CONCATENATED MODULE: ./node_modules/libram/dist/modifier.js
+function modifier_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function modifier_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { modifier_ownKeys(Object(source), true).forEach(function (key) { modifier_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { modifier_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function modifier_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+
+function modifier_get(name, subject) {
+  if (arrayContains(name, booleanModifiers)) {
+    return subject === undefined ? (0,external_kolmafia_namespaceObject.booleanModifier)(name) : (0,external_kolmafia_namespaceObject.booleanModifier)(subject, name);
+  }
+
+  if (arrayContains(name, classModifiers)) {
+    return (0,external_kolmafia_namespaceObject.classModifier)(subject, name);
+  }
+
+  if (arrayContains(name, effectModifiers)) {
+    return (0,external_kolmafia_namespaceObject.effectModifier)(subject, name);
+  }
+
+  if (arrayContains(name, monsterModifiers)) {
+    return (0,external_kolmafia_namespaceObject.monsterModifier)(subject, name);
+  }
+
+  if (arrayContains(name, numericModifiers)) {
+    return subject === undefined ? (0,external_kolmafia_namespaceObject.numericModifier)(name) : (0,external_kolmafia_namespaceObject.numericModifier)(subject, name);
+  }
+
+  if (arrayContains(name, skillModifiers)) {
+    return (0,external_kolmafia_namespaceObject.skillModifier)(subject, name);
+  }
+
+  if (arrayContains(name, stringModifiers)) {
+    return subject === undefined ? (0,external_kolmafia_namespaceObject.stringModifier)(name) : (0,external_kolmafia_namespaceObject.stringModifier)(subject, name);
+  }
+
+  if (arrayContains(name, statModifiers)) {
+    return (0,external_kolmafia_namespaceObject.statModifier)(subject, name);
+  }
+}
+/**
+ * Merge two Modifiers objects into one, summing all numeric modifiers, ||ing all boolean modifiers, and otherwise letting the second object overwrite the first.
+ * @param modifiers1 Modifiers objects to be merged onto.
+ * @param modifiers2 Modifiers object to merge.
+ * @returns A single Modifiers object obtained by merging.
+ */
+
+function pairwiseMerge(modifiers1, modifiers2) {
+  var returnValue = modifier_objectSpread(modifier_objectSpread({}, modifiers1), modifiers2);
+
+  for (var modifier in modifiers1) {
+    if (Array.from(Object.values(modifiers2)).includes(modifier)) {
+      if (arrayContains(modifier, numericModifiers)) {
+        var _modifiers1$modifier, _modifiers2$modifier;
+
+        returnValue[modifier] = ((_modifiers1$modifier = modifiers1[modifier]) !== null && _modifiers1$modifier !== void 0 ? _modifiers1$modifier : 0) + ((_modifiers2$modifier = modifiers2[modifier]) !== null && _modifiers2$modifier !== void 0 ? _modifiers2$modifier : 0);
+      }
+
+      if (arrayContains(modifier, booleanModifiers)) {
+        var _modifiers1$modifier2, _modifiers2$modifier2;
+
+        returnValue[modifier] = ((_modifiers1$modifier2 = modifiers1[modifier]) !== null && _modifiers1$modifier2 !== void 0 ? _modifiers1$modifier2 : false) || ((_modifiers2$modifier2 = modifiers2[modifier]) !== null && _modifiers2$modifier2 !== void 0 ? _modifiers2$modifier2 : false);
+      }
+    }
+  }
+
+  return returnValue;
+}
+/**
+ * Merge arbitrarily many Modifiers objects into one, summing all numeric modifiers, and ||ing all boolean modifiers.
+ * @param modifierss Modifiers objects to be merged together.
+ * @returns A single Modifiers object obtained by merging.
+ */
+
+
+function mergeModifiers() {
+  for (var _len = arguments.length, modifierss = new Array(_len), _key = 0; _key < _len; _key++) {
+    modifierss[_key] = arguments[_key];
+  }
+
+  return modifierss.reduce((a, b) => pairwiseMerge(a, b), {});
+}
 ;// CONCATENATED MODULE: ./src/potions.ts
 var potions_templateObject, potions_templateObject2, potions_templateObject3, potions_templateObject4, potions_templateObject5, potions_templateObject6, potions_templateObject7;
 
@@ -12445,13 +12067,13 @@ var Florist_all = Object.freeze([RabidDogwood, Rutabeggar, RadishRadish, Articho
 ;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2022/AutumnAton.js
 
 
-var AutumnAton_item = external_kolmafia_namespaceObject.Item.get("autumn-aton");
+var item = external_kolmafia_namespaceObject.Item.get("autumn-aton");
 /**
  * Is the autumn-aton currently in your inventory, available to deploy?
  */
 
 function available() {
-  return (0,external_kolmafia_namespaceObject.availableAmount)(AutumnAton_item) > 0;
+  return (0,external_kolmafia_namespaceObject.availableAmount)(item) > 0;
 }
 /**
  * Do you own the autumn-aton?
@@ -12632,6 +12254,326 @@ var BaggoQuest = {
     }).kill()
   }]
 };
+// EXTERNAL MODULE: ./node_modules/lodash/isEqual.js
+var isEqual = __webpack_require__(7120);
+var isEqual_default = /*#__PURE__*/__webpack_require__.n(isEqual);
+;// CONCATENATED MODULE: ./node_modules/libram/dist/Copier.js
+function Copier_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Copier_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Copier = function Copier(couldCopy, prepare, canCopy, copiedMonster, fightCopy) {
+  Copier_classCallCheck(this, Copier);
+
+  Copier_defineProperty(this, "couldCopy", void 0);
+
+  Copier_defineProperty(this, "prepare", void 0);
+
+  Copier_defineProperty(this, "canCopy", void 0);
+
+  Copier_defineProperty(this, "copiedMonster", void 0);
+
+  Copier_defineProperty(this, "fightCopy", null);
+
+  this.couldCopy = couldCopy;
+  this.prepare = prepare;
+  this.canCopy = canCopy;
+  this.copiedMonster = copiedMonster;
+  if (fightCopy) this.fightCopy = fightCopy;
+};
+;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2016/SourceTerminal.js
+var SourceTerminal_templateObject, SourceTerminal_templateObject2, SourceTerminal_templateObject3, SourceTerminal_templateObject4, SourceTerminal_templateObject5, SourceTerminal_templateObject6, SourceTerminal_templateObject7, SourceTerminal_templateObject8, SourceTerminal_templateObject9, SourceTerminal_templateObject10, SourceTerminal_templateObject11, SourceTerminal_templateObject12, SourceTerminal_templateObject13, SourceTerminal_templateObject14, SourceTerminal_templateObject15, SourceTerminal_templateObject16, SourceTerminal_templateObject17, SourceTerminal_templateObject18, SourceTerminal_templateObject19, SourceTerminal_templateObject20, SourceTerminal_templateObject21, SourceTerminal_templateObject22, SourceTerminal_templateObject23, SourceTerminal_templateObject24, SourceTerminal_templateObject25, SourceTerminal_templateObject26, SourceTerminal_templateObject27;
+
+function SourceTerminal_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = SourceTerminal_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function SourceTerminal_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return SourceTerminal_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return SourceTerminal_arrayLikeToArray(o, minLen); }
+
+function SourceTerminal_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function SourceTerminal_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+
+
+
+
+var SourceTerminal_item = template_string_$item(SourceTerminal_templateObject || (SourceTerminal_templateObject = SourceTerminal_taggedTemplateLiteral(["Source terminal"])));
+function SourceTerminal_have() {
+  return haveInCampground(SourceTerminal_item);
+}
+/**
+ * Buffs that can be acquired from Enhance
+ *
+ * - Items: +30% Item Drop
+ * - Meat: +60% Meat Drop
+ * - Init: +50% Initiative
+ * - Critical: +10% chance of Critical Hit, +10% chance of Spell Critical Hit
+ * - Damage: +5 Prismatic Damage
+ * - Substats: +3 Stats Per Fight
+ */
+
+var Buffs = {
+  Items: $effect(SourceTerminal_templateObject2 || (SourceTerminal_templateObject2 = SourceTerminal_taggedTemplateLiteral(["items.enh"]))),
+  Meat: $effect(SourceTerminal_templateObject3 || (SourceTerminal_templateObject3 = SourceTerminal_taggedTemplateLiteral(["meat.enh"]))),
+  Init: $effect(SourceTerminal_templateObject4 || (SourceTerminal_templateObject4 = SourceTerminal_taggedTemplateLiteral(["init.enh"]))),
+  Critical: $effect(SourceTerminal_templateObject5 || (SourceTerminal_templateObject5 = SourceTerminal_taggedTemplateLiteral(["critical.enh"]))),
+  Damage: $effect(SourceTerminal_templateObject6 || (SourceTerminal_templateObject6 = SourceTerminal_taggedTemplateLiteral(["damage.enh"]))),
+  Substats: $effect(SourceTerminal_templateObject7 || (SourceTerminal_templateObject7 = SourceTerminal_taggedTemplateLiteral(["substats.enh"])))
+};
+/**
+ * Acquire a buff from the Source Terminal
+ * @param buff The buff to acquire
+ * @see Buffs
+ */
+
+function enhance(buff) {
+  if (!Object.values(Buffs).includes(buff)) {
+    return false;
+  }
+
+  return (0,external_kolmafia_namespaceObject.cliExecute)("terminal enhance ".concat(buff.name));
+}
+/**
+ * Rollover buffs that can be acquired from Enquiry
+ */
+
+var RolloverBuffs = {
+  /** +5 Familiar Weight */
+  Familiar: $effect(SourceTerminal_templateObject8 || (SourceTerminal_templateObject8 = SourceTerminal_taggedTemplateLiteral(["familiar.enq"]))),
+
+  /** +25 ML */
+  Monsters: $effect(SourceTerminal_templateObject9 || (SourceTerminal_templateObject9 = SourceTerminal_taggedTemplateLiteral(["monsters.enq"]))),
+
+  /** +5 Prismatic Resistance */
+  Protect: $effect(SourceTerminal_templateObject10 || (SourceTerminal_templateObject10 = SourceTerminal_taggedTemplateLiteral(["protect.enq"]))),
+
+  /** +100% Muscle, +100% Mysticality, +100% Moxie */
+  Stats: $effect(SourceTerminal_templateObject11 || (SourceTerminal_templateObject11 = SourceTerminal_taggedTemplateLiteral(["stats.enq"])))
+};
+/**
+ * Acquire a buff from the Source Terminal
+ * @param buff The buff to acquire
+ * @see RolloverBuffs
+ */
+
+function enquiry(rolloverBuff) {
+  if (!Object.values(RolloverBuffs).includes(rolloverBuff)) {
+    return false;
+  }
+
+  return cliExecute("terminal enquiry ".concat(rolloverBuff.name));
+}
+/**
+ * Skills that can be acquired from Enhance
+ */
+
+var Skills = {
+  /** Collect Source essence from enemies once per combat */
+  Extract: $skill(SourceTerminal_templateObject12 || (SourceTerminal_templateObject12 = SourceTerminal_taggedTemplateLiteral(["Extract"]))),
+
+  /** Stagger and create a wandering monster 1-3 times per day */
+  Digitize: $skill(SourceTerminal_templateObject13 || (SourceTerminal_templateObject13 = SourceTerminal_taggedTemplateLiteral(["Digitize"]))),
+
+  /** Stagger and deal 25% of enemy HP in damage once per combat */
+  Compress: $skill(SourceTerminal_templateObject14 || (SourceTerminal_templateObject14 = SourceTerminal_taggedTemplateLiteral(["Compress"]))),
+
+  /** Double monster's HP, attack, defence, attacks per round and item drops once per fight and once per day (five in The Source) */
+  Duplicate: $skill(SourceTerminal_templateObject15 || (SourceTerminal_templateObject15 = SourceTerminal_taggedTemplateLiteral(["Duplicate"]))),
+
+  /** Causes government agent/Source Agent wanderer next turn once per combat and three times per day */
+  Portscan: $skill(SourceTerminal_templateObject16 || (SourceTerminal_templateObject16 = SourceTerminal_taggedTemplateLiteral(["Portscan"]))),
+
+  /** Increase Max MP by 100% and recover 1000 MP once per combat with a 30 turn cooldown */
+  Turbo: $skill(SourceTerminal_templateObject17 || (SourceTerminal_templateObject17 = SourceTerminal_taggedTemplateLiteral(["Turbo"])))
+};
+/**
+ * Make a skill available.
+ * The Source Terminal can give the player access to two skills at any time
+ * @param skill Skill to learn
+ * @see Skills
+ */
+
+function educate(skills) {
+  var skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
+  if (isEqual_default()(skillsArray, getSkills())) return true;
+
+  var _iterator = SourceTerminal_createForOfIteratorHelper(skillsArray),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var skill = _step.value;
+      if (!Object.values(Skills).includes(skill)) return false;
+      (0,external_kolmafia_namespaceObject.cliExecute)("terminal educate ".concat(skill.name.toLowerCase(), ".edu"));
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return true;
+}
+/**
+ * Return the Skills currently available from Source Terminal
+ */
+
+function getSkills() {
+  return ["sourceTerminalEducate1", "sourceTerminalEducate2"].map(p => property_get(p)).filter(s => s !== "").map(s => external_kolmafia_namespaceObject.Skill.get(s.slice(0, -4)));
+}
+function isCurrentSkill(skills) {
+  var currentSkills = getSkills();
+  var skillsArray = Array.isArray(skills) ? skills.slice(0, 2) : [skills];
+  return skillsArray.every(skill => currentSkills.includes(skill));
+}
+/**
+ * Items that can be generated by the Source Terminal
+ */
+
+var Items = new Map([[template_string_$item(SourceTerminal_templateObject18 || (SourceTerminal_templateObject18 = SourceTerminal_taggedTemplateLiteral(["browser cookie"]))), "food.ext"], [template_string_$item(SourceTerminal_templateObject19 || (SourceTerminal_templateObject19 = SourceTerminal_taggedTemplateLiteral(["hacked gibson"]))), "booze.ext"], [template_string_$item(SourceTerminal_templateObject20 || (SourceTerminal_templateObject20 = SourceTerminal_taggedTemplateLiteral(["Source shades"]))), "goggles.ext"], [template_string_$item(SourceTerminal_templateObject21 || (SourceTerminal_templateObject21 = SourceTerminal_taggedTemplateLiteral(["Source terminal GRAM chip"]))), "gram.ext"], [template_string_$item(SourceTerminal_templateObject22 || (SourceTerminal_templateObject22 = SourceTerminal_taggedTemplateLiteral(["Source terminal PRAM chip"]))), "pram.ext"], [template_string_$item(SourceTerminal_templateObject23 || (SourceTerminal_templateObject23 = SourceTerminal_taggedTemplateLiteral(["Source terminal SPAM chip"]))), "spam.ext"], [template_string_$item(SourceTerminal_templateObject24 || (SourceTerminal_templateObject24 = SourceTerminal_taggedTemplateLiteral(["Source terminal CRAM chip"]))), "cram.ext"], [template_string_$item(SourceTerminal_templateObject25 || (SourceTerminal_templateObject25 = SourceTerminal_taggedTemplateLiteral(["Source terminal DRAM chip"]))), "dram.ext"], [template_string_$item(SourceTerminal_templateObject26 || (SourceTerminal_templateObject26 = SourceTerminal_taggedTemplateLiteral(["Source terminal TRAM chip"]))), "tram.ext"], [template_string_$item(SourceTerminal_templateObject27 || (SourceTerminal_templateObject27 = SourceTerminal_taggedTemplateLiteral(["software bug"]))), "familiar.ext"]]);
+/**
+ * Collect an item from the Source Terminal (up to three times a day)
+ * @param item Item to collect
+ * @see Items
+ */
+
+function extrude(item) {
+  var fileName = Items.get(item);
+  if (!fileName) return false;
+  return cliExecute("terminal extrude ".concat(fileName));
+}
+/**
+ * Return chips currently installed to player's Source Terminal
+ */
+
+function getChips() {
+  return property_get("sourceTerminalChips").split(",");
+}
+/**
+ * Return number of times digitize was cast today
+ */
+
+function getDigitizeUses() {
+  return property_get("_sourceTerminalDigitizeUses");
+}
+/**
+ * Return Monster that is currently digitized, else null
+ */
+
+function getDigitizeMonster() {
+  return property_get("_sourceTerminalDigitizeMonster");
+}
+/**
+ * Return number of digitized monsters encountered since it was last cast
+ */
+
+function getDigitizeMonsterCount() {
+  return get("_sourceTerminalDigitizeMonsterCount");
+}
+/**
+ * Return maximum number of digitizes player can cast
+ */
+
+function getMaximumDigitizeUses() {
+  var chips = getChips();
+  return 1 + (chips.includes("TRAM") ? 1 : 0) + (chips.includes("TRIGRAM") ? 1 : 0);
+}
+/**
+ * Returns the current day's number of remaining digitize uses
+ */
+
+function getDigitizeUsesRemaining() {
+  return getMaximumDigitizeUses() - getDigitizeUses();
+}
+/**
+ * Returns whether the player could theoretically cast Digitize
+ */
+
+function couldDigitize() {
+  return getDigitizeUses() < getMaximumDigitizeUses();
+}
+function prepareDigitize() {
+  if (!isCurrentSkill(Skills.Digitize)) {
+    return educate(Skills.Digitize);
+  }
+
+  return true;
+}
+/**
+ * Returns whether the player can cast Digitize immediately
+ * This only considers whether the player has learned the skill
+ * and has sufficient daily casts remaining, not whether they have sufficient MP
+ */
+
+function canDigitize() {
+  return couldDigitize() && getSkills().includes(Skills.Digitize);
+}
+var Digitize = new Copier(() => couldDigitize(), () => prepareDigitize(), () => canDigitize(), () => getDigitizeMonster());
+/**
+ * Return number of times duplicate was cast today
+ */
+
+function getDuplicateUses() {
+  return get("_sourceTerminalDuplicateUses");
+}
+/**
+ * Return number of times enhance was cast today
+ */
+
+function getEnhanceUses() {
+  return property_get("_sourceTerminalEnhanceUses");
+}
+/**
+ * Return number of times portscan was cast today
+ */
+
+function getPortscanUses() {
+  return get("_sourceTerminalPortscanUses");
+}
+/**
+ * Returns maximum number of times duplicate can be used
+ */
+
+function maximumDuplicateUses() {
+  return myPath() === Path.get("The Source") ? 5 : 1;
+}
+/**
+ * Returns number of remaining times duplicate can be used today
+ */
+
+function duplicateUsesRemaining() {
+  return maximumDuplicateUses() - getDuplicateUses();
+}
+/**
+ * Return number of times enhance can be used per day
+ */
+
+function maximumEnhanceUses() {
+  return 1 + getChips().filter(chip => ["CRAM", "SCRAM"].includes(chip)).length;
+}
+/**
+ * Returns number of remaining times enahce can be used today
+ */
+
+function enhanceUsesRemaining() {
+  return maximumEnhanceUses() - getEnhanceUses();
+}
+/**
+ * Returns expected duration of an enhance buff
+ */
+
+function enhanceBuffDuration() {
+  return 25 + get("sourceTerminalPram") * 5 + (getChips().includes("INGRAM") ? 25 : 0);
+}
+/**
+ * Returns expected duration of an enquiry buff
+ */
+
+function enquiryBuffDuration() {
+  return 50 + 10 * get("sourceTerminalGram") + (getChips().includes("DIAGRAM") ? 50 : 0);
+}
 ;// CONCATENATED MODULE: ./node_modules/libram/dist/resources/2018/SongBoom.js
 var SongBoom_templateObject;
 
@@ -12690,47 +12632,82 @@ function dropProgress() {
   return get("_boomBoxFights");
 }
 ;// CONCATENATED MODULE: ./src/tasks/dailies.ts
-var dailies_templateObject, dailies_templateObject2, dailies_templateObject3, dailies_templateObject4, dailies_templateObject5, dailies_templateObject6, dailies_templateObject7, dailies_templateObject8, dailies_templateObject9, dailies_templateObject10;
+var dailies_templateObject, dailies_templateObject2, dailies_templateObject3, dailies_templateObject4, dailies_templateObject5, dailies_templateObject6, dailies_templateObject7, dailies_templateObject8, dailies_templateObject9, dailies_templateObject10, dailies_templateObject11, dailies_templateObject12, dailies_templateObject13, dailies_templateObject14, dailies_templateObject15, dailies_templateObject16, dailies_templateObject17, dailies_templateObject18, dailies_templateObject19, dailies_templateObject20, dailies_templateObject21, dailies_templateObject22, dailies_templateObject23, dailies_templateObject24, dailies_templateObject25;
 
 function dailies_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
 
 
 
 var DailiesQuest = {
   name: "Dailies",
   tasks: [{
+    name: "Pool Table",
+    ready: () => template_string_$item(dailies_templateObject || (dailies_templateObject = dailies_taggedTemplateLiteral(["Clan pool table"]))).name in (0,external_kolmafia_namespaceObject.getClanLounge)(),
+    completed: () => property_get("_poolGames") >= 3,
+    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("pool stylish"),
+    limit: {
+      tries: 3
+    }
+  }, {
     name: "Kgnee",
-    ready: () => have(template_string_$familiar(dailies_templateObject || (dailies_templateObject = dailies_taggedTemplateLiteral(["Reagnimated Gnome"])))),
-    completed: () => [template_string_$item(dailies_templateObject2 || (dailies_templateObject2 = dailies_taggedTemplateLiteral(["gnomish swimmer's ears"]))), template_string_$item(dailies_templateObject3 || (dailies_templateObject3 = dailies_taggedTemplateLiteral(["gnomish coal miner's lung"]))), template_string_$item(dailies_templateObject4 || (dailies_templateObject4 = dailies_taggedTemplateLiteral(["gnomish tennis elbow"]))), template_string_$item(dailies_templateObject5 || (dailies_templateObject5 = dailies_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))), template_string_$item(dailies_templateObject6 || (dailies_templateObject6 = dailies_taggedTemplateLiteral(["gnomish athlete's foot"])))].some(item => have(item)),
+    ready: () => have(template_string_$familiar(dailies_templateObject2 || (dailies_templateObject2 = dailies_taggedTemplateLiteral(["Reagnimated Gnome"])))),
+    completed: () => [template_string_$item(dailies_templateObject3 || (dailies_templateObject3 = dailies_taggedTemplateLiteral(["gnomish swimmer's ears"]))), template_string_$item(dailies_templateObject4 || (dailies_templateObject4 = dailies_taggedTemplateLiteral(["gnomish coal miner's lung"]))), template_string_$item(dailies_templateObject5 || (dailies_templateObject5 = dailies_taggedTemplateLiteral(["gnomish tennis elbow"]))), template_string_$item(dailies_templateObject6 || (dailies_templateObject6 = dailies_taggedTemplateLiteral(["gnomish housemaid's kgnee"]))), template_string_$item(dailies_templateObject7 || (dailies_templateObject7 = dailies_taggedTemplateLiteral(["gnomish athlete's foot"])))].some(item => have(item)),
     do: () => {
       (0,external_kolmafia_namespaceObject.visitUrl)("arena.php");
       (0,external_kolmafia_namespaceObject.runChoice)(4);
     },
     outfit: {
-      familiar: template_string_$familiar(dailies_templateObject7 || (dailies_templateObject7 = dailies_taggedTemplateLiteral(["Reagnimated Gnome"])))
+      familiar: template_string_$familiar(dailies_templateObject8 || (dailies_templateObject8 = dailies_taggedTemplateLiteral(["Reagnimated Gnome"])))
     },
+    limit: {
+      tries: 1
+    }
+  }, {
+    name: "Source Terminal Enhance",
+    ready: () => SourceTerminal_have(),
+    completed: () => getEnhanceUses() >= 3,
+    do: () => enhance($effect(dailies_templateObject9 || (dailies_templateObject9 = dailies_taggedTemplateLiteral(["items.enh"])))),
+    limit: {
+      tries: 3
+    }
+  }, {
+    name: "Kremlin's Greatest Briefcase Buff",
+    ready: () => have(template_string_$item(dailies_templateObject10 || (dailies_templateObject10 = dailies_taggedTemplateLiteral(["Kremlin's Greatest Briefcase"])))),
+    completed: () => property_get("_kgbClicksUsed") >= 22,
+    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("Briefcase buff"),
+    limit: {
+      tries: 8
+    }
+  }, {
+    name: "Asdon Martin",
+    ready: () => installed(),
+    completed: () => have($effect(dailies_templateObject11 || (dailies_templateObject11 = dailies_taggedTemplateLiteral(["Driving Observantly"]))), turnsRemaining()),
+    do: () => drive($effect(dailies_templateObject12 || (dailies_templateObject12 = dailies_taggedTemplateLiteral(["Driving Observantly"]))), turnsRemaining())
+  }, {
+    name: "Horsery",
+    ready: () => property_get("horseryAvailable"),
+    completed: () => property_get("_horsery") === "dark horse",
+    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("horsery dark"),
     limit: {
       tries: 1
     }
   }, {
     name: "Mummery Item",
-    ready: () => have(template_string_$item(dailies_templateObject8 || (dailies_templateObject8 = dailies_taggedTemplateLiteral(["mumming trunk"])))),
+    ready: () => have(template_string_$item(dailies_templateObject13 || (dailies_templateObject13 = dailies_taggedTemplateLiteral(["mumming trunk"])))),
     completed: () => property_get("_mummeryMods").includes("Item Drop"),
     do: () => (0,external_kolmafia_namespaceObject.cliExecute)("mummery item"),
     outfit: {
-      familiar: template_string_$familiar(dailies_templateObject9 || (dailies_templateObject9 = dailies_taggedTemplateLiteral(["Reagnimated Gnome"])))
+      familiar: template_string_$familiar(dailies_templateObject14 || (dailies_templateObject14 = dailies_taggedTemplateLiteral(["Reagnimated Gnome"])))
     },
     limit: {
       tries: 1
     }
   }, {
-    name: "Cosplay Saber",
-    ready: () => have(template_string_$item(dailies_templateObject10 || (dailies_templateObject10 = dailies_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))),
-    completed: () => property_get("_saberMod") !== 0,
-    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("saber familiar"),
-    limit: {
-      tries: 1
-    }
+    name: "Clan Fortune",
+    ready: () => template_string_$item(dailies_templateObject15 || (dailies_templateObject15 = dailies_taggedTemplateLiteral(["Clan Carnival Game"]))).name in (0,external_kolmafia_namespaceObject.getClanLounge)(),
+    completed: () => property_get("_clanFortuneBuffUsed"),
+    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("fortune buff item")
   }, {
     name: "SongBoom",
     ready: () => SongBoom_have() && songChangesLeft() > 0,
@@ -12740,23 +12717,36 @@ var DailiesQuest = {
       tries: 1
     }
   }, {
-    name: "Horsery",
-    ready: () => property_get("horseryAvailable"),
-    completed: () => property_get("_horsery") === "dark horse",
-    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("horsery dark"),
+    name: "Cosplay Saber",
+    ready: () => have(template_string_$item(dailies_templateObject16 || (dailies_templateObject16 = dailies_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))),
+    completed: () => property_get("_saberMod") !== 0,
+    do: () => (0,external_kolmafia_namespaceObject.cliExecute)("saber familiar"),
     limit: {
       tries: 1
     }
+  }, {
+    name: "Bird Calendar",
+    ready: () => have(template_string_$item(dailies_templateObject17 || (dailies_templateObject17 = dailies_taggedTemplateLiteral(["Bird-a-Day calendar"])))),
+    completed: () => have($skill(dailies_templateObject18 || (dailies_templateObject18 = dailies_taggedTemplateLiteral(["Seek out a Bird"])))),
+    do: () => (0,external_kolmafia_namespaceObject.use)(1, template_string_$item(dailies_templateObject19 || (dailies_templateObject19 = dailies_taggedTemplateLiteral(["Bird-a-Day calendar"])))),
+    limit: {
+      tries: 1
+    }
+  }, {
+    name: "Daily Bird",
+    after: ["Bird Calendar"],
+    ready: () => modifier_get("Item Drop", $effect(dailies_templateObject20 || (dailies_templateObject20 = dailies_taggedTemplateLiteral(["Blessing of the Bird"])))) > 0 || modifier_get("Familiar Weight", $effect(dailies_templateObject21 || (dailies_templateObject21 = dailies_taggedTemplateLiteral(["Blessing of the Bird"])))) > 0,
+    completed: () => property_get("_birdsSoughtToday") >= 6,
+    do: () => (0,external_kolmafia_namespaceObject.useSkill)($skill(dailies_templateObject22 || (dailies_templateObject22 = dailies_taggedTemplateLiteral(["Seek out a Bird"]))), 6 - property_get("_birdsSoughtToday"))
+  }, {
+    name: "Favorite Bird",
+    after: ["Bird Calendar"],
+    ready: () => modifier_get("Item Drop", $effect(dailies_templateObject23 || (dailies_templateObject23 = dailies_taggedTemplateLiteral(["Blessing of your favorite Bird"])))) > 0 || modifier_get("Familiar Weight", $effect(dailies_templateObject24 || (dailies_templateObject24 = dailies_taggedTemplateLiteral(["Blessing of your favorite Bird"])))) > 0,
+    completed: () => property_get("_favoriteBirdVisited"),
+    do: () => (0,external_kolmafia_namespaceObject.useSkill)($skill(dailies_templateObject25 || (dailies_templateObject25 = dailies_taggedTemplateLiteral(["Visit your Favorite Bird"]))))
   }]
 };
 ;// CONCATENATED MODULE: ./src/main.ts
-function main_createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = main_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function main_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return main_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return main_arrayLikeToArray(o, minLen); }
-
-function main_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-
 
 
 
@@ -12804,27 +12794,6 @@ function main(command) {
 
   if (engine.getNextTask()) {
     setupPotions();
-
-    var _iterator = main_createForOfIteratorHelper(effectResources),
-        _step;
-
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var resource = _step.value;
-
-        if (resource.available()) {
-          var _resource$prepare;
-
-          (_resource$prepare = resource.prepare) === null || _resource$prepare === void 0 ? void 0 : _resource$prepare.call(resource);
-          resource.do();
-        }
-      }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
-    }
-
     if (args.buff) return;
   }
 

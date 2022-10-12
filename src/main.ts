@@ -1,6 +1,5 @@
 import { Args, getTasks } from "grimoire-kolmafia";
 import { myAdventures } from "kolmafia";
-import { effectResources } from "./effects";
 import { Engine } from "./engine/engine";
 import { setupPotions } from "./potions";
 import { BaggoQuest } from "./tasks/baggo";
@@ -47,12 +46,6 @@ export function main(command?: string): void {
 
   if (engine.getNextTask()) {
     setupPotions();
-    for (const resource of effectResources) {
-      if (resource.available()) {
-        resource.prepare?.();
-        resource.do();
-      }
-    }
     if (args.buff) return;
   }
 
