@@ -12205,6 +12205,7 @@ function coldMedicineCabinet() {
   (0,external_kolmafia_namespaceObject.visitUrl)("campground.php?action=workshed");
   (0,external_kolmafia_namespaceObject.runChoice)(5);
 }
+var floristFlowers = [StealingMagnolia, AloeGuvnor, PitcherPlant];
 var BaggoQuest = {
   name: "Baggo",
   tasks: [{
@@ -12217,8 +12218,8 @@ var BaggoQuest = {
   }, {
     name: "Florist Friar",
     ready: () => Florist_have() && (0,external_kolmafia_namespaceObject.myLocation)() === $location(baggo_templateObject6 || (baggo_templateObject6 = baggo_taggedTemplateLiteral(["The Neverending Party"]))),
-    completed: () => isFull() || [StealingMagnolia, AloeGuvnor, PitcherPlant].every(flower => !flower.available()),
-    do: () => [StealingMagnolia, AloeGuvnor, PitcherPlant].forEach(flower => flower.plant())
+    completed: () => isFull() || floristFlowers.every(flower => !flower.available()),
+    do: () => floristFlowers.forEach(flower => flower.plant())
   }, {
     name: "Autumn-Aton",
     ready: () => available(),

@@ -38,6 +38,12 @@ export function coldMedicineCabinet(): void {
   runChoice(5);
 }
 
+const floristFlowers = [
+  FloristFriar.StealingMagnolia,
+  FloristFriar.AloeGuvnor,
+  FloristFriar.PitcherPlant,
+];
+
 export const BaggoQuest: Quest = {
   name: "Baggo",
   tasks: [
@@ -51,14 +57,8 @@ export const BaggoQuest: Quest = {
       name: "Florist Friar",
       ready: () => FloristFriar.have() && myLocation() === $location`The Neverending Party`,
       completed: () =>
-        FloristFriar.isFull() ||
-        [FloristFriar.StealingMagnolia, FloristFriar.AloeGuvnor, FloristFriar.PitcherPlant].every(
-          (flower) => !flower.available()
-        ),
-      do: () =>
-        [FloristFriar.StealingMagnolia, FloristFriar.AloeGuvnor, FloristFriar.PitcherPlant].forEach(
-          (flower) => flower.plant()
-        ),
+        FloristFriar.isFull() || floristFlowers.every((flower) => !flower.available()),
+      do: () => floristFlowers.forEach((flower) => flower.plant()),
     },
     {
       name: "Autumn-Aton",
