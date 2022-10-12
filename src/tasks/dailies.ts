@@ -27,14 +27,7 @@ export const DailiesQuest: Quest = {
     {
       name: "Kgnee",
       ready: () => have($familiar`Reagnimated Gnome`),
-      completed: () =>
-        [
-          $item`gnomish swimmer's ears`,
-          $item`gnomish coal miner's lung`,
-          $item`gnomish tennis elbow`,
-          $item`gnomish housemaid's kgnee`,
-          $item`gnomish athlete's foot`,
-        ].some((item) => have(item)),
+      completed: () => have($item`gnomish housemaid's kgnee`),
       do: (): void => {
         visitUrl("arena.php");
         runChoice(4);

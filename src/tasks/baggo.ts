@@ -1,8 +1,11 @@
+import { OutfitSpec } from "grimoire-kolmafia";
 import {
+  adv1,
   cliExecute,
   expectedColdMedicineCabinet,
   getWorkshed,
   itemAmount,
+  Location,
   Monster,
   myLocation,
   putCloset,
@@ -75,6 +78,33 @@ export const BaggoQuest: Quest = {
         else runChoice(2);
       },
       limit: { tries: 1 },
+    },
+    {
+      name: "Proton Ghost",
+      ready: () => have($item`protonic accelerator pack`) && get("ghostLocation") !== Location.none,
+      completed: () => get("questPAGhost") === "unstarted",
+      do: (): void => {
+        const location = get("ghostLocation");
+        if (location) {
+          adv1(location, 0, "");
+        } else {
+          throw "Could not determine ghost location";
+        }
+      },
+      outfit: (): OutfitSpec => {
+        return {
+          ...createFarmingOutfit,
+          back: $item`protonic accelerator pack`,
+        };
+      },
+
+      combat: new CombatStrategy().macro(
+        Macro.trySkill($skill`Sing Along`)
+          .trySkill($skill`Shoot Ghost`)
+          .trySkill($skill`Shoot Ghost`)
+          .trySkill($skill`Shoot Ghost`)
+          .trySkill($skill`Trap Ghost`)
+      ),
     },
     {
       name: "Collect Bags",
