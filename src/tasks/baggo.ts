@@ -1,25 +1,36 @@
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
+  canEquip,
   cliExecute,
   expectedColdMedicineCabinet,
   getWorkshed,
+  haveEquipped,
   itemAmount,
   Location,
   Monster,
+  myClass,
   myLocation,
+  myThrall,
+  outfitPieces,
   putCloset,
   runChoice,
   toEffect,
   totalTurnsPlayed,
   toUrl,
+  useSkill,
   visitUrl,
 } from "kolmafia";
 import {
+  $class,
+  $classes,
+  $effect,
+  $familiar,
   $item,
   $location,
   $monsters,
   $skill,
+  $thrall,
   AutumnAton,
   FloristFriar,
   get,
@@ -27,18 +38,54 @@ import {
   Macro,
 } from "libram";
 import { CombatStrategy } from "../engine/combat";
-import { createFarmingOutfit } from "../engine/outfit";
 import { Quest } from "../engine/task";
 import { args, turnsRemaining } from "../main";
 import { bubbleVision } from "../potions";
 
-export function coldMedicineCabinet(): void {
-  if (getWorkshed() !== $item`cold medicine cabinet`) return;
-  if (get("_coldMedicineConsults") >= 5) return;
-  if (get("_nextColdMedicineConsult") > totalTurnsPlayed()) return;
-  if (expectedColdMedicineCabinet()["pill"] !== $item`Extrovermectin™`) return;
-  visitUrl("campground.php?action=workshed");
-  runChoice(5);
+export function baggoOutfit(): OutfitSpec {
+  const spec: OutfitSpec = {
+    familiar: $familiar`Reagnimated Gnome`,
+    famequip: $item`gnomish housemaid's kgnee`,
+    modifier: "0.0014familiar weight 0.04item drop",
+    avoid: [$item`time-twitching toolbelt`],
+  };
+
+  if (args.outfit !== "") {
+    spec.equip = outfitPieces(args.outfit);
+    return spec;
+  }
+
+  // Free runaway source
+  const toEquip = [
+    have($item`Greatest American Pants`)
+      ? $item`Greatest American Pants`
+      : $item`navel ring of navel gazing`,
+  ];
+
+  // Pickpocket source
+  if ($classes`Disco Bandit, Accordion Thief`.includes(myClass())) {
+    if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
+  } else if (canEquip($item`mime army infiltration glove`)) {
+    toEquip.push($item`mime army infiltration glove`);
+    if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
+  } else {
+    toEquip.push($item`tiny black hole`);
+  }
+  spec.equip = toEquip;
+
+  if (have($item`Jurassic Parka`) && !have($effect`Everything Looks Yellow`)) {
+    spec.shirt = $item`Jurassic Parka`;
+  }
+
+  if (have($item`June cleaver`)) {
+    spec.weapon = $item`June cleaver`;
+  } else if (have($item`Fourth of May Cosplay Saber`)) {
+    spec.weapon = $item`Fourth of May Cosplay Saber`;
+  }
+
+  if (have($item`mafia thumb ring`)) spec.acc1 = $item`mafia thumb ring`;
+
+  return spec;
 }
 
 const floristFlowers = [
@@ -57,17 +104,38 @@ export const BaggoQuest: Quest = {
       limit: { tries: 1 },
     },
     {
+      name: "Spice Ghost",
+      ready: () => myClass() === $class`Pastamancer` && have($skill`Bind Spice Ghost`),
+      completed: () => myThrall() === $thrall`Spice Ghost`,
+      do: () => useSkill($skill`Bind Spice Ghost`),
+      limit: { tries: 1 },
+    },
+    {
       name: "Florist Friar",
       ready: () => FloristFriar.have() && myLocation() === $location`The Neverending Party`,
       completed: () =>
         FloristFriar.isFull() || floristFlowers.every((flower) => !flower.available()),
       do: () => floristFlowers.forEach((flower) => flower.plant()),
+      limit: { tries: 1 },
     },
     {
       name: "Autumn-Aton",
       ready: () => AutumnAton.available(),
       completed: () => AutumnAton.currentlyIn() !== null,
       do: () => AutumnAton.sendTo($location`The Neverending Party`),
+    },
+    {
+      name: "Cold Medicine Cabinet",
+      ready: () =>
+        getWorkshed() === $item`cold medicine cabinet` &&
+        get("_nextColdMedicineConsult") <= totalTurnsPlayed() &&
+        expectedColdMedicineCabinet()["pill"] === $item`Extrovermectin™`,
+      completed: () => get("_coldMedicineConsults") >= 5,
+      do: (): void => {
+        visitUrl("campground.php?action=workshed");
+        runChoice(5);
+      },
+      limit: { tries: 5 },
     },
     {
       name: "Party Fair",
@@ -93,11 +161,10 @@ export const BaggoQuest: Quest = {
       },
       outfit: (): OutfitSpec => {
         return {
-          ...createFarmingOutfit,
+          ...baggoOutfit(),
           back: $item`protonic accelerator pack`,
         };
       },
-
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Sing Along`)
           .trySkill($skill`Shoot Ghost`)
@@ -112,11 +179,15 @@ export const BaggoQuest: Quest = {
       completed: () => turnsRemaining() <= 0,
       prepare: (): void => {
         bubbleVision();
-        coldMedicineCabinet();
-        if (get("parkaMode").toLowerCase() !== "dilophosaur") cliExecute("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
+        if (
+          haveEquipped($item`Jurassic Parka`) &&
+          get("parkaMode").toLowerCase() !== "dilophosaur"
+        ) {
+          cliExecute("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
+        }
       },
       do: $location`The Neverending Party`,
-      outfit: createFarmingOutfit,
+      outfit: baggoOutfit,
       effects: [
         $skill`Blood Bond`,
         $skill`Leash of Linguini`,
