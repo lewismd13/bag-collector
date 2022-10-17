@@ -1,6 +1,7 @@
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
+  canAdventure,
   canEquip,
   cliExecute,
   expectedColdMedicineCabinet,
@@ -149,7 +150,8 @@ export const BaggoQuest: Quest = {
     },
     {
       name: "Proton Ghost",
-      ready: () => have($item`protonic accelerator pack`) && get("ghostLocation") !== Location.none,
+      ready: () =>
+        have($item`protonic accelerator pack`) && canAdventure(get("ghostLocation", Location.none)),
       completed: () => get("questPAGhost") === "unstarted",
       do: (): void => {
         const location = get("ghostLocation");
