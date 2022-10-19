@@ -40,7 +40,7 @@ export function acquire(quantity: number, item: Item, maxPrice: number): number 
 
 export function expectedAdvsGainedPerCombat(): number {
   const gnome = haveEquipped($item`gnomish housemaid's kgnee`)
-    ? familiarWeight(myFamiliar()) + weightAdjustment()
+    ? (familiarWeight(myFamiliar()) + weightAdjustment()) / 1000
     : 0;
   const ring = haveEquipped($item`mafia thumb ring`) ? 0.04 : 0;
   return gnome + ring;
