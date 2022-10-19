@@ -9,7 +9,7 @@ import { DailiesQuest } from "./tasks/dailies";
 
 export const args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
   advs: Args.number({
-    help: "Number of adventures to run (use negative numbers for the number of adventures remaining)",
+    help: "Number of adventures to run (use negative numbers for the number of adventures remaining).",
     default: Infinity,
   }),
   itemvalue: Args.number({ help: "Value of a single duffel bag or van key.", default: 20_000 }),
