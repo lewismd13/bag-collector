@@ -1,5 +1,13 @@
 import { Engine as BaseEngine, CombatResources, CombatStrategy, Outfit } from "grimoire-kolmafia";
-import { haveEffect, myAdventures, readCcs, writeCcs } from "kolmafia";
+import {
+  cliExecute,
+  haveEffect,
+  Location,
+  myAdventures,
+  readCcs,
+  setAutoAttack,
+  writeCcs,
+} from "kolmafia";
 import { $effect, get, getBanishedMonsters, have, Macro, PropertiesManager } from "libram";
 import { CombatActions, MyActionDefaults } from "./combat";
 import { equipFirst } from "./outfit";
@@ -9,6 +17,8 @@ import { Task } from "./task";
 const grimoireCCS = "grimoire_macro";
 
 export class Engine extends BaseEngine<CombatActions, Task> {
+  cachedCss = "";
+
   constructor(tasks: Task[]) {
     super(tasks, { combat_defaults: new MyActionDefaults() });
   }
@@ -27,6 +37,36 @@ export class Engine extends BaseEngine<CombatActions, Task> {
         throw `Fight was lost (debug info: ${beaten_turns} => ${haveEffect(
           $effect`Beaten Up`
         )}, (${start_advs} => ${myAdventures()}); stop.`;
+    }
+  }
+
+  setCombat(
+    task: Task,
+    task_combat: CombatStrategy<CombatActions>,
+    task_resources: CombatResources<CombatActions>
+  ): void {
+    // Save regular combat macro
+    const macro = task_combat.compile(
+      task_resources,
+      this.options?.combat_defaults,
+      task.do instanceof Location ? task.do : undefined
+    );
+
+    if (macro.toString() !== this.cachedCss) {
+      // Use the macro through a CCS file
+      this.cachedCss = macro.toString();
+      writeCcs(`[ default ]\n"${macro.toString()}"`, grimoireCCS);
+      cliExecute(`ccs ${grimoireCCS}`); // force Mafia to reparse the ccs
+    }
+
+    // Save autoattack combat macro
+    const autoattack = task_combat.compileAutoattack().step(macro);
+
+    if (autoattack.toString().length > 1) {
+      autoattack.save();
+      autoattack.setAutoAttack();
+    } else {
+      setAutoAttack(0);
     }
   }
 
@@ -89,5 +129,10 @@ export class Engine extends BaseEngine<CombatActions, Task> {
       }
       manager.set({ customCombatScript: this.options.ccs ?? grimoireCCS });
     }
+  }
+
+  destruct(): void {
+    super.destruct();
+    setAutoAttack(0);
   }
 }

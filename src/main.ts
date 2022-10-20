@@ -1,9 +1,9 @@
 import { Args, getTasks } from "grimoire-kolmafia";
-import { myAdventures, myTurncount, print } from "kolmafia";
-import { $item, Session } from "libram";
+import { canInteract, Familiar, myAdventures, myTurncount, toFamiliar } from "kolmafia";
 import { Engine } from "./engine/engine";
-import { expectedAdvsGainedPerCombat, formatNumber } from "./lib";
+import { expectedAdvsGainedPerCombat } from "./lib";
 import { setupPotions } from "./potions";
+import { endTracking, startTracking } from "./session";
 import { BaggoQuest } from "./tasks/baggo";
 import { DailiesQuest } from "./tasks/dailies";
 
@@ -27,6 +27,13 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
     help: "Name of the outfit whose pieces to equip when farming.",
     default: "",
   }),
+  familiar: Args.custom<Familiar>(
+    {
+      help: "The familiar to use",
+    },
+    (val: string) => toFamiliar(val),
+    "FAMILIAR"
+  ),
 });
 
 export const adventures = myAdventures();
@@ -50,10 +57,11 @@ export function main(command?: string): void {
 
   const tasks = getTasks([DailiesQuest, BaggoQuest]);
   const engine = new Engine(tasks);
-  const sessionStart = Session.current();
+
+  startTracking();
 
   if (engine.getNextTask()) {
-    setupPotions();
+    if (canInteract()) setupPotions();
     if (args.buff) return;
   }
 
@@ -61,18 +69,6 @@ export function main(command?: string): void {
     engine.run();
   } finally {
     engine.destruct();
+    endTracking();
   }
-
-  const sessionResults = Session.current().diff(sessionStart);
-  const bags = sessionResults.items.get($item`unremarkable duffel bag`) ?? 0;
-  const keys = sessionResults.items.get($item`van key`) ?? 0;
-  const advs = adventures - myAdventures();
-  const turns = myTurncount() - turncount;
-  const mpa = Math.round(((bags + keys) * args.itemvalue + sessionResults.meat) / advs);
-  print(`This run of baggo, you spent ${turns} turns and generated:`, "blue");
-  print(`* ${formatNumber(bags)} duffel bags`, "blue");
-  print(`* ${formatNumber(keys)} van keys`, "blue");
-  print(`* ${formatNumber(turns - advs)} advs`, "blue");
-  print(`* ${formatNumber(sessionResults.meat)} meat`, "blue");
-  print(`That's ${formatNumber(mpa)} MPA!`, "blue");
 }

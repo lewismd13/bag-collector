@@ -1,4 +1,21 @@
-import { cliExecute, getClanLounge, runChoice, use, useSkill, visitUrl } from "kolmafia";
+import {
+  availableAmount,
+  buyUsingStorage,
+  canEquip,
+  cliExecute,
+  getClanLounge,
+  Item,
+  mallPrice,
+  mySign,
+  retrieveItem,
+  runChoice,
+  Slot,
+  storageAmount,
+  toSlot,
+  use,
+  useSkill,
+  visitUrl,
+} from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -11,8 +28,38 @@ import {
   SongBoom,
   SourceTerminal,
 } from "libram";
-import { Quest } from "../engine/task";
+import { Quest, Task } from "../engine/task";
+import { canPull, gyou, ronin } from "../lib";
 import { turnsRemaining } from "../main";
+
+function pull(item: Item): Task {
+  return {
+    name: `Pull ${item}`,
+    ready: () =>
+      canPull(item) && (toSlot(item) === Slot.none || canEquip(item)) && storageAmount(item) >= 1,
+    completed: () => !canPull(item),
+    do: () => cliExecute(`pull ${item}`),
+  };
+}
+
+function buyPull(item: Item, price: number): Task[] {
+  if (item.tradeable && ronin()) {
+    return [
+      {
+        name: `Buy ${item} to pull`,
+        ready: () =>
+          canPull(item) &&
+          (toSlot(item) === Slot.none || canEquip(item)) &&
+          mallPrice(item) <= price,
+        completed: () => storageAmount(item) >= 1,
+        do: () => buyUsingStorage(item, 1, price),
+      },
+      pull(item),
+    ];
+  } else {
+    return [pull(item)];
+  }
+}
 
 export const DailiesQuest: Quest = {
   name: "Dailies",
@@ -46,8 +93,19 @@ export const DailiesQuest: Quest = {
       name: "Kremlin's Greatest Briefcase Buff",
       ready: () => have($item`Kremlin's Greatest Briefcase`),
       completed: () => get("_kgbClicksUsed") >= 22,
-      do: () => cliExecute("Briefcase buff"),
+      do: () => cliExecute("Briefcase buff item"),
       limit: { tries: 8 },
+    },
+    {
+      name: "Asdon Martin Fuel",
+      ready: () => gyou() && ronin() && !["Mongoose", "Wallaby", "Vole"].includes(mySign()),
+      completed: () =>
+        have($effect`Driving Observantly`, turnsRemaining()) ||
+        have($item`loaf of soda bread`, 100),
+      do: () =>
+        retrieveItem(5, $item`all-purpose flower`) &&
+        use(5, $item`all-purpose flower`) &&
+        retrieveItem(availableAmount($item`wad of dough`), $item`loaf of soda bread`),
     },
     {
       name: "Asdon Martin",
@@ -110,10 +168,21 @@ export const DailiesQuest: Quest = {
       name: "Favorite Bird",
       after: ["Bird Calendar"],
       ready: () =>
-        getModifier("Item Drop", $effect`Blessing of your favorite Bird`) > 0 ||
+        (have($skill`Visit your Favorite Bird`) &&
+          getModifier("Item Drop", $effect`Blessing of your favorite Bird`) > 0) ||
         getModifier("Familiar Weight", $effect`Blessing of your favorite Bird`) > 0,
       completed: () => get("_favoriteBirdVisited"),
       do: () => useSkill($skill`Visit your Favorite Bird`),
+    },
+    ...buyPull($item`human musk`, 15000),
+    ...buyPull($item`ice house`, 50000),
+    pull($item`mime army infiltration glove`),
+    {
+      name: "Craft Tiny Black Hole",
+      ready: () => !have($item`mime army infiltration glove`),
+      do: () => retrieveItem($item`tiny black hole`),
+      completed: () => have($item`tiny black hole`),
+      limit: { tries: 1 },
     },
   ],
 };

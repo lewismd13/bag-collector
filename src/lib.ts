@@ -1,15 +1,18 @@
 import {
+  canInteract,
   familiarWeight,
   haveEquipped,
   Item,
   itemAmount,
   myClass,
   myFamiliar,
+  myPath,
   print,
   retrieveItem,
+  toInt,
   weightAdjustment,
 } from "kolmafia";
-import { $item, $stat, withProperty } from "libram";
+import { $item, $path, $stat, get, withProperty } from "libram";
 
 export function debug(message: string, color?: string): void {
   if (color) {
@@ -58,4 +61,17 @@ export function canPickpocket(): boolean {
     myClass().primestat === $stat`Moxie` ||
     [$item`mime army infiltration glove`, $item`tiny black hole`].some((item) => haveEquipped(item))
   );
+}
+
+export function ronin(): boolean {
+  return !canInteract();
+}
+
+export function gyou(): boolean {
+  return myPath() === $path`Grey You`;
+}
+
+export function canPull(item: Item): boolean {
+  const pulls = get("_roninStoragePulls").split(",");
+  return ronin() && pulls.length < 20 && !pulls.includes(`${toInt(item)}`);
 }
