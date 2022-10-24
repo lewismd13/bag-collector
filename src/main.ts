@@ -2,15 +2,15 @@ import { Args, getTasks } from "grimoire-kolmafia";
 import { myAdventures, myTurncount, print } from "kolmafia";
 import { $item, Session } from "libram";
 import { Engine } from "./engine/engine";
-import { formatNumber } from "./lib";
+import { expectedAdvsGainedPerCombat, formatNumber } from "./lib";
 import { setupPotions } from "./potions";
 import { BaggoQuest } from "./tasks/baggo";
 import { DailiesQuest } from "./tasks/dailies";
 
 export const args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
   advs: Args.number({
-    help: "Number of adventures to spend farming. A value of -1 will spend all of your adventures, including those generated.",
-    default: -1,
+    help: "Number of adventures to run (use negative numbers for the number of adventures remaining).",
+    default: Infinity,
   }),
   itemvalue: Args.number({ help: "Value of a single duffel bag or van key.", default: 20_000 }),
   olfact: Args.string({
@@ -29,12 +29,16 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
   }),
 });
 
-export const initialAdvs = myAdventures();
-export const initialTurncount = myTurncount();
+export const adventures = myAdventures();
+export const turncount = myTurncount();
 
 export function turnsRemaining(): number {
-  if (args.advs === -1) return myAdventures();
-  return args.advs - (myTurncount() - initialTurncount);
+  if (isFinite(args.advs) && args.advs > 0) {
+    const spent = myTurncount() - turncount;
+    return Math.min(args.advs - spent, myAdventures());
+  }
+  const spend = myAdventures() + Math.min(0, args.advs);
+  return Math.round(spend / (1 - expectedAdvsGainedPerCombat()));
 }
 
 export function main(command?: string): void {
@@ -62,8 +66,8 @@ export function main(command?: string): void {
   const sessionResults = Session.current().diff(sessionStart);
   const bags = sessionResults.items.get($item`unremarkable duffel bag`) ?? 0;
   const keys = sessionResults.items.get($item`van key`) ?? 0;
-  const advs = initialAdvs - myAdventures();
-  const turns = myTurncount() - initialTurncount;
+  const advs = adventures - myAdventures();
+  const turns = myTurncount() - turncount;
   const mpa = Math.round(((bags + keys) * args.itemvalue + sessionResults.meat) / advs);
   print(`This run of baggo, you spent ${turns} turns and generated:`, "blue");
   print(`* ${formatNumber(bags)} duffel bags`, "blue");

@@ -78,8 +78,9 @@ export function getRelevantPotions(): Potion[] {
   return Item.all()
     .filter((item) => item.tradeable && !blacklist.includes(item) && itemType(item) === "potion")
     .map((item) => new Potion(item))
-    .filter((potion) => potion.familiarWeight() > 0 || potion.itemDrop() > 0)
-    .filter((potion) => potion.netValue() > 0)
+    .filter(
+      (potion) => (potion.familiarWeight() > 0 || potion.itemDrop() > 0) && potion.netValue() > 0
+    )
     .sort((a, b) => b.netValue() - a.netValue());
 }
 

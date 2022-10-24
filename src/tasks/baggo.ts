@@ -10,6 +10,7 @@ import {
   itemAmount,
   Location,
   Monster,
+  myAdventures,
   myClass,
   myLocation,
   myThrall,
@@ -178,7 +179,7 @@ export const BaggoQuest: Quest = {
     {
       name: "Collect Bags",
       after: ["Dailies/Kgnee", "Party Fair"],
-      completed: () => turnsRemaining() <= 0,
+      completed: () => turnsRemaining() < 1 || myAdventures() === 0,
       prepare: (): void => {
         bubbleVision();
         if (
