@@ -46,7 +46,7 @@ export const DailiesQuest: Quest = {
       name: "Kremlin's Greatest Briefcase Buff",
       ready: () => have($item`Kremlin's Greatest Briefcase`),
       completed: () => get("_kgbClicksUsed") >= 22,
-      do: () => cliExecute("Briefcase buff"),
+      do: () => cliExecute("Briefcase buff item"),
       limit: { tries: 8 },
     },
     {
@@ -110,8 +110,9 @@ export const DailiesQuest: Quest = {
       name: "Favorite Bird",
       after: ["Bird Calendar"],
       ready: () =>
-        getModifier("Item Drop", $effect`Blessing of your favorite Bird`) > 0 ||
-        getModifier("Familiar Weight", $effect`Blessing of your favorite Bird`) > 0,
+        have($skill`Visit your Favorite Bird`) &&
+        (getModifier("Item Drop", $effect`Blessing of your favorite Bird`) > 0 ||
+          getModifier("Familiar Weight", $effect`Blessing of your favorite Bird`) > 0),
       completed: () => get("_favoriteBirdVisited"),
       do: () => useSkill($skill`Visit your Favorite Bird`),
     },

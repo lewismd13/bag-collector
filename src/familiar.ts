@@ -1,5 +1,5 @@
 import { Familiar, Item } from "kolmafia";
-import { have, $familiar, $item, findFairyMultiplier } from "libram";
+import { $familiar, $item, findFairyMultiplier, have } from "libram";
 import { maxBy } from "./lib";
 import { args } from "./main";
 
@@ -14,9 +14,12 @@ function chosenGnomePart(): Item | undefined {
 }
 
 export function bestFamiliar(): Familiar {
-  // if (args.familiar) return args.familiar;
+  if (args.familiar) return args.familiar;
 
-  if (have($familiar`Reagnimated Gnome`) && chosenGnomePart() == $item`gnomish housemaid's kgnee`) {
+  if (
+    have($familiar`Reagnimated Gnome`) &&
+    chosenGnomePart() === $item`gnomish housemaid's kgnee`
+  ) {
     return $familiar`Reagnimated Gnome`;
   }
 

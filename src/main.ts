@@ -1,5 +1,5 @@
 import { Args, getTasks } from "grimoire-kolmafia";
-import { myAdventures, myTurncount, print } from "kolmafia";
+import { Familiar, myAdventures, myTurncount, print } from "kolmafia";
 import { $item, Session } from "libram";
 import { Engine } from "./engine/engine";
 import { expectedAdvsGainedPerCombat, formatNumber } from "./lib";
@@ -27,12 +27,18 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
     help: "Name of the outfit whose pieces to equip when farming.",
     default: "",
   }),
+  familiar: Args.custom<Familiar>(
+    { help: "Familiar to use when farming." },
+    Familiar.get,
+    "FAMILIAR"
+  ),
 });
 
 export const adventures = myAdventures();
 export const turncount = myTurncount();
 
 export function turnsRemaining(): number {
+  if (args.advs === 0) return 0;
   if (isFinite(args.advs) && args.advs > 0) {
     const spent = myTurncount() - turncount;
     return Math.min(args.advs - spent, myAdventures());
