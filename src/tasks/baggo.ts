@@ -2,7 +2,6 @@ import { OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
   canAdventure,
-  canEquip,
   cliExecute,
   expectedColdMedicineCabinet,
   getWorkshed,
@@ -14,7 +13,6 @@ import {
   myClass,
   myLocation,
   myThrall,
-  outfitPieces,
   putCloset,
   runChoice,
   toEffect,
@@ -25,9 +23,7 @@ import {
 } from "kolmafia";
 import {
   $class,
-  $classes,
   $effect,
-  $familiar,
   $item,
   $location,
   $monsters,
@@ -42,53 +38,8 @@ import {
 import { CombatStrategy } from "../engine/combat";
 import { Quest } from "../engine/task";
 import { args, turnsRemaining } from "../main";
+import { bestOutfit } from "../outfit";
 import { bubbleVision } from "../potions";
-
-export function baggoOutfit(): OutfitSpec {
-  const spec: OutfitSpec = {
-    familiar: $familiar`Reagnimated Gnome`,
-    famequip: $item`gnomish housemaid's kgnee`,
-    modifier: "0.0014familiar weight 0.04item drop",
-    avoid: [$item`time-twitching toolbelt`],
-  };
-
-  if (args.outfit !== "") {
-    spec.equip = outfitPieces(args.outfit);
-    return spec;
-  }
-
-  // Free runaway source
-  const toEquip = [
-    have($item`Greatest American Pants`)
-      ? $item`Greatest American Pants`
-      : $item`navel ring of navel gazing`,
-  ];
-
-  // Pickpocket source
-  if ($classes`Disco Bandit, Accordion Thief`.includes(myClass())) {
-    if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
-  } else if (canEquip($item`mime army infiltration glove`)) {
-    toEquip.push($item`mime army infiltration glove`);
-    if (have($item`carnivorous potted plant`)) toEquip.push($item`carnivorous potted plant`);
-  } else {
-    toEquip.push($item`tiny black hole`);
-  }
-  spec.equip = toEquip;
-
-  if (have($item`Jurassic Parka`) && !have($effect`Everything Looks Yellow`)) {
-    spec.shirt = $item`Jurassic Parka`;
-  }
-
-  if (have($item`June cleaver`)) {
-    spec.weapon = $item`June cleaver`;
-  } else if (have($item`Fourth of May Cosplay Saber`)) {
-    spec.weapon = $item`Fourth of May Cosplay Saber`;
-  }
-
-  if (have($item`mafia thumb ring`)) spec.acc1 = $item`mafia thumb ring`;
-
-  return spec;
-}
 
 const floristFlowers = [
   FloristFriar.StealingMagnolia,
@@ -163,10 +114,7 @@ export const BaggoQuest: Quest = {
         }
       },
       outfit: (): OutfitSpec => {
-        return {
-          ...baggoOutfit(),
-          back: $item`protonic accelerator pack`,
-        };
+        return { ...bestOutfit().spec(), back: $item`protonic accelerator pack` };
       },
       combat: new CombatStrategy().macro(
         Macro.trySkill($skill`Sing Along`)
@@ -178,7 +126,7 @@ export const BaggoQuest: Quest = {
     },
     {
       name: "Collect Bags",
-      after: ["Dailies/Kgnee", "Party Fair"],
+      after: ["Party Fair"],
       completed: () => turnsRemaining() < 1 || myAdventures() === 0,
       prepare: (): void => {
         bubbleVision();
@@ -186,11 +134,13 @@ export const BaggoQuest: Quest = {
           haveEquipped($item`Jurassic Parka`) &&
           get("parkaMode").toLowerCase() !== "dilophosaur"
         ) {
-          cliExecute("parka dilophosaur"); // Use grimoire's outfit modes for this once it is implemented
+          cliExecute(
+            `parka ${have($effect`Everything Looks Yellow`) ? "ghostasaurus" : "dilophosaur"}`
+          ); // Use grimoire's outfit modes for this once it is implemented
         }
       },
       do: $location`The Neverending Party`,
-      outfit: baggoOutfit,
+      outfit: () => bestOutfit(),
       effects: [
         $skill`Blood Bond`,
         $skill`Leash of Linguini`,

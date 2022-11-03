@@ -104,35 +104,3 @@ export function unusedBanishes(to_banish: Monster[]): BanishSource[] {
   debug(`Banishes used: ${Array.from(used_banishes).join(", ")}`);
   return banishSources.filter((banish) => banish.available() && !used_banishes.has(banish.do));
 }
-
-export const runawaySources: CombatResource[] = [
-  {
-    name: "GAP",
-    available: () => have($item`Greatest American Pants`),
-    do: Macro.runaway(),
-    equip: $item`Greatest American Pants`,
-  },
-  {
-    name: "Navel Ring",
-    available: () => have($item`navel ring of navel gazing`),
-    do: Macro.runaway(),
-    equip: $item`navel ring of navel gazing`,
-  },
-];
-
-export const pickpocketSources: CombatResource[] = [
-  {
-    name: "Mime Glove",
-    available: () =>
-      have($item`mime army infiltration glove`) && canEquip($item`mime army infiltration glove`),
-    do: Macro.step("pickpocket"),
-    equip: $item`mime army infiltration glove`,
-  },
-  {
-    name: "Tiny Black Hole",
-    prepare: () => retrieveItem($item`tiny black hole`),
-    available: () => have($item`tiny black hole`) || retrievePrice($item`tiny black hole`) < 10_000,
-    do: Macro.step("pickpocket"),
-    equip: $item`tiny black hole`,
-  },
-];
