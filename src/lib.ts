@@ -1,14 +1,6 @@
-import {
-  familiarWeight,
-  haveEquipped,
-  Item,
-  itemAmount,
-  myFamiliar,
-  print,
-  retrieveItem,
-  weightAdjustment,
-} from "kolmafia";
-import { $item, withProperty } from "libram";
+import { Outfit } from "grimoire-kolmafia";
+import { Item, itemAmount, print, retrieveItem } from "kolmafia";
+import { withProperty } from "libram";
 
 export function debug(message: string, color?: string): void {
   if (color) {
@@ -37,22 +29,11 @@ export function acquire(quantity: number, item: Item, maxPrice: number): number 
   return itemAmount(item) - startAmount;
 }
 
-/**
- * Return the expected adventures gained from a turn-taking combat based on the player's current state.
- */
-export function expectedAdvsGainedPerCombat(): number {
-  const gnome = haveEquipped($item`gnomish housemaid's kgnee`)
-    ? 0.01 + (familiarWeight(myFamiliar()) + weightAdjustment()) / 1000
-    : 0;
-  const ring = haveEquipped($item`mafia thumb ring`) ? 0.04 : 0;
-  return gnome + ring;
-}
-
-export function expectedBagsPerAdv(familiarWeight: number, itemDrop: number): number {
-  const bonusItem = (itemDrop + (Math.sqrt(55 + familiarWeight) + familiarWeight + 3)) / 100;
-  const a = familiarWeight / 1000 + 0.04; // expected advs gained per combat
-  const b = 0.25 / (1 - (0.2 + 0.8 * a)) + (0.75 * (0.05 * (1 + bonusItem))) / (1 - a); // expected bags from combat with a burnout or jock
-  return (6 / 7) * b + (1 / 7) * ((2 / 5) * b + (3 / 5) * (0.2 + 0.8 * a) * b);
+export function printOutfit(outfit: Outfit): void {
+  for (const [slot, item] of outfit.equips) {
+    print(`* ${slot}: ${item}`);
+  }
+  print(`* ${outfit.familiar}`);
 }
 
 /**

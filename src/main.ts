@@ -1,9 +1,11 @@
 import { Args, getTasks } from "grimoire-kolmafia";
 import { Familiar, myAdventures, myTurncount, print } from "kolmafia";
-import { $item, Session } from "libram";
+import { $item, $slot, Session } from "libram";
 import { Engine } from "./engine/engine";
-import { expectedAdvsGainedPerCombat, formatNumber } from "./lib";
+import { formatNumber, printOutfit } from "./lib";
+import { bestOutfit } from "./outfit";
 import { setupPotions } from "./potions";
+import { Sim } from "./sim";
 import { BaggoQuest } from "./tasks/baggo";
 import { DailiesQuest } from "./tasks/dailies";
 
@@ -44,7 +46,8 @@ export function turnsRemaining(): number {
     return Math.min(args.advs - spent, myAdventures());
   }
   const spend = myAdventures() + Math.min(0, args.advs);
-  return Math.round(spend / (1 - expectedAdvsGainedPerCombat()));
+  // return Math.round(spend / (1 - expectedAdvsGainedPerCombatTurn(bestOutfit(), 45)));
+  return 0;
 }
 
 export function main(command?: string): void {
@@ -54,31 +57,51 @@ export function main(command?: string): void {
     return;
   }
 
-  const tasks = getTasks([DailiesQuest, BaggoQuest]);
-  const engine = new Engine(tasks);
-  const sessionStart = Session.current();
+  const sim = new Sim(bestOutfit(), 50, 200);
+  printOutfit(sim.outfit);
+  print(`can pickpocket: ${sim.canPickpocket()}`);
+  print(`can navel runaway: ${sim.canNavelRunaway()}`);
+  print(`item bonus: ${sim.itemBonus()}`);
+  print(`expected bags/keys: ${sim.expectedBagsOrKeysPerAdv()}`);
 
-  if (engine.getNextTask()) {
-    setupPotions();
-    if (args.buff) return;
-  }
+  const sim2 = new Sim(bestOutfit(), 51, 200);
+  const sim3 = new Sim(bestOutfit(), 50, 201);
+  print(
+    `value of 1 lb: ${
+      (sim2.expectedBagsOrKeysPerAdv() - sim.expectedBagsOrKeysPerAdv()) * args.itemvalue
+    }`
+  );
+  print(
+    `value of 1%: ${
+      (sim3.expectedBagsOrKeysPerAdv() - sim.expectedBagsOrKeysPerAdv()) * args.itemvalue
+    }`
+  );
 
-  try {
-    engine.run();
-  } finally {
-    engine.destruct();
-  }
+  // const tasks = getTasks([DailiesQuest(), BaggoQuest()]);
+  // const engine = new Engine(tasks);
+  // const sessionStart = Session.current();
 
-  const sessionResults = Session.current().diff(sessionStart);
-  const bags = sessionResults.items.get($item`unremarkable duffel bag`) ?? 0;
-  const keys = sessionResults.items.get($item`van key`) ?? 0;
-  const advs = adventures - myAdventures();
-  const turns = myTurncount() - turncount;
-  const mpa = Math.round(((bags + keys) * args.itemvalue + sessionResults.meat) / advs);
-  print(`This run of baggo, you spent ${turns} turns and generated:`, "blue");
-  print(`* ${formatNumber(bags)} duffel bags`, "blue");
-  print(`* ${formatNumber(keys)} van keys`, "blue");
-  print(`* ${formatNumber(turns - advs)} advs`, "blue");
-  print(`* ${formatNumber(sessionResults.meat)} meat`, "blue");
-  print(`That's ${formatNumber(mpa)} MPA!`, "blue");
+  // if (engine.getNextTask()) {
+  //   setupPotions();
+  //   if (args.buff) return;
+  // }
+
+  // try {
+  //   engine.run();
+  // } finally {
+  //   engine.destruct();
+  // }
+
+  // const sessionResults = Session.current().diff(sessionStart);
+  // const bags = sessionResults.items.get($item`unremarkable duffel bag`) ?? 0;
+  // const keys = sessionResults.items.get($item`van key`) ?? 0;
+  // const advs = adventures - myAdventures();
+  // const turns = myTurncount() - turncount;
+  // const mpa = Math.round(((bags + keys) * args.itemvalue + sessionResults.meat) / advs);
+  // print(`This run of baggo, you spent ${turns} turns and generated:`, "blue");
+  // print(`* ${formatNumber(bags)} duffel bags`, "blue");
+  // print(`* ${formatNumber(keys)} van keys`, "blue");
+  // print(`* ${formatNumber(turns - advs)} advs`, "blue");
+  // print(`* ${formatNumber(sessionResults.meat)} meat`, "blue");
+  // print(`That's ${formatNumber(mpa)} MPA!`, "blue");
 }
