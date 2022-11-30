@@ -27,7 +27,7 @@ export function isSober(): boolean {
   return myInebriety() > inebrietyLimit() - Number(myFamiliar() !== $familiar`Stooper`);
 }
 
-export function equipFirstOn(items: Item[], outfit: Outfit): boolean {
+export function equipFirst(items: Item[], outfit: Outfit): boolean {
   return items.some((x) => outfit.equip(x));
 }
 
@@ -66,13 +66,17 @@ export function chooseOutfit(): Outfit {
   }
 
   if ($classes`Disco Bandit, Accordion Thief`.includes(myClass())) {
-    equipFirstOn([$item`mime army infiltration glove`, $item`tiny black hole`], outfit);
+    equipFirst([$item`mime army infiltration glove`, $item`tiny black hole`], outfit);
   }
 
-  equipFirstOn([$item`Greatest American Pants`, $item`navel ring of navel gazing`], outfit);
+  equipFirst([$item`Greatest American Pants`, $item`navel ring of navel gazing`], outfit);
 
-  if (!have($effect`Everything Looks Yellow`)) outfit.equip($item`Jurassic Parka`);
-
+  if (!have($effect`Everything Looks Yellow`)) {
+    outfit.equip($item`Jurassic Parka`);
+    outfit.setModes({
+      parka: "dilophosaur",
+    });
+  }
   if (
     get("questPAGhost") === "unstarted" &&
     get("nextParanormalActivity") <= totalTurnsPlayed() &&
@@ -84,6 +88,8 @@ export function chooseOutfit(): Outfit {
   outfit.equip([$item`June cleaver`, $item`Fourth of May Cosplay Saber`], $slot`weapon`);
   outfit.equip($item`carnivorous potted plant`);
   outfit.equip($item`mafia thumb ring`);
+  outfit.setModes({ parka: "ghostasaurus" });
+  // TODO run sim and get modifier weights
   outfit.equip({
     modifier: "0.0014familiar weight 0.04item drop",
     avoid: [$item`time-twitching toolbelt`],

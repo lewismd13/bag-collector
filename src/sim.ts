@@ -1,6 +1,7 @@
 import { Outfit } from "grimoire-kolmafia";
-import { Familiar, Item, myClass } from "kolmafia";
-import { $classes, $item, findFairyMultiplier, getModifier, ReagnimatedGnome } from "libram";
+import { Familiar, Item, myClass, Skill, toEffect } from "kolmafia";
+import { $classes, $item, findFairyMultiplier, getModifier, have, ReagnimatedGnome } from "libram";
+import { args } from "./main";
 import { chooseOutfit } from "./outfit";
 export function amountEquippedOnOutfit(item: Item, outfit: Outfit): number {
   return [...outfit.equips.values()].filter((i) => i === item).length;
@@ -20,13 +21,13 @@ export class Sim {
   famWeight: number;
   itemDrop: number;
 
-  static baseline(): Sim {
-    const outfit = chooseOutfit();
-    const sources = [...outfit.equips.values()];
-    const famWeight = sources.reduce((a, b) => a + getModifier("Familiar Weight", b), 0);
-    const itemDrop = sources.reduce((a, b) => a + getModifier("Item Drop", b), 0);
-    return new Sim(outfit, famWeight, itemDrop);
-  }
+  // static baseline(): Sim {
+  //   const outfit = chooseOutfit();
+  //   const sources = [...outfit.equips.values()];
+  //   const famWeight = sources.reduce((a, b) => a + getModifier("Familiar Weight", b), 0);
+  //   const itemDrop = sources.reduce((a, b) => a + getModifier("Item Drop", b), 0);
+  //   return new Sim(outfit, famWeight, itemDrop);
+  // }
 
   constructor(outfit: Outfit, famWeight: number, itemDrop: number) {
     this.outfit = outfit;
@@ -79,9 +80,25 @@ export class Sim {
       (1 / 7) * ((2 / 5) * b + (3 / 5) * (runawayChance + (1 - runawayChance) * a) * b)
     );
   }
+
+  unitValue(): any {
+    return {
+      famWeight:
+        (new Sim(this.outfit, this.famWeight + 1, this.itemDrop).expectedBagsOrKeysPerAdv() -
+          this.expectedBagsOrKeysPerAdv()) *
+        args.itemvalue,
+      itemDrop:
+        (new Sim(this.outfit, this.famWeight, this.itemDrop + 1).expectedBagsOrKeysPerAdv() -
+          this.expectedBagsOrKeysPerAdv()) *
+        args.itemvalue,
+    };
+  }
 }
 
-export function baseline(outfit: Outfit): any {
+export function baselineModifierValues(outfit: Outfit): any {
+  const passives = Skill.all().filter((skill) => have(skill) && skill.passive);
+  const buffs = Skill.all().filter(skill => have(skill) && skill.)
   const sources = [...outfit.equips.values()];
+  // passives, skills, base fam weight
   return sources.reduce((a, b) => a + getModifier("Familiar Weight", b), 0);
 }

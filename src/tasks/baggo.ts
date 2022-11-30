@@ -132,11 +132,6 @@ export function BaggoQuest(): Quest {
         completed: () => turnsRemaining() < 1 || myAdventures() === 0,
         prepare: (): void => {
           bubbleVision();
-          if (haveEquipped($item`Jurassic Parka`)) {
-            cliExecute(
-              `parka ${have($effect`Everything Looks Yellow`) ? "ghostasaurus" : "dilophosaur"}`
-            ); // Use grimoire's outfit modes for this once it is implemented
-          }
         },
         do: $location`The Neverending Party`,
         outfit: () => chooseOutfit(),

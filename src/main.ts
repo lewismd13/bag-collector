@@ -3,7 +3,7 @@ import { Familiar, myAdventures, myTurncount, print } from "kolmafia";
 import { $item, $slot, Session } from "libram";
 import { Engine } from "./engine/engine";
 import { formatNumber, printOutfit } from "./lib";
-import { bestOutfit } from "./outfit";
+import { chooseOutfit } from "./outfit";
 import { setupPotions } from "./potions";
 import { Sim } from "./sim";
 import { BaggoQuest } from "./tasks/baggo";
@@ -57,15 +57,15 @@ export function main(command?: string): void {
     return;
   }
 
-  const sim = new Sim(bestOutfit(), 50, 200);
+  const sim = new Sim(chooseOutfit(), 50, 200);
   printOutfit(sim.outfit);
   print(`can pickpocket: ${sim.canPickpocket()}`);
   print(`can navel runaway: ${sim.canNavelRunaway()}`);
   print(`item bonus: ${sim.itemBonus()}`);
   print(`expected bags/keys: ${sim.expectedBagsOrKeysPerAdv()}`);
 
-  const sim2 = new Sim(bestOutfit(), 51, 200);
-  const sim3 = new Sim(bestOutfit(), 50, 201);
+  const sim2 = new Sim(chooseOutfit(), 51, 200);
+  const sim3 = new Sim(chooseOutfit(), 50, 201);
   print(
     `value of 1 lb: ${
       (sim2.expectedBagsOrKeysPerAdv() - sim.expectedBagsOrKeysPerAdv()) * args.itemvalue
