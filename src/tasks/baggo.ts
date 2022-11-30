@@ -38,7 +38,7 @@ import {
 import { CombatStrategy } from "../engine/combat";
 import { Quest } from "../engine/task";
 import { args, turnsRemaining } from "../main";
-import { bestOutfit } from "../outfit";
+import { chooseOutfit } from "../outfit";
 import { bubbleVision } from "../potions";
 
 const floristFlowers = [
@@ -116,7 +116,7 @@ export function BaggoQuest(): Quest {
           }
         },
         outfit: (): OutfitSpec => {
-          return { ...bestOutfit().spec(), back: $item`protonic accelerator pack` };
+          return { ...chooseOutfit().spec(), back: $item`protonic accelerator pack` };
         },
         combat: new CombatStrategy().macro(
           Macro.trySkill($skill`Sing Along`)
@@ -139,7 +139,7 @@ export function BaggoQuest(): Quest {
           }
         },
         do: $location`The Neverending Party`,
-        outfit: () => bestOutfit(),
+        outfit: () => chooseOutfit(),
         effects: [
           $skill`Blood Bond`,
           $skill`Leash of Linguini`,

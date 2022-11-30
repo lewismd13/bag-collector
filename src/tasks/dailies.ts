@@ -12,8 +12,8 @@ import {
   SourceTerminal,
 } from "libram";
 import { Quest } from "../engine/task";
-import { bestFamiliar } from "../familiar";
 import { turnsRemaining } from "../main";
+import { chooseFamiliar } from "../outfit";
 
 export function DailiesQuest(): Quest {
   return {
@@ -69,7 +69,7 @@ export function DailiesQuest(): Quest {
         ready: () => have($item`mumming trunk`),
         completed: () => get("_mummeryMods").includes("Item Drop"),
         do: () => cliExecute("mummery item"),
-        outfit: { familiar: bestFamiliar() },
+        outfit: { familiar: chooseFamiliar() },
         limit: { tries: 1 },
       },
       {

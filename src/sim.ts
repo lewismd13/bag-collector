@@ -1,8 +1,7 @@
 import { Outfit } from "grimoire-kolmafia";
 import { Familiar, Item, myClass } from "kolmafia";
-import { $classes, $item, findFairyMultiplier, getModifier } from "libram";
-import { bestOutfit } from "./outfit";
-
+import { $classes, $item, findFairyMultiplier, getModifier, ReagnimatedGnome } from "libram";
+import { chooseOutfit } from "./outfit";
 export function amountEquippedOnOutfit(item: Item, outfit: Outfit): number {
   return [...outfit.equips.values()].filter((i) => i === item).length;
 }
@@ -22,7 +21,7 @@ export class Sim {
   itemDrop: number;
 
   static baseline(): Sim {
-    const outfit = bestOutfit();
+    const outfit = chooseOutfit();
     const sources = [...outfit.equips.values()];
     const famWeight = sources.reduce((a, b) => a + getModifier("Familiar Weight", b), 0);
     const itemDrop = sources.reduce((a, b) => a + getModifier("Item Drop", b), 0);
@@ -61,7 +60,7 @@ export class Sim {
 
   expectedAdvsGainedPerTurnTakingCombat(): number {
     const gnome = haveEquippedOnOutfit($item`gnomish housemaid's kgnee`, this.outfit)
-      ? 0.01 + this.famWeight / 1000
+      ? ReagnimatedGnome.expectedAdvsPerCombat(this.famWeight)
       : 0;
     const ring = haveEquippedOnOutfit($item`mafia thumb ring`, this.outfit) ? 0.04 : 0;
     return gnome + ring;

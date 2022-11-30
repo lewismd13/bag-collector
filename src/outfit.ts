@@ -1,68 +1,63 @@
-import { Outfit, outfitSlots } from "grimoire-kolmafia";
+import { Outfit } from "grimoire-kolmafia";
 import {
-  equippedItem,
+  Familiar,
   inebrietyLimit,
   Item,
   myClass,
   myFamiliar,
   myInebriety,
-  myPath,
   outfitPieces,
-  toSlot,
   totalTurnsPlayed,
 } from "kolmafia";
-import { $classes, $effect, $familiar, $item, $path, $slot, get, have } from "libram";
-import { bestFamiliar } from "./familiar";
+import {
+  $classes,
+  $effect,
+  $familiar,
+  $item,
+  $slot,
+  findFairyMultiplier,
+  get,
+  have,
+  ReagnimatedGnome,
+} from "libram";
+import { maxBy } from "./lib";
 import { args } from "./main";
-
-// TODO replace with outfit.haveEquipped once it is made public
-export function haveEquippedOnOutfit(item: Item, outfit: Outfit): boolean {
-  return [...outfit.equips.values()].filter((i) => i === item).length > 0;
-}
-
-export function canPickpocketWearing(outfit: Outfit): boolean {
-  return (
-    $classes`Disco Bandit, Accordion Thief`.includes(myClass()) ||
-    [$item`mime army infiltration glove`, $item`tiny black hole`].some((item) =>
-      haveEquippedOnOutfit(item, outfit)
-    )
-  );
-}
-
-export function canNavelRunawayWearing(outfit: Outfit): boolean {
-  return [$item`Greatest American Pants`, $item`navel ring of navel gazing`].some((item) =>
-    haveEquippedOnOutfit(item, outfit)
-  );
-}
-
-export function outfitFromCurrent(): Outfit {
-  const result = new Outfit();
-  if (!result.equip(myFamiliar())) throw `Failed to equip ${myFamiliar()}`;
-  for (const slotName of outfitSlots) {
-    const slot =
-      new Map([
-        ["famequip", $slot`familiar`],
-        ["offhand", $slot`off-hand`],
-      ]).get(slotName) ?? toSlot(slotName);
-    if (!result.equip(equippedItem(slot), slot)) {
-      throw `Failed to equip ${equippedItem(slot)} in slot ${slot}`;
-    }
-  }
-  return result;
-}
 
 export function isSober(): boolean {
   return myInebriety() > inebrietyLimit() - Number(myFamiliar() !== $familiar`Stooper`);
 }
 
-export function bestOutfit(): Outfit {
+export function equipFirstOn(items: Item[], outfit: Outfit): boolean {
+  return items.some((x) => outfit.equip(x));
+}
+
+export function chooseFamiliar(): Familiar {
+  if (args.familiar !== undefined) return args.familiar;
+
+  if (ReagnimatedGnome.chosenParts().includes($item`gnomish housemaid's kgnee`)) {
+    return $familiar`Reagnimated Gnome`;
+  }
+
+  const viableFairies = Familiar.all().filter(
+    (f) =>
+      have(f) &&
+      findFairyMultiplier(f) &&
+      f !== $familiar`Steam-Powered Cheerleader` &&
+      !f.physicalDamage &&
+      !f.elementalDamage
+  );
+  const bestFairy = maxBy(viableFairies, findFairyMultiplier);
+  return bestFairy;
+}
+
+export function chooseOutfit(): Outfit {
   const outfit = new Outfit();
 
   if (!isSober() && !outfit.equip($item`Drunkula's wineglass`)) {
-    throw "Unable to equip Drunkula's wineglass on our grimoire outfit and we are overdrunk";
+    throw "Unable to equip Drunkula's wineglass";
   }
 
-  outfit.equip(bestFamiliar());
+  outfit.equip(chooseFamiliar());
   outfit.equip($item`gnomish housemaid's kgnee`);
 
   if (args.outfit) {
@@ -70,21 +65,19 @@ export function bestOutfit(): Outfit {
     return outfit;
   }
 
-  if (!canPickpocketWearing(outfit)) {
-    for (const item of [$item`mime army infiltration glove`, $item`tiny black hole`]) {
-      if (outfit.equip(item)) break;
-    }
+  if ($classes`Disco Bandit, Accordion Thief`.includes(myClass())) {
+    equipFirstOn([$item`mime army infiltration glove`, $item`tiny black hole`], outfit);
   }
 
-  for (const item of [$item`Greatest American Pants`, $item`navel ring of navel gazing`]) {
-    if (outfit.equip(item)) break;
-  }
+  equipFirstOn([$item`Greatest American Pants`, $item`navel ring of navel gazing`], outfit);
 
-  if (myPath() === $path`Grey You` || !have($effect`Everything Looks Yellow`)) {
-    outfit.equip($item`Jurassic Parka`);
-  }
+  if (!have($effect`Everything Looks Yellow`)) outfit.equip($item`Jurassic Parka`);
 
-  if (get("questPAGhost") === "unstarted" && get("nextParanormalActivity") <= totalTurnsPlayed()) {
+  if (
+    get("questPAGhost") === "unstarted" &&
+    get("nextParanormalActivity") <= totalTurnsPlayed() &&
+    isSober()
+  ) {
     outfit.equip($item`protonic accelerator pack`);
   }
 
