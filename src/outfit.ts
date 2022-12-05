@@ -2,7 +2,6 @@ import { Outfit } from "grimoire-kolmafia";
 import {
   Familiar,
   inebrietyLimit,
-  Item,
   myClass,
   myFamiliar,
   myInebriety,
@@ -14,6 +13,7 @@ import {
   $effect,
   $familiar,
   $item,
+  $items,
   $slot,
   findFairyMultiplier,
   get,
@@ -25,10 +25,6 @@ import { args } from "./main";
 
 export function isSober(): boolean {
   return myInebriety() > inebrietyLimit() - Number(myFamiliar() !== $familiar`Stooper`);
-}
-
-export function equipFirst(items: Item[], outfit: Outfit): boolean {
-  return items.some((x) => outfit.equip(x));
 }
 
 export function chooseFamiliar(): Familiar {
@@ -54,7 +50,7 @@ export function chooseOutfit(): Outfit {
   const outfit = new Outfit();
 
   if (!isSober() && !outfit.equip($item`Drunkula's wineglass`)) {
-    throw "Unable to equip Drunkula's wineglass";
+    throw "Unable to add Drunkula's wineglass to our outfit";
   }
 
   outfit.equip(chooseFamiliar());
@@ -66,10 +62,10 @@ export function chooseOutfit(): Outfit {
   }
 
   if ($classes`Disco Bandit, Accordion Thief`.includes(myClass())) {
-    equipFirst([$item`mime army infiltration glove`, $item`tiny black hole`], outfit);
+    outfit.equipFirst($items`mime army infiltration glove, tiny black hole`);
   }
 
-  equipFirst([$item`Greatest American Pants`, $item`navel ring of navel gazing`], outfit);
+  outfit.equipFirst($items`Greatest American Pants, navel ring of navel gazing`);
 
   if (!have($effect`Everything Looks Yellow`)) {
     outfit.equip($item`Jurassic Parka`);
@@ -77,6 +73,7 @@ export function chooseOutfit(): Outfit {
       parka: "dilophosaur",
     });
   }
+
   if (
     get("questPAGhost") === "unstarted" &&
     get("nextParanormalActivity") <= totalTurnsPlayed() &&
