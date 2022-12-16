@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Args, getTasks } from "grimoire-kolmafia";
-import { Familiar, myAdventures, myTurncount, print } from "kolmafia";
+import { dump, Familiar, myAdventures, myTurncount, print } from "kolmafia";
 import { $item, $slot, Session } from "libram";
 import { Engine } from "./engine/engine";
 import { formatNumber, printOutfit } from "./lib";
 import { chooseOutfit } from "./outfit";
 import { setupPotions } from "./potions";
-import { Sim } from "./sim";
+import { Simulation } from "./simulation";
 import { BaggoQuest } from "./tasks/baggo";
 import { DailiesQuest } from "./tasks/dailies";
 
@@ -14,7 +15,7 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
     help: "Number of adventures to run (use negative numbers for the number of adventures remaining).",
     default: Infinity,
   }),
-  itemvalue: Args.number({ help: "Value of a single duffel bag or van key.", default: 20_000 }),
+  bagvalue: Args.number({ help: "Value of a single duffel bag or van key.", default: 20_000 }),
   olfact: Args.string({
     help: "Which monster to olfact.",
     options: [
@@ -26,14 +27,11 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
   }),
   buff: Args.flag({ help: "Only buff up, do not spend any adventures.", default: false }),
   outfit: Args.string({
-    help: "Name of the outfit whose pieces to equip when farming.",
-    default: "",
+    help: "Name of the outfit whose pieces to equip when farming. If not given, an outfit will be automatically selected",
   }),
-  familiar: Args.custom<Familiar>(
-    { help: "Familiar to use when farming." },
-    Familiar.get,
-    "FAMILIAR"
-  ),
+  familiar: Args.familiar({
+    help: "Familiar to use when farming. If not given, a familiar will be automatically selected.",
+  }),
 });
 
 export const adventures = myAdventures();
@@ -57,25 +55,18 @@ export function main(command?: string): void {
     return;
   }
 
-  const sim = new Sim(chooseOutfit(), 50, 200);
+  const sim = new Simulation(chooseOutfit(), 50, 200);
   printOutfit(sim.outfit);
+  print("");
   print(`can pickpocket: ${sim.canPickpocket()}`);
   print(`can navel runaway: ${sim.canNavelRunaway()}`);
+  print("");
+  print(`advs gained: ${sim.advsGainedPerTurnTakingCombat()}`);
   print(`item bonus: ${sim.itemBonus()}`);
-  print(`expected bags/keys: ${sim.expectedBagsOrKeysPerAdv()}`);
-
-  const sim2 = new Sim(chooseOutfit(), 51, 200);
-  const sim3 = new Sim(chooseOutfit(), 50, 201);
-  print(
-    `value of 1 lb: ${
-      (sim2.expectedBagsOrKeysPerAdv() - sim.expectedBagsOrKeysPerAdv()) * args.itemvalue
-    }`
-  );
-  print(
-    `value of 1%: ${
-      (sim3.expectedBagsOrKeysPerAdv() - sim.expectedBagsOrKeysPerAdv()) * args.itemvalue
-    }`
-  );
+  print(`expected bags/keys: ${sim.bagsGainedPerAdv()}`);
+  print("");
+  print("unit values in meat:");
+  dump(sim.unitValue());
 
   // const tasks = getTasks([DailiesQuest(), BaggoQuest()]);
   // const engine = new Engine(tasks);
@@ -97,7 +88,7 @@ export function main(command?: string): void {
   // const keys = sessionResults.items.get($item`van key`) ?? 0;
   // const advs = adventures - myAdventures();
   // const turns = myTurncount() - turncount;
-  // const mpa = Math.round(((bags + keys) * args.itemvalue + sessionResults.meat) / advs);
+  // const mpa = Math.round(((bags + keys) * args.bagvalue + sessionResults.meat) / advs);
   // print(`This run of baggo, you spent ${turns} turns and generated:`, "blue");
   // print(`* ${formatNumber(bags)} duffel bags`, "blue");
   // print(`* ${formatNumber(keys)} van keys`, "blue");

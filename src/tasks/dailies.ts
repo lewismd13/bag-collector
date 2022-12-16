@@ -1,4 +1,4 @@
-import { cliExecute, getClanLounge, runChoice, use, useSkill, visitUrl } from "kolmafia";
+import { cliExecute, getClanLounge, use, useSkill } from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -8,6 +8,7 @@ import {
   get,
   getModifier,
   have,
+  ReagnimatedGnome,
   SongBoom,
   SourceTerminal,
 } from "libram";
@@ -30,10 +31,7 @@ export function DailiesQuest(): Quest {
         name: "Kgnee",
         ready: () => have($familiar`Reagnimated Gnome`),
         completed: () => have($item`gnomish housemaid's kgnee`),
-        do: (): void => {
-          visitUrl("arena.php");
-          runChoice(4);
-        },
+        do: () => ReagnimatedGnome.choosePart("kgnee"),
         outfit: { familiar: $familiar`Reagnimated Gnome` },
         limit: { tries: 1 },
       },

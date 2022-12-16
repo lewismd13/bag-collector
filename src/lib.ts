@@ -37,7 +37,7 @@ export function printOutfit(outfit: Outfit): void {
 }
 
 /**
- * Find the best element of an array, where "best" is defined by some given criteria. Borrowed from garbage-collector.
+ * Find the best element of an array, where "best" is defined by some given criteria. Taken from garbage-collector.
  * @param array The array to traverse and find the best element of.
  * @param optimizer Either a key on the objects we're looking at that corresponds to numerical values, or a function for mapping these objects to numbers. Essentially, some way of assigning value to the elements of the array.
  * @param reverse Make this true to find the worst element of the array, and false to find the best. Defaults to false.

@@ -22,6 +22,7 @@ import {
 } from "libram";
 import { maxBy } from "./lib";
 import { args } from "./main";
+import { baselineModifierValues, Simulation } from "./simulation";
 
 export function isSober(): boolean {
   return myInebriety() > inebrietyLimit() - Number(myFamiliar() !== $familiar`Stooper`);
@@ -61,7 +62,7 @@ export function chooseOutfit(): Outfit {
     return outfit;
   }
 
-  if ($classes`Disco Bandit, Accordion Thief`.includes(myClass())) {
+  if (!$classes`Disco Bandit, Accordion Thief`.includes(myClass())) {
     outfit.equipFirst($items`mime army infiltration glove, tiny black hole`);
   }
 
@@ -86,9 +87,14 @@ export function chooseOutfit(): Outfit {
   outfit.equip($item`carnivorous potted plant`);
   outfit.equip($item`mafia thumb ring`);
   outfit.setModes({ parka: "ghostasaurus" });
-  // TODO run sim and get modifier weights
+
+  // Estimate value of modifiers
+  const baseline = baselineModifierValues(outfit);
+  const sim = new Simulation(outfit, baseline.famWeight, baseline.itemDrop);
+  const units = sim.unitValue();
+
   outfit.equip({
-    modifier: "0.0014familiar weight 0.04item drop",
+    modifier: `${units.famWeight}familiar weight ${units.itemDrop}item drop`, // 0.0014familiar weight 0.04item drop
     avoid: [$item`time-twitching toolbelt`],
   });
   return outfit;
