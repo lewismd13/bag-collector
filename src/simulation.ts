@@ -3,11 +3,6 @@ import { Familiar, familiarWeight, myClass, Skill, toEffect } from "kolmafia";
 import { $classes, $item, findFairyMultiplier, getModifier, have, ReagnimatedGnome } from "libram";
 import { args } from "./main";
 
-export function fairyItemBonus(familiar: Familiar, famWeight: number): number {
-  const fairyMult = findFairyMultiplier(familiar);
-  return Math.max(Math.sqrt(55 * fairyMult * famWeight) + fairyMult * famWeight - 3, 0);
-}
-
 export class Simulation {
   outfit: Outfit;
   famWeight: number;
@@ -15,7 +10,7 @@ export class Simulation {
 
   /**
    * Create the simulation.
-   * @param outfit Outfit to use for evaluating combat capabilities.
+   * @param outfit Outfit to use for evaluating combat results. The modifier values from items equipped to the outfit are not taken into account.
    * @param famWeight Value of familiar weight modifier.
    * @param itemDrop Value of item drop modifier.
    */
@@ -25,6 +20,9 @@ export class Simulation {
     this.itemDrop = itemDrop;
   }
 
+  /**
+   * @returns Whether the outfit has the ability to pickpocket.
+   */
   canPickpocket(): boolean {
     return (
       $classes`Disco Bandit, Accordion Thief`.includes(myClass()) ||
@@ -34,12 +32,18 @@ export class Simulation {
     );
   }
 
+  /**
+   * @returns Whether the outfit has the ability to use navel runaways.
+   */
   canNavelRunaway(): boolean {
     return [$item`Greatest American Pants`, $item`navel ring of navel gazing`].some((item) =>
       this.outfit.haveEquipped(item)
     );
   }
 
+  /**
+   * @returns The total item bonus from item drop modifier and a fairy-like familiar.
+   */
   itemBonus(): number {
     const fairyMult = findFairyMultiplier(this.outfit.familiar ?? Familiar.none);
     const fairyBonus = Math.max(
@@ -49,6 +53,9 @@ export class Simulation {
     return this.itemDrop + fairyBonus;
   }
 
+  /**
+   * @returns The expected number of adventures gained from a turn-taking combat.
+   */
   advsGainedPerTurnTakingCombat(): number {
     const gnome = this.outfit.haveEquipped($item`gnomish housemaid's kgnee`)
       ? ReagnimatedGnome.expectedAdvsPerCombat(this.famWeight)
@@ -57,6 +64,9 @@ export class Simulation {
     return gnome + ring;
   }
 
+  /**
+   * @returns The expected number of duffel bags or van keys gained per net adventure spent.
+   */
   bagsGainedPerAdv(): number {
     const pickpocketChance = this.canPickpocket() ? 0.25 : 0;
     const runawayChance = this.canNavelRunaway() ? 0.2 : 0;
@@ -64,21 +74,24 @@ export class Simulation {
     // bags obtained from combat with a burnout or jock
     const b =
       pickpocketChance / (1 - (runawayChance + (1 - runawayChance) * a)) +
-      ((1 - pickpocketChance) * (0.05 * (1 + this.itemBonus() / 100))) / (1 - a);
+      ((1 - pickpocketChance) * Math.min(0.05 * (1 + this.itemBonus() / 100), 1)) / (1 - a);
     return (
       (6 / 7) * b +
       (1 / 7) * ((2 / 5) * b + (3 / 5) * (runawayChance + (1 - runawayChance) * a) * b)
     );
   }
 
+  /**
+   * @returns The value, in meat, of one unit of the familiar weight and item drop modifiers.
+   */
   unitValue(): { famWeight: number; itemDrop: number } {
     return {
       famWeight:
         new Simulation(this.outfit, this.famWeight + 1, this.itemDrop).bagsGainedPerAdv() -
-        this.bagsGainedPerAdv() * args.itemvalue,
+        this.bagsGainedPerAdv() * args.bagvalue,
       itemDrop:
         new Simulation(this.outfit, this.famWeight, this.itemDrop + 1).bagsGainedPerAdv() -
-        this.bagsGainedPerAdv() * args.itemvalue,
+        this.bagsGainedPerAdv() * args.bagvalue,
     };
   }
 }
