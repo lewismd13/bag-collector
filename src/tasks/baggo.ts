@@ -1,14 +1,22 @@
-import { OutfitSpec } from "grimoire-kolmafia";
+import { OutfitEquips as BaseOutfitEquips, outfitSlots, OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
   canAdventure,
   expectedColdMedicineCabinet,
   getWorkshed,
+  canEquip,
+  canInteract,
+  cliExecute,
+  expectedColdMedicineCabinet,
+  getWorkshed,
+  haveEquipped,
+  inebrietyLimit,
+  Item,
   itemAmount,
   Location,
   Monster,
-  myAdventures,
   myClass,
+  myInebriety,
   myLocation,
   myThrall,
   putCloset,
@@ -22,6 +30,7 @@ import {
 import {
   $class,
   $item,
+  $items,
   $location,
   $monsters,
   $skill,
@@ -34,6 +43,7 @@ import {
 } from "libram";
 import { CombatStrategy } from "../engine/combat";
 import { Quest } from "../engine/task";
+import { gyou } from "../lib";
 import { args, turnsRemaining } from "../main";
 import { chooseOutfit } from "../outfit";
 import { bubbleVision } from "../potions";
@@ -117,6 +127,7 @@ export function BaggoQuest(): Quest {
         },
         combat: new CombatStrategy().macro(
           Macro.trySkill($skill`Sing Along`)
+            .trySkill($skill`Summon Love Gnats`)
             .trySkill($skill`Shoot Ghost`)
             .trySkill($skill`Shoot Ghost`)
             .trySkill($skill`Shoot Ghost`)
@@ -125,11 +136,23 @@ export function BaggoQuest(): Quest {
       },
       {
         name: "Collect Bags",
-        after: ["Party Fair"],
-        completed: () => turnsRemaining() < 1 || myAdventures() === 0,
-        prepare: () => bubbleVision(),
+        after: ["Dailies/Kgnee", "Party Fair"],
+        completed: () => false,
+        prepare: (): void => {
+          if (canInteract()) {
+            bubbleVision();
+          }
+          if (
+            haveEquipped($item`Jurassic Parka`) &&
+            get("parkaMode").toLowerCase() !== "dilophosaur"
+          ) {
+            cliExecute(
+              `parka ${have($effect`Everything Looks Yellow`) ? "ghostasaurus" : "dilophosaur"}`
+            ); // Use grimoire's outfit modes for this once it is implemented
+          }
+        },
         do: $location`The Neverending Party`,
-        outfit: () => chooseOutfit(),
+        outfit: baggoOutfit,
         effects: [
           $skill`Blood Bond`,
           $skill`Leash of Linguini`,
@@ -137,21 +160,31 @@ export function BaggoQuest(): Quest {
           $skill`The Spirit of Taking`,
           $skill`Fat Leon's Phat Loot Lyric`,
           $skill`Singer's Faithful Ocelot`,
+          $skill`Astral Shell`,
+          $skill`Ghostly Shell`,
         ]
           .filter((skill) => have(skill))
           .map((skill) => toEffect(skill)),
         choices: { 1324: 5 },
         combat: new CombatStrategy()
           .banish($monsters`biker, party girl, "plain" girl`)
-          .macro(
-            Macro.step("pickpocket")
+          .autoattack(
+            Macro.externalIf(
+              !gyou(),
+              Macro.if_(`!hppercentbelow 75`, Macro.step("pickpocket")).skill(
+                $skill`Summon Love Gnats`
+              ),
+              Macro.step("pickpocket")
+            )
               .if_(`match "unremarkable duffel bag" || match "van key"`, Macro.runaway())
-              .trySkill($skill`Double Nanovision`)
-              .trySkill($skill`Double Nanovision`)
-              .trySkill($skill`Spit jurassic acid`),
+              .trySkill($skill`Spit jurassic acid`)
+              .if_(
+                "!hppercentbelow 75 && !mpbelow 40",
+                Macro.trySkill($skill`Double Nanovision`).trySkill($skill`Double Nanovision`)
+              ),
             $monsters`burnout, jock`
           )
-          .macro((): Macro => {
+          .autoattack((): Macro => {
             return args.olfact !== "none"
               ? Macro.if_(Monster.get(args.olfact), Macro.trySkill($skill`Transcendent Olfaction`))
               : new Macro();
@@ -159,5 +192,6 @@ export function BaggoQuest(): Quest {
           .kill(),
       },
     ],
+    completed: () => turnsRemaining() <= 0,
   };
 }

@@ -1,4 +1,21 @@
-import { cliExecute, getClanLounge, use, useSkill } from "kolmafia";
+import {
+  availableAmount,
+  buyUsingStorage,
+  canEquip,
+  cliExecute,
+  getClanLounge,
+  Item,
+  mallPrice,
+  mySign,
+  retrieveItem,
+  runChoice,
+  Slot,
+  storageAmount,
+  toSlot,
+  use,
+  useSkill,
+  visitUrl,
+} from "kolmafia";
 import {
   $effect,
   $familiar,
@@ -12,7 +29,8 @@ import {
   SongBoom,
   SourceTerminal,
 } from "libram";
-import { Quest } from "../engine/task";
+import { Quest, Task } from "../engine/task";
+import { canPull, gyou, ronin } from "../lib";
 import { turnsRemaining } from "../main";
 import { chooseFamiliar } from "../outfit";
 

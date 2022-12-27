@@ -1,6 +1,6 @@
 import { Outfit } from "grimoire-kolmafia";
-import { Item, itemAmount, print, retrieveItem } from "kolmafia";
-import { withProperty } from "libram";
+import { canInteract, Item, itemAmount, myPath, print, retrieveItem, toInt } from "kolmafia";
+import { $path, get, withProperty } from "libram";
 
 export function debug(message: string, color?: string): void {
   if (color) {
@@ -66,4 +66,17 @@ export function maxBy<S extends string | number | symbol, T extends { [x in S]: 
   } else {
     return array.reduce((a, b) => (a[optimizer] > b[optimizer] !== reverse ? a : b));
   }
+}
+
+export function ronin(): boolean {
+  return !canInteract();
+}
+
+export function gyou(): boolean {
+  return myPath() === $path`Grey You`;
+}
+
+export function canPull(item: Item): boolean {
+  const pulls = get("_roninStoragePulls").split(",");
+  return ronin() && pulls.length < 20 && !pulls.includes(`${toInt(item)}`);
 }
