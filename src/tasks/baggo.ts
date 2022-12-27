@@ -1,22 +1,14 @@
-import { OutfitEquips as BaseOutfitEquips, outfitSlots, OutfitSpec } from "grimoire-kolmafia";
+import { OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
   canAdventure,
-  expectedColdMedicineCabinet,
-  getWorkshed,
-  canEquip,
   canInteract,
-  cliExecute,
   expectedColdMedicineCabinet,
   getWorkshed,
-  haveEquipped,
-  inebrietyLimit,
-  Item,
   itemAmount,
   Location,
   Monster,
   myClass,
-  myInebriety,
   myLocation,
   myThrall,
   putCloset,
@@ -30,7 +22,6 @@ import {
 import {
   $class,
   $item,
-  $items,
   $location,
   $monsters,
   $skill,
@@ -137,22 +128,12 @@ export function BaggoQuest(): Quest {
       {
         name: "Collect Bags",
         after: ["Dailies/Kgnee", "Party Fair"],
-        completed: () => false,
+        completed: () => turnsRemaining() <= 0,
         prepare: (): void => {
-          if (canInteract()) {
-            bubbleVision();
-          }
-          if (
-            haveEquipped($item`Jurassic Parka`) &&
-            get("parkaMode").toLowerCase() !== "dilophosaur"
-          ) {
-            cliExecute(
-              `parka ${have($effect`Everything Looks Yellow`) ? "ghostasaurus" : "dilophosaur"}`
-            ); // Use grimoire's outfit modes for this once it is implemented
-          }
+          if (canInteract()) bubbleVision();
         },
         do: $location`The Neverending Party`,
-        outfit: baggoOutfit,
+        outfit: chooseOutfit,
         effects: [
           $skill`Blood Bond`,
           $skill`Leash of Linguini`,
@@ -192,6 +173,5 @@ export function BaggoQuest(): Quest {
           .kill(),
       },
     ],
-    completed: () => turnsRemaining() <= 0,
   };
 }
