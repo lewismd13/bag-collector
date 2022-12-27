@@ -2,10 +2,8 @@ import { OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
   canAdventure,
-  cliExecute,
   expectedColdMedicineCabinet,
   getWorkshed,
-  haveEquipped,
   itemAmount,
   Location,
   Monster,
@@ -23,7 +21,6 @@ import {
 } from "kolmafia";
 import {
   $class,
-  $effect,
   $item,
   $location,
   $monsters,
@@ -130,9 +127,7 @@ export function BaggoQuest(): Quest {
         name: "Collect Bags",
         after: ["Party Fair"],
         completed: () => turnsRemaining() < 1 || myAdventures() === 0,
-        prepare: (): void => {
-          bubbleVision();
-        },
+        prepare: () => bubbleVision(),
         do: $location`The Neverending Party`,
         outfit: () => chooseOutfit(),
         effects: [

@@ -6,7 +6,7 @@ import { Engine } from "./engine/engine";
 import { formatNumber, printOutfit } from "./lib";
 import { chooseOutfit } from "./outfit";
 import { setupPotions } from "./potions";
-import { Simulation } from "./simulation";
+import { Calculator } from "./calculator";
 import { BaggoQuest } from "./tasks/baggo";
 import { DailiesQuest } from "./tasks/dailies";
 
@@ -55,7 +55,7 @@ export function main(command?: string): void {
     return;
   }
 
-  const sim = new Simulation(chooseOutfit(), 50, 200);
+  const sim = new Calculator(chooseOutfit(), 50, 200);
   printOutfit(sim.outfit);
   print("");
   print(`can pickpocket: ${sim.canPickpocket()}`);

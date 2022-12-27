@@ -22,7 +22,7 @@ import {
 } from "libram";
 import { maxBy } from "./lib";
 import { args } from "./main";
-import { baselineModifierValues, Simulation } from "./simulation";
+import { Calculator } from "./calculator";
 
 export function isSober(): boolean {
   return myInebriety() > inebrietyLimit() - Number(myFamiliar() !== $familiar`Stooper`);
@@ -88,13 +88,9 @@ export function chooseOutfit(): Outfit {
   outfit.equip($item`mafia thumb ring`);
   outfit.setModes({ parka: "ghostasaurus" });
 
-  // Estimate value of modifiers
-  const baseline = baselineModifierValues(outfit);
-  const sim = new Simulation(outfit, baseline.famWeight, baseline.itemDrop);
-  const units = sim.unitValue();
-
+  const value = Calculator.fromBaseline(outfit).unitValue(); // Estimate value of modifiers
   outfit.equip({
-    modifier: `${units.famWeight}familiar weight ${units.itemDrop}item drop`, // 0.0014familiar weight 0.04item drop
+    modifier: `${value.famWeight}familiar weight ${value.itemDrop}item drop`,
     avoid: [$item`time-twitching toolbelt`],
   });
   return outfit;
