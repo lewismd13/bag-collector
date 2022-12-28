@@ -25,7 +25,7 @@ import { args } from "./main";
 import { Calculator } from "./calculator";
 
 export function isSober(): boolean {
-  return myInebriety() > inebrietyLimit() - Number(myFamiliar() !== $familiar`Stooper`);
+  return myInebriety() <= inebrietyLimit() - Number(myFamiliar() === $familiar`Stooper`);
 }
 
 export function chooseFamiliar(): Familiar {
@@ -88,9 +88,9 @@ export function chooseOutfit(): Outfit {
   outfit.equip($item`mafia thumb ring`);
   outfit.setModes({ parka: "ghostasaurus" });
 
-  const value = Calculator.fromBaseline(outfit).unitValue(); // Estimate value of modifiers
+  const unitValue = Calculator.baseline(outfit).unitValue(); // Estimate value of modifiers
   outfit.equip({
-    modifier: `${value.famWeight}familiar weight ${value.itemDrop}item drop`,
+    modifier: `${unitValue.famWeight}familiar weight ${unitValue.itemDrop}item drop`,
     avoid: [$item`time-twitching toolbelt`],
   });
   return outfit;

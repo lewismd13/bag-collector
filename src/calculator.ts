@@ -1,6 +1,7 @@
 import { Outfit } from "grimoire-kolmafia";
-import { Familiar, familiarWeight, myClass, Skill, toEffect } from "kolmafia";
+import { Effect, Familiar, familiarWeight, myClass, Skill, toEffect } from "kolmafia";
 import { $classes, $item, findFairyMultiplier, getModifier, have, ReagnimatedGnome } from "libram";
+import { fromCurrent } from "./engine/outfit";
 import { args } from "./main";
 
 export class Calculator {
@@ -9,17 +10,18 @@ export class Calculator {
   itemDrop: number;
 
   /**
-   * Create an instance using what is considered "baseline" values.
-   * @param outfit The outfit to use.
-   * @returns A calculator instance that includes the modifier values of passives, skill effects, outfit equips, and base familiar weight.
+   * Create a calculator instance using what are considered "baseline" values: passives, buffs, outfit equips, and base familiar weight.
+   * @param outfit The outfit to use. If not specified, this will use an outfit created from the current character state.
+   * @returns A calculator instance that includes the modifier values of baseline sources.
    */
-  static fromBaseline(outfit: Outfit): Calculator {
+  static baseline(outfit?: Outfit): Calculator {
+    outfit = outfit ?? fromCurrent();
     const passives = Skill.all().filter((skill) => have(skill) && skill.passive);
-    const effects = Skill.all()
-      .filter((skill) => have(skill) && skill.buff)
+    const buffs = Skill.all()
+      .filter((skill) => have(skill) && skill.buff && toEffect(skill) !== Effect.none)
       .map((skill) => toEffect(skill));
     const equips = [...outfit.equips.values()];
-    const sources = [...passives, ...effects, ...equips];
+    const sources = [...passives, ...buffs, ...equips];
     const famWeight =
       sources.reduce((a, b) => a + getModifier("Familiar Weight", b), 0) +
       (outfit.familiar ? familiarWeight(outfit.familiar) : 0);

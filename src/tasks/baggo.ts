@@ -37,13 +37,15 @@ import { Quest } from "../engine/task";
 import { gyou } from "../lib";
 import { args, turnsRemaining } from "../main";
 import { chooseOutfit } from "../outfit";
-import { bubbleVision } from "../potions";
+import { bubbleVision, potionSetup } from "../potions";
 
 const floristFlowers = [
   FloristFriar.StealingMagnolia,
   FloristFriar.AloeGuvnor,
   FloristFriar.PitcherPlant,
 ];
+
+let potionsCompleted = false;
 
 export function BaggoQuest(): Quest {
   return {
@@ -126,12 +128,20 @@ export function BaggoQuest(): Quest {
         ),
       },
       {
-        name: "Collect Bags",
-        after: ["Dailies/Kgnee", "Party Fair"],
-        completed: () => turnsRemaining() <= 0,
-        prepare: (): void => {
-          if (canInteract()) bubbleVision();
+        name: "Potions",
+        completed: () => !canInteract() || potionsCompleted,
+        do: potionSetup,
+        post: () => {
+          potionsCompleted = true;
+          throw `Check potion printout`;
         },
+        outfit: chooseOutfit,
+      },
+      {
+        name: "Collect Bags",
+        after: ["Dailies/Kgnee", "Party Fair", "Potions"],
+        completed: () => turnsRemaining() <= 0,
+        prepare: bubbleVision,
         do: $location`The Neverending Party`,
         outfit: chooseOutfit,
         effects: [
