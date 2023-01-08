@@ -7,8 +7,8 @@ import { DailiesQuest } from "./tasks/dailies";
 import { endTracking, startTracking } from "./session";
 
 export const args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
-  advs: Args.number({
-    help: "Number of adventures to run (use negative numbers for the number of adventures remaining).",
+  turns: Args.number({
+    help: "Number of turns to run (use negative numbers for the number of turns remaining).",
     default: Infinity,
   }),
   bagvalue: Args.number({ help: "Value of a single duffel bag or van key.", default: 20_000 }),
@@ -34,12 +34,12 @@ export const adventures = myAdventures();
 export const turncount = myTurncount();
 
 export function turnsRemaining(): number {
-  if (args.advs === 0) return 0;
-  if (isFinite(args.advs) && args.advs > 0) {
+  if (args.turns === 0) return 0;
+  if (isFinite(args.turns) && args.turns > 0) {
     const spent = myTurncount() - turncount;
-    return Math.min(args.advs - spent, myAdventures());
+    return Math.min(args.turns - spent, myAdventures());
   }
-  const spend = myAdventures() + Math.min(0, args.advs);
+  const spend = myAdventures() + Math.min(0, args.turns);
   return Math.round(spend / (1 - Calculator.baseline().advsGainedPerTurnTakingCombat()));
 }
 

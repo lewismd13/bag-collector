@@ -14189,8 +14189,8 @@ function endTracking() {
 
 
 var args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
-  advs: Args.number({
-    help: "Number of adventures to run (use negative numbers for the number of adventures remaining).",
+  turns: Args.number({
+    help: "Number of turns to run (use negative numbers for the number of turns remaining).",
     default: Infinity
   }),
   bagvalue: Args.number({
@@ -14216,14 +14216,14 @@ var args = Args.create("baggo", "A script for farming duffel bags and van keys."
 var adventures = (0,external_kolmafia_namespaceObject.myAdventures)();
 var turncount = (0,external_kolmafia_namespaceObject.myTurncount)();
 function turnsRemaining() {
-  if (args.advs === 0) return 0;
+  if (args.turns === 0) return 0;
 
-  if (isFinite(args.advs) && args.advs > 0) {
+  if (isFinite(args.turns) && args.turns > 0) {
     var spent = (0,external_kolmafia_namespaceObject.myTurncount)() - turncount;
-    return Math.min(args.advs - spent, (0,external_kolmafia_namespaceObject.myAdventures)());
+    return Math.min(args.turns - spent, (0,external_kolmafia_namespaceObject.myAdventures)());
   }
 
-  var spend = (0,external_kolmafia_namespaceObject.myAdventures)() + Math.min(0, args.advs);
+  var spend = (0,external_kolmafia_namespaceObject.myAdventures)() + Math.min(0, args.turns);
   return Math.round(spend / (1 - Calculator.baseline().advsGainedPerTurnTakingCombat()));
 }
 function main(command) {
