@@ -1,3 +1,4 @@
+import { Outfit } from "grimoire-kolmafia";
 import {
   canInteract,
   Effect,
@@ -89,8 +90,8 @@ export function farmingPotions(): Potion[] {
     .filter((potion) => potion.familiarWeight() > 0 || potion.itemDrop() > 0);
 }
 
-export function potionSetup(): void {
-  const unitValue = Calculator.baseline().unitValue();
+export function potionSetup(outfit?: Outfit): void {
+  const unitValue = Calculator.baseline(outfit).unitValue();
 
   const excludedEffects = new Set<Effect>(
     getActiveEffects()

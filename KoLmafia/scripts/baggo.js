@@ -11927,7 +11927,7 @@ function formatNumber(x) {
   return str.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 function acquire(quantity, item, maxPrice) {
-  debug("Trying to acquire ".concat(formatAmountOfItem(quantity, item), "}; max price ").concat(formatNumber(maxPrice)), "green");
+  debug("Trying to acquire ".concat(formatAmountOfItem(quantity, item), "; max price ").concat(formatNumber(maxPrice)), "green");
   var startAmount = (0,external_kolmafia_namespaceObject.itemAmount)(item);
   withProperty("autoBuyPriceLimit", maxPrice, () => (0,external_kolmafia_namespaceObject.retrieveItem)(item, quantity));
   return (0,external_kolmafia_namespaceObject.itemAmount)(item) - startAmount;
@@ -12487,7 +12487,7 @@ var Calculator = /*#__PURE__*/function () {
     key: "baseline",
     value:
     /**
-     * Create a calculator instance using what are considered "baseline" values: passives, skill effects, outfit equips, and base familiar weight.
+     * Create a calculator instance using what are considered "baseline" values: passives, buffs, outfit equips, and base familiar weight.
      * @param outfit The outfit to use. If not specified, this will use an outfit created from the current character state.
      * @returns A calculator instance that includes the modifier values of baseline sources.
      */
@@ -12496,11 +12496,11 @@ var Calculator = /*#__PURE__*/function () {
 
       outfit = (_outfit = outfit) !== null && _outfit !== void 0 ? _outfit : fromCurrent();
       var passives = external_kolmafia_namespaceObject.Skill.all().filter(skill => have(skill) && skill.passive);
-      var effects = external_kolmafia_namespaceObject.Skill.all().filter(skill => have(skill) && skill.buff && (0,external_kolmafia_namespaceObject.toEffect)(skill) !== external_kolmafia_namespaceObject.Effect.none).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill));
+      var buffs = external_kolmafia_namespaceObject.Skill.all().filter(skill => have(skill) && skill.buff && (0,external_kolmafia_namespaceObject.toEffect)(skill) !== external_kolmafia_namespaceObject.Effect.none).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill));
 
       var equips = calculator_toConsumableArray(outfit.equips.values());
 
-      var sources = [].concat(calculator_toConsumableArray(passives), calculator_toConsumableArray(effects), calculator_toConsumableArray(equips));
+      var sources = [].concat(calculator_toConsumableArray(passives), calculator_toConsumableArray(buffs), calculator_toConsumableArray(equips));
       var famWeight = sources.reduce((a, b) => a + modifier_get("Familiar Weight", b), 0) + (outfit.familiar ? (0,external_kolmafia_namespaceObject.familiarWeight)(outfit.familiar) : 0);
       var itemDrop = sources.reduce((a, b) => a + modifier_get("Item Drop", b), 0);
       return new Calculator(outfit, famWeight, itemDrop);
@@ -12956,7 +12956,7 @@ function chooseOutfit() {
   return outfit;
 }
 ;// CONCATENATED MODULE: ./src/potions.ts
-var potions_templateObject, potions_templateObject2, potions_templateObject3, potions_templateObject4, potions_templateObject5;
+var potions_templateObject, potions_templateObject2, potions_templateObject3, potions_templateObject4, potions_templateObject5, potions_templateObject6, potions_templateObject7;
 
 function potions_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -13011,8 +13011,11 @@ var Potion = /*#__PURE__*/function () {
 
     potions_defineProperty(this, "overrideItemDrop", void 0);
 
+    potions_defineProperty(this, "overrideEffectDuration", void 0);
+
     this.item = item;
     this.overrideItemDrop = options.itemDrop;
+    this.overrideEffectDuration = options.effectDuration;
   }
 
   potions_createClass(Potion, [{
@@ -13023,7 +13026,9 @@ var Potion = /*#__PURE__*/function () {
   }, {
     key: "effectDuration",
     value: function effectDuration() {
-      return modifier_get("Effect Duration", this.item);
+      var _this$overrideEffectD;
+
+      return (_this$overrideEffectD = this.overrideEffectDuration) !== null && _this$overrideEffectD !== void 0 ? _this$overrideEffectD : modifier_get("Effect Duration", this.item);
     }
   }, {
     key: "familiarWeight",
@@ -13039,95 +13044,90 @@ var Potion = /*#__PURE__*/function () {
       return (_this$overrideItemDro = this.overrideItemDrop) !== null && _this$overrideItemDro !== void 0 ? _this$overrideItemDro : modifier_get("Item Drop", this.effect());
     }
   }, {
-    key: "cost",
-    value: function cost() {
+    key: "gross",
+    value: function gross(unitValue, maxTurns) {
+      var duration = Math.max(this.effectDuration(), maxTurns !== null && maxTurns !== void 0 ? maxTurns : 0);
+      return (unitValue.famWeight * this.familiarWeight() + unitValue.itemDrop * this.itemDrop()) * duration;
+    }
+  }, {
+    key: "price",
+    value: function price() {
       return (0,external_kolmafia_namespaceObject.mallPrice)(this.item);
+    }
+  }, {
+    key: "net",
+    value: function net(unitValue) {
+      return this.gross(unitValue) - this.price();
     }
   }]);
 
   return Potion;
-}(); // export function bubbleVision(): void {
-//   if (have($effect`Bubble Vision`)) return;
-//   const potion = new Potion($item`bottle of bubbles`, { itemDrop: 50 });
-//   if (potion.netValue() > 0) {
-//     acquire(1, potion.item, potion.grossValue());
-//     debug(`Using ${potion.item}`);
-//     use(1, potion.item);
-//   }
-// }
+}();
+function farmingPotions() {
+  return external_kolmafia_namespaceObject.Item.all().filter(item => item.tradeable && !blacklist.includes(item) && (0,external_kolmafia_namespaceObject.itemType)(item) === "potion").map(item => new Potion(item)).filter(potion => potion.familiarWeight() > 0 || potion.itemDrop() > 0);
+}
+function potionSetup(outfit) {
+  var unitValue = Calculator.baseline(outfit).unitValue();
+  var excludedEffects = new Set(getActiveEffects().map(effect => getMutuallyExclusiveEffectsOf(effect)).flat());
+  var profitablePotions = farmingPotions().filter(potion => potion.net(unitValue) > 0).sort((a, b) => b.net(unitValue) - a.net(unitValue));
 
-var PotionManager = /*#__PURE__*/function () {
-  function PotionManager(unitValue) {
-    potions_classCallCheck(this, PotionManager);
+  var _iterator2 = potions_createForOfIteratorHelper(profitablePotions),
+      _step2;
 
-    potions_defineProperty(this, "unitValue", void 0);
+  try {
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var potion = _step2.value;
+      var effect = potion.effect();
+      if (excludedEffects.has(effect)) continue;
+      var desiredAmount = (turnsRemaining() - (0,external_kolmafia_namespaceObject.haveEffect)(effect)) / potion.effectDuration();
+      var overageProfitable = desiredAmount % 1 * potion.gross(unitValue) - potion.price() > 0;
+      var acquireAmount = Math.floor(desiredAmount) + (overageProfitable ? 1 : 0);
+      if (acquireAmount <= 0) continue;
+      acquire(acquireAmount, potion.item, potion.gross(unitValue));
+      var useAmount = Math.min(acquireAmount, (0,external_kolmafia_namespaceObject.itemAmount)(potion.item));
+      debug("Using ".concat(formatAmountOfItem(useAmount, potion.item)));
+      (0,external_kolmafia_namespaceObject.use)(useAmount, potion.item);
 
-    this.unitValue = unitValue !== null && unitValue !== void 0 ? unitValue : Calculator.baseline().unitValue();
-  }
+      if (have(effect)) {
+        var _iterator3 = potions_createForOfIteratorHelper(getMutuallyExclusiveEffectsOf(effect)),
+            _step3;
 
-  potions_createClass(PotionManager, [{
-    key: "profitablePotions",
-    value: function profitablePotions() {
-      return external_kolmafia_namespaceObject.Item.all().filter(item => item.tradeable && !blacklist.includes(item) && (0,external_kolmafia_namespaceObject.itemType)(item) === "potion").map(item => new Potion(item)).filter(potion => (potion.familiarWeight() > 0 || potion.itemDrop() > 0) && this.netValue(potion) > 0).sort((a, b) => this.netValue(b) - this.netValue(a));
-    }
-  }, {
-    key: "applyPotions",
-    value: function applyPotions() {
-      var excludedEffects = new Set(getActiveEffects().map(effect => getMutuallyExclusiveEffectsOf(effect)).flat());
-
-      var _iterator2 = potions_createForOfIteratorHelper(this.profitablePotions()),
-          _step2;
-
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var potion = _step2.value;
-          var effect = potion.effect();
-          if (excludedEffects.has(effect)) continue;
-          var desiredAmount = (turnsRemaining() - (0,external_kolmafia_namespaceObject.haveEffect)(effect)) / potion.effectDuration();
-          var overageProfitable = desiredAmount % 1 * this.grossValue(potion) - potion.cost() > 0;
-          var acquireAmount = Math.floor(desiredAmount) + (overageProfitable ? 1 : 0);
-          if (acquireAmount <= 0) return;
-          acquire(desiredAmount, potion.item, this.grossValue(potion));
-          var useAmount = Math.min(desiredAmount, (0,external_kolmafia_namespaceObject.itemAmount)(potion.item));
-          debug("Using ".concat(formatAmountOfItem(useAmount, potion.item)));
-          var used = (0,external_kolmafia_namespaceObject.use)(useAmount, potion.item);
-
-          if (used) {
-            var _iterator3 = potions_createForOfIteratorHelper(getMutuallyExclusiveEffectsOf(effect)),
-                _step3;
-
-            try {
-              for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-                var excluded = _step3.value;
-                excludedEffects.add(excluded);
-              }
-            } catch (err) {
-              _iterator3.e(err);
-            } finally {
-              _iterator3.f();
-            }
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var excluded = _step3.value;
+            excludedEffects.add(excluded);
           }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
         }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
       }
     }
-  }, {
-    key: "grossValue",
-    value: function grossValue(potion) {
-      return (this.unitValue.famWeight * potion.familiarWeight() + this.unitValue.itemDrop * potion.itemDrop()) * potion.effectDuration();
-    }
-  }, {
-    key: "netValue",
-    value: function netValue(potion) {
-      return this.grossValue(potion) - potion.cost();
-    }
-  }]);
+  } catch (err) {
+    _iterator2.e(err);
+  } finally {
+    _iterator2.f();
+  }
+}
+function bubbleVision() {
+  if (!(0,external_kolmafia_namespaceObject.canInteract)() || have($effect(potions_templateObject6 || (potions_templateObject6 = potions_taggedTemplateLiteral(["Bubble Vision"]))))) return;
+  var item = template_string_$item(potions_templateObject7 || (potions_templateObject7 = potions_taggedTemplateLiteral(["bottle of bubbles"])));
+  var turns = Math.min(turnsRemaining(), modifier_get("Effect Duration", item));
+  var averageItemDrop = turns / 2 * (2 + (turns - 1)); // Sum of arithmetic sequence where a = d = 1
 
-  return PotionManager;
-}();
+  var potion = new Potion(item, {
+    itemDrop: averageItemDrop,
+    effectDuration: turns
+  });
+  var unitValue = Calculator.baseline().unitValue();
+
+  if (potion.net(unitValue) > 0) {
+    acquire(1, potion.item, potion.gross(unitValue));
+    debug("Using ".concat(formatAmountOfItem(1, potion.item)));
+    (0,external_kolmafia_namespaceObject.use)(1, potion.item);
+  }
+}
 ;// CONCATENATED MODULE: ./src/tasks/baggo.ts
 var baggo_templateObject, baggo_templateObject2, baggo_templateObject3, baggo_templateObject4, baggo_templateObject5, baggo_templateObject6, baggo_templateObject7, baggo_templateObject8, baggo_templateObject9, baggo_templateObject10, baggo_templateObject11, baggo_templateObject12, baggo_templateObject13, baggo_templateObject14, baggo_templateObject15, baggo_templateObject16, baggo_templateObject17, baggo_templateObject18, baggo_templateObject19, baggo_templateObject20, baggo_templateObject21, baggo_templateObject22, baggo_templateObject23, baggo_templateObject24, baggo_templateObject25, baggo_templateObject26, baggo_templateObject27, baggo_templateObject28, baggo_templateObject29, baggo_templateObject30, baggo_templateObject31, baggo_templateObject32, baggo_templateObject33, baggo_templateObject34, baggo_templateObject35, baggo_templateObject36;
 
@@ -13147,7 +13147,7 @@ function baggo_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.s
 
 
 var floristFlowers = [StealingMagnolia, AloeGuvnor, PitcherPlant];
-var potionsApplied = false;
+var potionsCompleted = false;
 function BaggoQuest() {
   return {
     name: "Baggo",
@@ -13221,27 +13221,25 @@ function BaggoQuest() {
       combat: new combat_CombatStrategy().macro(Macro.trySkill($skill(baggo_templateObject15 || (baggo_templateObject15 = baggo_taggedTemplateLiteral(["Sing Along"])))).trySkill($skill(baggo_templateObject16 || (baggo_templateObject16 = baggo_taggedTemplateLiteral(["Summon Love Gnats"])))).trySkill($skill(baggo_templateObject17 || (baggo_templateObject17 = baggo_taggedTemplateLiteral(["Shoot Ghost"])))).trySkill($skill(baggo_templateObject18 || (baggo_templateObject18 = baggo_taggedTemplateLiteral(["Shoot Ghost"])))).trySkill($skill(baggo_templateObject19 || (baggo_templateObject19 = baggo_taggedTemplateLiteral(["Shoot Ghost"])))).trySkill($skill(baggo_templateObject20 || (baggo_templateObject20 = baggo_taggedTemplateLiteral(["Trap Ghost"])))))
     }, {
       name: "Potions",
-      completed: () => !(0,external_kolmafia_namespaceObject.canInteract)() || potionsApplied,
-      do: () => new PotionManager().applyPotions(),
+      completed: () => !(0,external_kolmafia_namespaceObject.canInteract)() || potionsCompleted,
+      do: potionSetup,
       post: () => {
-        potionsApplied = true;
+        potionsCompleted = true;
       },
       outfit: chooseOutfit
     }, {
       name: "Collect Bags",
       after: ["Dailies/Kgnee", "Party Fair", "Potions"],
       completed: () => turnsRemaining() <= 0,
-      prepare: () => {
-        // new PotionManager(turnsRemaining(), Calculator.baseline().unitValue()).applyPotions();
-        throw "Check potion printout";
-      },
+      prepare: bubbleVision,
       do: $location(baggo_templateObject21 || (baggo_templateObject21 = baggo_taggedTemplateLiteral(["The Neverending Party"]))),
       outfit: chooseOutfit,
       effects: [$skill(baggo_templateObject22 || (baggo_templateObject22 = baggo_taggedTemplateLiteral(["Blood Bond"]))), $skill(baggo_templateObject23 || (baggo_templateObject23 = baggo_taggedTemplateLiteral(["Leash of Linguini"]))), $skill(baggo_templateObject24 || (baggo_templateObject24 = baggo_taggedTemplateLiteral(["Empathy of the Newt"]))), $skill(baggo_templateObject25 || (baggo_templateObject25 = baggo_taggedTemplateLiteral(["The Spirit of Taking"]))), $skill(baggo_templateObject26 || (baggo_templateObject26 = baggo_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), $skill(baggo_templateObject27 || (baggo_templateObject27 = baggo_taggedTemplateLiteral(["Singer's Faithful Ocelot"]))), $skill(baggo_templateObject28 || (baggo_templateObject28 = baggo_taggedTemplateLiteral(["Astral Shell"]))), $skill(baggo_templateObject29 || (baggo_templateObject29 = baggo_taggedTemplateLiteral(["Ghostly Shell"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
       choices: {
         1324: 5
       },
-      combat: new combat_CombatStrategy().banish($monsters(baggo_templateObject30 || (baggo_templateObject30 = baggo_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).autoattack(Macro.externalIf(!gyou(), Macro.if_("!hppercentbelow 75", Macro.step("pickpocket")).skill($skill(baggo_templateObject31 || (baggo_templateObject31 = baggo_taggedTemplateLiteral(["Summon Love Gnats"])))), Macro.step("pickpocket")).if_("match \"unremarkable duffel bag\" || match \"van key\"", Macro.runaway()).trySkill($skill(baggo_templateObject32 || (baggo_templateObject32 = baggo_taggedTemplateLiteral(["Spit jurassic acid"])))).if_("!hppercentbelow 75 && !mpbelow 40", Macro.trySkill($skill(baggo_templateObject33 || (baggo_templateObject33 = baggo_taggedTemplateLiteral(["Double Nanovision"])))).trySkill($skill(baggo_templateObject34 || (baggo_templateObject34 = baggo_taggedTemplateLiteral(["Double Nanovision"]))))), $monsters(baggo_templateObject35 || (baggo_templateObject35 = baggo_taggedTemplateLiteral(["burnout, jock"])))).autoattack(() => {
+      combat: new combat_CombatStrategy().banish($monsters(baggo_templateObject30 || (baggo_templateObject30 = baggo_taggedTemplateLiteral(["biker, party girl, \"plain\" girl"])))).autoattack(Macro.externalIf(!gyou(), Macro.if_("!hppercentbelow 75", Macro.step("pickpocket")), Macro.step("pickpocket")).if_("match \"unremarkable duffel bag\" || match \"van key\"", Macro.runaway()) // TODO only runaway if we have a navel runaway, consider tatters/GOTOs
+      .trySkill($skill(baggo_templateObject31 || (baggo_templateObject31 = baggo_taggedTemplateLiteral(["Spit jurassic acid"])))).trySkill($skill(baggo_templateObject32 || (baggo_templateObject32 = baggo_taggedTemplateLiteral(["Summon Love Gnats"])))).if_("!hppercentbelow 75 && !mpbelow 40", Macro.trySkill($skill(baggo_templateObject33 || (baggo_templateObject33 = baggo_taggedTemplateLiteral(["Double Nanovision"])))).trySkill($skill(baggo_templateObject34 || (baggo_templateObject34 = baggo_taggedTemplateLiteral(["Double Nanovision"]))))), $monsters(baggo_templateObject35 || (baggo_templateObject35 = baggo_taggedTemplateLiteral(["burnout, jock"])))).autoattack(() => {
         return args.olfact !== "none" ? Macro.if_(external_kolmafia_namespaceObject.Monster.get(args.olfact), Macro.trySkill($skill(baggo_templateObject36 || (baggo_templateObject36 = baggo_taggedTemplateLiteral(["Transcendent Olfaction"]))))) : new Macro();
       }).kill()
     }]

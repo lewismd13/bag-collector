@@ -133,7 +133,6 @@ export function BaggoQuest(): Quest {
         do: potionSetup,
         post: () => {
           potionsCompleted = true;
-          throw `Check potion printout`;
         },
         outfit: chooseOutfit,
       },
@@ -162,13 +161,12 @@ export function BaggoQuest(): Quest {
           .autoattack(
             Macro.externalIf(
               !gyou(),
-              Macro.if_(`!hppercentbelow 75`, Macro.step("pickpocket")).skill(
-                $skill`Summon Love Gnats`
-              ),
+              Macro.if_(`!hppercentbelow 75`, Macro.step("pickpocket")),
               Macro.step("pickpocket")
             )
-              .if_(`match "unremarkable duffel bag" || match "van key"`, Macro.runaway())
+              .if_(`match "unremarkable duffel bag" || match "van key"`, Macro.runaway()) // TODO only runaway if we have a navel runaway, consider tatters/GOTOs
               .trySkill($skill`Spit jurassic acid`)
+              .trySkill($skill`Summon Love Gnats`)
               .if_(
                 "!hppercentbelow 75 && !mpbelow 40",
                 Macro.trySkill($skill`Double Nanovision`).trySkill($skill`Double Nanovision`)

@@ -22,7 +22,7 @@ export function formatNumber(x: number): string {
 
 export function acquire(quantity: number, item: Item, maxPrice: number): number {
   debug(
-    `Trying to acquire ${formatAmountOfItem(quantity, item)}}; max price ${formatNumber(maxPrice)}`,
+    `Trying to acquire ${formatAmountOfItem(quantity, item)}; max price ${formatNumber(maxPrice)}`,
     "green"
   );
   const startAmount = itemAmount(item);
