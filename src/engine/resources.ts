@@ -1,15 +1,6 @@
 import { CombatResource as BaseCombatResource, OutfitSpec } from "grimoire-kolmafia";
-import {
-  canEquip,
-  Familiar,
-  Item,
-  Monster,
-  myTurncount,
-  retrieveItem,
-  retrievePrice,
-  Skill,
-} from "kolmafia";
-import { $item, $skill, AsdonMartin, get, getBanishedMonsters, have, Macro } from "libram";
+import { Familiar, Item, Monster, myTurncount, retrieveItem, retrievePrice, Skill } from "kolmafia";
+import { $item, $skill, AsdonMartin, get, getBanishedMonsters, have } from "libram";
 import { debug } from "../lib";
 
 export interface Resource {
