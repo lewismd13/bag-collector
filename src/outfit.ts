@@ -20,7 +20,7 @@ import {
   have,
   ReagnimatedGnome,
 } from "libram";
-import { maxBy } from "./lib";
+import { gyou, maxBy } from "./lib";
 import { args } from "./main";
 import { Calculator } from "./calculator";
 
@@ -68,10 +68,10 @@ export function chooseOutfit(): Outfit {
 
   outfit.equipFirst($items`Greatest American Pants, navel ring of navel gazing`);
 
-  if (!have($effect`Everything Looks Yellow`)) {
+  if (!have($effect`Everything Looks Yellow`) || gyou()) {
     outfit.equip($item`Jurassic Parka`);
     outfit.setModes({
-      parka: "dilophosaur",
+      parka: !have($effect`Everything Looks Yellow`) ? "dilophosaur" : "kachungasaur",
     });
   }
 
@@ -90,7 +90,7 @@ export function chooseOutfit(): Outfit {
 
   const unitValue = Calculator.baseline(outfit).unitValue(); // Estimate value of modifiers
   outfit.equip({
-    modifier: `${unitValue.famWeight}familiar weight ${unitValue.itemDrop}item drop`,
+    modifier: `${unitValue.famWeight}familiar weight, ${unitValue.itemDrop}item drop`,
     avoid: [$item`time-twitching toolbelt`],
   });
   return outfit;

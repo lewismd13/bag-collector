@@ -10,8 +10,10 @@ import {
   Monster,
   myClass,
   myLocation,
+  myMaxhp,
   myThrall,
   putCloset,
+  restoreHp,
   runChoice,
   toEffect,
   totalTurnsPlayed,
@@ -140,7 +142,10 @@ export function BaggoQuest(): Quest {
         name: "Collect Bags",
         after: ["Dailies/Kgnee", "Party Fair", "Potions"],
         completed: () => turnsRemaining() <= 0,
-        prepare: bubbleVision,
+        prepare: () => {
+          bubbleVision();
+          if (gyou()) restoreHp(myMaxhp());
+        },
         do: $location`The Neverending Party`,
         outfit: chooseOutfit,
         effects: [

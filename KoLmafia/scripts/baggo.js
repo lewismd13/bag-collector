@@ -12885,7 +12885,7 @@ function seasonalItems() {
   return currentUpgrades().includes("cowcatcher") ? 2 : 1;
 }
 ;// CONCATENATED MODULE: ./src/outfit.ts
-var src_outfit_templateObject, src_outfit_templateObject2, src_outfit_templateObject3, src_outfit_templateObject4, src_outfit_templateObject5, src_outfit_templateObject6, src_outfit_templateObject7, src_outfit_templateObject8, src_outfit_templateObject9, src_outfit_templateObject10, src_outfit_templateObject11, src_outfit_templateObject12, src_outfit_templateObject13, src_outfit_templateObject14, src_outfit_templateObject15, src_outfit_templateObject16, src_outfit_templateObject17, src_outfit_templateObject18;
+var src_outfit_templateObject, src_outfit_templateObject2, src_outfit_templateObject3, src_outfit_templateObject4, src_outfit_templateObject5, src_outfit_templateObject6, src_outfit_templateObject7, src_outfit_templateObject8, src_outfit_templateObject9, src_outfit_templateObject10, src_outfit_templateObject11, src_outfit_templateObject12, src_outfit_templateObject13, src_outfit_templateObject14, src_outfit_templateObject15, src_outfit_templateObject16, src_outfit_templateObject17, src_outfit_templateObject18, src_outfit_templateObject19;
 
 function src_outfit_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -12930,28 +12930,28 @@ function chooseOutfit() {
 
   outfit.equipFirst(template_string_$items(src_outfit_templateObject9 || (src_outfit_templateObject9 = src_outfit_taggedTemplateLiteral(["Greatest American Pants, navel ring of navel gazing"]))));
 
-  if (!have($effect(src_outfit_templateObject10 || (src_outfit_templateObject10 = src_outfit_taggedTemplateLiteral(["Everything Looks Yellow"]))))) {
+  if (!have($effect(src_outfit_templateObject10 || (src_outfit_templateObject10 = src_outfit_taggedTemplateLiteral(["Everything Looks Yellow"])))) || gyou()) {
     outfit.equip(template_string_$item(src_outfit_templateObject11 || (src_outfit_templateObject11 = src_outfit_taggedTemplateLiteral(["Jurassic Parka"]))));
     outfit.setModes({
-      parka: "dilophosaur"
+      parka: !have($effect(src_outfit_templateObject12 || (src_outfit_templateObject12 = src_outfit_taggedTemplateLiteral(["Everything Looks Yellow"])))) ? "dilophosaur" : "kachungasaur"
     });
   }
 
   if (property_get("questPAGhost") === "unstarted" && property_get("nextParanormalActivity") <= (0,external_kolmafia_namespaceObject.totalTurnsPlayed)() && isSober()) {
-    outfit.equip(template_string_$item(src_outfit_templateObject12 || (src_outfit_templateObject12 = src_outfit_taggedTemplateLiteral(["protonic accelerator pack"]))));
+    outfit.equip(template_string_$item(src_outfit_templateObject13 || (src_outfit_templateObject13 = src_outfit_taggedTemplateLiteral(["protonic accelerator pack"]))));
   }
 
-  outfit.equip([template_string_$item(src_outfit_templateObject13 || (src_outfit_templateObject13 = src_outfit_taggedTemplateLiteral(["June cleaver"]))), template_string_$item(src_outfit_templateObject14 || (src_outfit_templateObject14 = src_outfit_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))], $slot(src_outfit_templateObject15 || (src_outfit_templateObject15 = src_outfit_taggedTemplateLiteral(["weapon"]))));
-  outfit.equip(template_string_$item(src_outfit_templateObject16 || (src_outfit_templateObject16 = src_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))));
-  outfit.equip(template_string_$item(src_outfit_templateObject17 || (src_outfit_templateObject17 = src_outfit_taggedTemplateLiteral(["mafia thumb ring"]))));
+  outfit.equip([template_string_$item(src_outfit_templateObject14 || (src_outfit_templateObject14 = src_outfit_taggedTemplateLiteral(["June cleaver"]))), template_string_$item(src_outfit_templateObject15 || (src_outfit_templateObject15 = src_outfit_taggedTemplateLiteral(["Fourth of May Cosplay Saber"])))], $slot(src_outfit_templateObject16 || (src_outfit_templateObject16 = src_outfit_taggedTemplateLiteral(["weapon"]))));
+  outfit.equip(template_string_$item(src_outfit_templateObject17 || (src_outfit_templateObject17 = src_outfit_taggedTemplateLiteral(["carnivorous potted plant"]))));
+  outfit.equip(template_string_$item(src_outfit_templateObject18 || (src_outfit_templateObject18 = src_outfit_taggedTemplateLiteral(["mafia thumb ring"]))));
   outfit.setModes({
     parka: "ghostasaurus"
   });
   var unitValue = Calculator.baseline(outfit).unitValue(); // Estimate value of modifiers
 
   outfit.equip({
-    modifier: "".concat(unitValue.famWeight, "familiar weight ").concat(unitValue.itemDrop, "item drop"),
-    avoid: [template_string_$item(src_outfit_templateObject18 || (src_outfit_templateObject18 = src_outfit_taggedTemplateLiteral(["time-twitching toolbelt"])))]
+    modifier: "".concat(unitValue.famWeight, "familiar weight, ").concat(unitValue.itemDrop, "item drop"),
+    avoid: [template_string_$item(src_outfit_templateObject19 || (src_outfit_templateObject19 = src_outfit_taggedTemplateLiteral(["time-twitching toolbelt"])))]
   });
   return outfit;
 }
@@ -13231,7 +13231,10 @@ function BaggoQuest() {
       name: "Collect Bags",
       after: ["Dailies/Kgnee", "Party Fair", "Potions"],
       completed: () => turnsRemaining() <= 0,
-      prepare: bubbleVision,
+      prepare: () => {
+        bubbleVision();
+        if (gyou()) (0,external_kolmafia_namespaceObject.restoreHp)((0,external_kolmafia_namespaceObject.myMaxhp)());
+      },
       do: $location(baggo_templateObject21 || (baggo_templateObject21 = baggo_taggedTemplateLiteral(["The Neverending Party"]))),
       outfit: chooseOutfit,
       effects: [$skill(baggo_templateObject22 || (baggo_templateObject22 = baggo_taggedTemplateLiteral(["Blood Bond"]))), $skill(baggo_templateObject23 || (baggo_templateObject23 = baggo_taggedTemplateLiteral(["Leash of Linguini"]))), $skill(baggo_templateObject24 || (baggo_templateObject24 = baggo_taggedTemplateLiteral(["Empathy of the Newt"]))), $skill(baggo_templateObject25 || (baggo_templateObject25 = baggo_taggedTemplateLiteral(["The Spirit of Taking"]))), $skill(baggo_templateObject26 || (baggo_templateObject26 = baggo_taggedTemplateLiteral(["Fat Leon's Phat Loot Lyric"]))), $skill(baggo_templateObject27 || (baggo_templateObject27 = baggo_taggedTemplateLiteral(["Singer's Faithful Ocelot"]))), $skill(baggo_templateObject28 || (baggo_templateObject28 = baggo_taggedTemplateLiteral(["Astral Shell"]))), $skill(baggo_templateObject29 || (baggo_templateObject29 = baggo_taggedTemplateLiteral(["Ghostly Shell"])))].filter(skill => have(skill)).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill)),
