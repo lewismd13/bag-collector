@@ -13230,7 +13230,7 @@ function BaggoQuest() {
     }, {
       name: "Collect Bags",
       after: ["Dailies/Kgnee", "Party Fair", "Potions"],
-      completed: () => turnsRemaining() <= 0,
+      completed: () => turnsRemaining() <= 0 || args.buff,
       prepare: () => {
         bubbleVision();
         if (gyou()) (0,external_kolmafia_namespaceObject.restoreHp)((0,external_kolmafia_namespaceObject.myMaxhp)());
