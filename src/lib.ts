@@ -1,29 +1,17 @@
-import {
-  canInteract,
-  familiarWeight,
-  haveEquipped,
-  Item,
-  itemAmount,
-  myClass,
-  myFamiliar,
-  myPath,
-  print,
-  retrieveItem,
-  toInt,
-  weightAdjustment,
-} from "kolmafia";
-import { $item, $path, $stat, get, withProperty } from "libram";
+import { Outfit } from "grimoire-kolmafia";
+import { canInteract, Item, itemAmount, myPath, print, retrieveItem, toInt } from "kolmafia";
+import { $path, get, withProperty } from "libram";
 
 export function debug(message: string, color?: string): void {
   if (color) {
-    print(`${message}`, color);
+    print(message, color);
   } else {
-    print(`${message}`);
+    print(message);
   }
 }
 
 export function formatAmountOfItem(amount: number, item: Item): string {
-  return `${amount} ${amount === 1 ? item : item.plural}`;
+  return `${formatNumber(amount)} ${amount === 1 ? item : item.plural}`;
 }
 
 export function formatNumber(x: number): string {
@@ -33,34 +21,52 @@ export function formatNumber(x: number): string {
 }
 
 export function acquire(quantity: number, item: Item, maxPrice: number): number {
-  if (!item.tradeable) return 0;
-
-  debug(`Trying to acquire ${formatAmountOfItem(quantity, item)}}`, "green");
+  debug(
+    `Trying to acquire ${formatAmountOfItem(quantity, item)}; max price ${formatNumber(maxPrice)}`,
+    "green"
+  );
   const startAmount = itemAmount(item);
   withProperty("autoBuyPriceLimit", maxPrice, () => retrieveItem(item, quantity));
   return itemAmount(item) - startAmount;
 }
 
-export function expectedAdvsGainedPerCombat(): number {
-  const gnome = haveEquipped($item`gnomish housemaid's kgnee`)
-    ? (familiarWeight(myFamiliar()) + weightAdjustment()) / 1000
-    : 0;
-  const ring = haveEquipped($item`mafia thumb ring`) ? 0.04 : 0;
-  return gnome + ring;
+export function printOutfit(outfit: Outfit): void {
+  for (const [slot, item] of outfit.equips) {
+    print(`* ${slot}: ${item}`);
+  }
+  print(`* ${outfit.familiar}`);
 }
 
-export function expectedBagsPerAdv(familiarWeight: number, itemDrop: number): number {
-  const bonusItem = (itemDrop + (Math.sqrt(55 + familiarWeight) + familiarWeight + 3)) / 100;
-  const a = familiarWeight / 1000 + 0.04; // expected advs gained per combat
-  const b = 0.25 / (1 - (0.2 + 0.8 * a)) + (0.75 * (0.05 * (1 + bonusItem))) / (1 - a); // expected bags from combat with a burnout or jock
-  return (6 / 7) * b + (1 / 7) * ((2 / 5) * b + (3 / 5) * (0.2 + 0.8 * a) * b);
-}
-
-export function canPickpocket(): boolean {
-  return (
-    myClass().primestat === $stat`Moxie` ||
-    [$item`mime army infiltration glove`, $item`tiny black hole`].some((item) => haveEquipped(item))
-  );
+/**
+ * Find the best element of an array, where "best" is defined by some given criteria. Taken from garbage-collector.
+ * @param array The array to traverse and find the best element of.
+ * @param optimizer Either a key on the objects we're looking at that corresponds to numerical values, or a function for mapping these objects to numbers. Essentially, some way of assigning value to the elements of the array.
+ * @param reverse Make this true to find the worst element of the array, and false to find the best. Defaults to false.
+ */
+export function maxBy<T>(
+  array: T[] | readonly T[],
+  optimizer: (element: T) => number,
+  reverse?: boolean
+): T;
+export function maxBy<S extends string | number | symbol, T extends { [x in S]: number }>(
+  array: T[] | readonly T[],
+  key: S,
+  reverse?: boolean
+): T;
+export function maxBy<S extends string | number | symbol, T extends { [x in S]: number }>(
+  array: T[] | readonly T[],
+  optimizer: ((element: T) => number) | S,
+  reverse = false
+): T {
+  if (typeof optimizer === "function") {
+    return maxBy(
+      array.map((key) => ({ key, value: optimizer(key) })),
+      "value",
+      reverse
+    ).key;
+  } else {
+    return array.reduce((a, b) => (a[optimizer] > b[optimizer] !== reverse ? a : b));
+  }
 }
 
 export function ronin(): boolean {

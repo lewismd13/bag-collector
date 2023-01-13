@@ -33,8 +33,8 @@
   "dependencies": {
     "core-js": "^3.16.4",
     "grimoire-kolmafia": "^0.3.8",
-    "kolmafia": "^5.26823.0",
-    "libram": "^0.7.3"
+    "kolmafia": "5.26781.0",
+    "libram": "0.7.6"
   },
   "author": "MrFizzyBubbs",
   "license": "ISC",

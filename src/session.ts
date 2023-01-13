@@ -26,7 +26,7 @@ let initialRuns = get("_navelRunaways");
 
 function printResults(results: Record<DailyProperty, DailyResult>, attr: keyof DailyResult): void {
   const { bags, keys, meat, adventures, turns, runs } = results;
-  const mpa = Math.round(((bags[attr] + keys[attr]) * args.itemvalue + meat[attr]) / turns[attr]);
+  const mpa = Math.round(((bags[attr] + keys[attr]) * args.bagvalue + meat[attr]) / turns[attr]);
   print(`Across ${formatNumber(turns[attr])} you generated`);
   print(`* ${formatNumber(bags[attr])} duffel bags`, "blue");
   print(`* ${formatNumber(keys[attr])} van keys`, "blue");
