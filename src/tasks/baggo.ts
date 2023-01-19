@@ -8,6 +8,7 @@ import {
   itemAmount,
   Location,
   Monster,
+  myAdventures,
   myClass,
   myLocation,
   myMaxhp,
@@ -107,7 +108,8 @@ export function BaggoQuest(): Quest {
         name: "Proton Ghost",
         ready: () =>
           have($item`protonic accelerator pack`) &&
-          canAdventure(get("ghostLocation", Location.none)),
+          canAdventure(get("ghostLocation", Location.none)) &&
+          myAdventures() > 0,
         completed: () => get("questPAGhost") === "unstarted",
         do: (): void => {
           const location = get("ghostLocation");

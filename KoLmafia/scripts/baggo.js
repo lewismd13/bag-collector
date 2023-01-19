@@ -13202,7 +13202,7 @@ function BaggoQuest() {
       }
     }, {
       name: "Proton Ghost",
-      ready: () => have(template_string_$item(baggo_templateObject13 || (baggo_templateObject13 = baggo_taggedTemplateLiteral(["protonic accelerator pack"])))) && (0,external_kolmafia_namespaceObject.canAdventure)(property_get("ghostLocation", external_kolmafia_namespaceObject.Location.none)),
+      ready: () => have(template_string_$item(baggo_templateObject13 || (baggo_templateObject13 = baggo_taggedTemplateLiteral(["protonic accelerator pack"])))) && (0,external_kolmafia_namespaceObject.canAdventure)(property_get("ghostLocation", external_kolmafia_namespaceObject.Location.none)) && (0,external_kolmafia_namespaceObject.myAdventures)() > 0,
       completed: () => property_get("questPAGhost") === "unstarted",
       do: () => {
         var location = property_get("ghostLocation");
