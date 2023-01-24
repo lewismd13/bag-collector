@@ -1,28 +1,44 @@
-# bag-collector
+# Overview
 
-`bag-collector` is a script for farming duffel bags and van keys outside of TCRS, typically as part of a full loop after running `garbo nobarf`.
+This is a script for farming duffel bags and van keys, using the [grimoire](https://github.com/Loathing-Associates-Scripting-Society/grimoire) framework.
+
+## Strategy
+
+The script was originally designed to be run in aftercore after something like [garbo](https://github.com/Loathing-Associates-Scripting-Society/garbage-collector) has handled dieting and usage of daily resources, typically via `garbo nobarf`. It has evolved to be capable of running in ronin, Grey You, and even TCRS.
 
 ## Installation
 
-Run this command in the graphical CLI:
+To install the script, use the following command in the KoLMafia CLI.
 
 ```text
 git checkout https://github.com/MrFizzyBubbs/bag-collector.git
 ```
 
-Will require [a recent build of KoLMafia](http://builds.kolmafia.us/job/Kolmafia/lastSuccessfulBuild/).
-
 ## Usage
 
-Be out of ronin and either type `baggo` in the graphical CLI or select it from the Scripts menu. There are several optional arguments:
+Run `baggo`. It really is that simple!
 
-1. `turns` NUMBER - Number of turns to run (use negative numbers for the number of turns remaining). _[default: Infinity]_ _[setting: baggo_advs]_
-2. `bagvalue` NUMBER - Value of a single duffel bag or van key. _[default: 20000]_ _[setting: baggo_bagvalue]_
-3. `olfact` TEXT - Which monster to olfact. _[default: none]_ _[setting: baggo_olfact]_
-   - none - Do not olfact.
-   - burnout - Drops van key (food).
-   - jock - Drops duffel bag (booze).
-4. `buff` - Only buff up, do not spend any adventures. _[default: false]_ _[setting: baggo_buff]_
-5. `outfit` TEXT - Name of the outfit whose pieces to equip when farming. _[default: ]_ _[setting: baggo_outfit]_
+The script provides several options that can be changed in a few different ways:
 
-These arguments be specified in the CLI when running the script (e.g., `baggo turns=100`) or as a preference (e.g., `set itemvalue=15000`).
+- By setting a mafia setting, e.g. `set baggo_olfact=jock`.
+- By providing an argument at runtime, e.g. `baggo olfact=jock`. Note that any arguments provided at runtime override mafia settings.
+
+Run `baggo help` for the full set of script commands and options:
+
+```
+> baggo help
+
+A script for farming duffel bags and van keys.
+
+Options:
+  turns NUMBER - Number of turns to run (use negative numbers for the number of turns remaining). [default: Infinity] [setting: baggo_turns]
+  bagvalue NUMBER - Value of a single duffel bag or van key. [default: 20000] [setting: baggo_bagvalue]
+  olfact TEXT - Which monster to olfact. [default: none] [setting: baggo_olfact]
+    olfact none - Do no olfact.
+    olfact burnout - Drops van key (food).
+    olfact jock - Drops duffel bag (booze).
+  buff - Only buff up, do not spend any adventures. [default: false] [setting: baggo_buff]
+  outfit TEXT - Name of the outfit whose pieces to equip when farming. If not given, an outfit will be automatically selected [setting: baggo_outfit]
+  familiar FAMILIAR - Familiar to use when farming. If not given, a familiar will be automatically selected. [setting: baggo_familiar]
+  help - Show this message and exit.
+```
