@@ -95,14 +95,13 @@ export function BaggoQuest(): Quest {
         limit: { tries: 5 },
       },
       {
-        name: "Party Fair",
-        completed: () => get("_questPartyFair") !== "unstarted",
-        do: (): void => {
-          visitUrl(toUrl($location`The Neverending Party`));
-          if (["food", "booze"].includes(get("_questPartyFairQuest"))) runChoice(1);
-          else runChoice(2);
+        name: "Potions",
+        completed: () => !canInteract() || potionsCompleted,
+        do: potionSetup,
+        post: () => {
+          potionsCompleted = true;
         },
-        limit: { tries: 1 },
+        outfit: chooseOutfit,
       },
       {
         name: "Proton Ghost",
@@ -110,7 +109,7 @@ export function BaggoQuest(): Quest {
           have($item`protonic accelerator pack`) &&
           canAdventure(get("ghostLocation", Location.none)) &&
           myAdventures() > 0,
-        completed: () => get("questPAGhost") === "unstarted",
+        completed: () => get("questPAGhost") === "unstarted" || args.buff,
         do: (): void => {
           const location = get("ghostLocation");
           if (location) {
@@ -132,17 +131,18 @@ export function BaggoQuest(): Quest {
         ),
       },
       {
-        name: "Potions",
-        completed: () => !canInteract() || potionsCompleted,
-        do: potionSetup,
-        post: () => {
-          potionsCompleted = true;
+        name: "Party Fair",
+        completed: () => get("_questPartyFair") !== "unstarted" || args.buff,
+        do: (): void => {
+          visitUrl(toUrl($location`The Neverending Party`));
+          if (["food", "booze"].includes(get("_questPartyFairQuest"))) runChoice(1);
+          else runChoice(2);
         },
-        outfit: chooseOutfit,
+        limit: { tries: 1 },
       },
       {
         name: "Collect Bags",
-        after: ["Dailies/Kgnee", "Party Fair", "Potions"],
+        after: ["Dailies/Kgnee", "Potions", "Party Fair"],
         completed: () => turnsRemaining() <= 0 || args.buff,
         prepare: () => {
           bubbleVision();

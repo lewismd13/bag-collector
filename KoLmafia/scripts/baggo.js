@@ -13194,19 +13194,17 @@ function BaggoQuest() {
         tries: 5
       }
     }, {
-      name: "Party Fair",
-      completed: () => property_get("_questPartyFair") !== "unstarted",
-      do: () => {
-        (0,external_kolmafia_namespaceObject.visitUrl)((0,external_kolmafia_namespaceObject.toUrl)($location(baggo_templateObject12 || (baggo_templateObject12 = baggo_taggedTemplateLiteral(["The Neverending Party"])))));
-        if (["food", "booze"].includes(property_get("_questPartyFairQuest"))) (0,external_kolmafia_namespaceObject.runChoice)(1);else (0,external_kolmafia_namespaceObject.runChoice)(2);
+      name: "Potions",
+      completed: () => !(0,external_kolmafia_namespaceObject.canInteract)() || potionsCompleted,
+      do: potionSetup,
+      post: () => {
+        potionsCompleted = true;
       },
-      limit: {
-        tries: 1
-      }
+      outfit: chooseOutfit
     }, {
       name: "Proton Ghost",
-      ready: () => have(template_string_$item(baggo_templateObject13 || (baggo_templateObject13 = baggo_taggedTemplateLiteral(["protonic accelerator pack"])))) && (0,external_kolmafia_namespaceObject.canAdventure)(property_get("ghostLocation", external_kolmafia_namespaceObject.Location.none)) && (0,external_kolmafia_namespaceObject.myAdventures)() > 0,
-      completed: () => property_get("questPAGhost") === "unstarted",
+      ready: () => have(template_string_$item(baggo_templateObject12 || (baggo_templateObject12 = baggo_taggedTemplateLiteral(["protonic accelerator pack"])))) && (0,external_kolmafia_namespaceObject.canAdventure)(property_get("ghostLocation", external_kolmafia_namespaceObject.Location.none)) && (0,external_kolmafia_namespaceObject.myAdventures)() > 0,
+      completed: () => property_get("questPAGhost") === "unstarted" || args.buff,
       do: () => {
         var location = property_get("ghostLocation");
 
@@ -13218,21 +13216,23 @@ function BaggoQuest() {
       },
       outfit: () => {
         return baggo_objectSpread(baggo_objectSpread({}, chooseOutfit().spec()), {}, {
-          back: template_string_$item(baggo_templateObject14 || (baggo_templateObject14 = baggo_taggedTemplateLiteral(["protonic accelerator pack"])))
+          back: template_string_$item(baggo_templateObject13 || (baggo_templateObject13 = baggo_taggedTemplateLiteral(["protonic accelerator pack"])))
         });
       },
-      combat: new combat_CombatStrategy().macro(Macro.trySkill($skill(baggo_templateObject15 || (baggo_templateObject15 = baggo_taggedTemplateLiteral(["Sing Along"])))).trySkill($skill(baggo_templateObject16 || (baggo_templateObject16 = baggo_taggedTemplateLiteral(["Summon Love Gnats"])))).trySkill($skill(baggo_templateObject17 || (baggo_templateObject17 = baggo_taggedTemplateLiteral(["Shoot Ghost"])))).trySkill($skill(baggo_templateObject18 || (baggo_templateObject18 = baggo_taggedTemplateLiteral(["Shoot Ghost"])))).trySkill($skill(baggo_templateObject19 || (baggo_templateObject19 = baggo_taggedTemplateLiteral(["Shoot Ghost"])))).trySkill($skill(baggo_templateObject20 || (baggo_templateObject20 = baggo_taggedTemplateLiteral(["Trap Ghost"])))))
+      combat: new combat_CombatStrategy().macro(Macro.trySkill($skill(baggo_templateObject14 || (baggo_templateObject14 = baggo_taggedTemplateLiteral(["Sing Along"])))).trySkill($skill(baggo_templateObject15 || (baggo_templateObject15 = baggo_taggedTemplateLiteral(["Summon Love Gnats"])))).trySkill($skill(baggo_templateObject16 || (baggo_templateObject16 = baggo_taggedTemplateLiteral(["Shoot Ghost"])))).trySkill($skill(baggo_templateObject17 || (baggo_templateObject17 = baggo_taggedTemplateLiteral(["Shoot Ghost"])))).trySkill($skill(baggo_templateObject18 || (baggo_templateObject18 = baggo_taggedTemplateLiteral(["Shoot Ghost"])))).trySkill($skill(baggo_templateObject19 || (baggo_templateObject19 = baggo_taggedTemplateLiteral(["Trap Ghost"])))))
     }, {
-      name: "Potions",
-      completed: () => !(0,external_kolmafia_namespaceObject.canInteract)() || potionsCompleted,
-      do: potionSetup,
-      post: () => {
-        potionsCompleted = true;
+      name: "Party Fair",
+      completed: () => property_get("_questPartyFair") !== "unstarted" || args.buff,
+      do: () => {
+        (0,external_kolmafia_namespaceObject.visitUrl)((0,external_kolmafia_namespaceObject.toUrl)($location(baggo_templateObject20 || (baggo_templateObject20 = baggo_taggedTemplateLiteral(["The Neverending Party"])))));
+        if (["food", "booze"].includes(property_get("_questPartyFairQuest"))) (0,external_kolmafia_namespaceObject.runChoice)(1);else (0,external_kolmafia_namespaceObject.runChoice)(2);
       },
-      outfit: chooseOutfit
+      limit: {
+        tries: 1
+      }
     }, {
       name: "Collect Bags",
-      after: ["Dailies/Kgnee", "Party Fair", "Potions"],
+      after: ["Dailies/Kgnee", "Potions", "Party Fair"],
       completed: () => turnsRemaining() <= 0 || args.buff,
       prepare: () => {
         bubbleVision();
@@ -14210,7 +14210,7 @@ var args = Args.create("baggo", "A script for farming duffel bags and van keys."
     default: "none"
   }),
   buff: Args.flag({
-    help: "Only buff up, do not spend any adventures.",
+    help: "Only do setup and buffing, do not adventure.",
     default: false
   }),
   outfit: Args.string({

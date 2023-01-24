@@ -22,7 +22,10 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
     ],
     default: "none",
   }),
-  buff: Args.flag({ help: "Only buff up, do not spend any adventures.", default: false }),
+  buff: Args.flag({
+    help: "Only do setup and buffing, do not adventure.",
+    default: false,
+  }),
   outfit: Args.string({
     help: "Name of the outfit whose pieces to equip when farming. If not given, an outfit will be automatically selected",
   }),
