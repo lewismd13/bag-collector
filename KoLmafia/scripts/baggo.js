@@ -12949,8 +12949,8 @@ function chooseOutfit() {
   outfit.setModes({
     parka: "ghostasaurus"
   });
-  var valuator = Calculator.baseline(outfit).valueOf; // Estimate value of modifiers
-
+  var calc = Calculator.baseline(outfit);
+  var valuator = calc.valueOf.bind(calc);
   outfit.equip({
     modifier: "".concat(valuator(1, 0), "familiar weight, ").concat(valuator(0, 1), "item drop"),
     avoid: [template_string_$item(src_outfit_templateObject19 || (src_outfit_templateObject19 = src_outfit_taggedTemplateLiteral(["time-twitching toolbelt"])))]
@@ -13070,7 +13070,8 @@ function farmingPotions() {
 }
 function potionSetup() {
   var excludedEffects = new Set(getActiveEffects().map(effect => getMutuallyExclusiveEffectsOf(effect)).flat());
-  var valuator = Calculator.current().valueOf;
+  var calc = Calculator.current();
+  var valuator = calc.valueOf.bind(calc);
   var profitablePotions = farmingPotions().filter(potion => potion.net(valuator) > 0).sort((a, b) => b.net(valuator) - a.net(valuator));
 
   var _iterator2 = potions_createForOfIteratorHelper(profitablePotions),
@@ -13081,7 +13082,11 @@ function potionSetup() {
       var potion = _step2.value;
       var effect = potion.effect();
       if (excludedEffects.has(effect)) continue;
-      var _valuator = Calculator.current().valueOf; // Update after each potion application to address capping item drops
+
+      var _calc = Calculator.current(); // Update after each potion application to address capping item drops
+
+
+      var _valuator = _calc.valueOf.bind(_calc);
 
       var desiredAmount = (turnsRemaining() - (0,external_kolmafia_namespaceObject.haveEffect)(effect)) / potion.effectDuration();
       var overageProfitable = desiredAmount % 1 * potion.gross(_valuator) - potion.price() > 0;
@@ -13127,7 +13132,8 @@ function bubbleVision() {
     itemDrop: averageItemDrop,
     effectDuration: turns
   });
-  var valuator = Calculator.current().valueOf;
+  var calc = Calculator.current();
+  var valuator = calc.valueOf.bind(calc);
 
   if (potion.net(valuator) > 0) {
     acquire(1, potion.item, potion.gross(valuator));

@@ -93,7 +93,8 @@ export function potionSetup(): void {
       .flat()
   );
 
-  const valuator = Calculator.current().valueOf;
+  const calc = Calculator.current();
+  const valuator = calc.valueOf.bind(calc);
   const profitablePotions = farmingPotions()
     .filter((potion) => potion.net(valuator) > 0)
     .sort((a, b) => b.net(valuator) - a.net(valuator));
@@ -102,7 +103,8 @@ export function potionSetup(): void {
     const effect = potion.effect();
     if (excludedEffects.has(effect)) continue;
 
-    const valuator = Calculator.current().valueOf; // Update after each potion application to address capping item drops
+    const calc = Calculator.current(); // Update after each potion application to address capping item drops
+    const valuator = calc.valueOf.bind(calc);
     const desiredAmount = (turnsRemaining() - haveEffect(effect)) / potion.effectDuration();
     const overageProfitable = (desiredAmount % 1) * potion.gross(valuator) - potion.price() > 0;
     const acquireAmount = Math.floor(desiredAmount) + (overageProfitable ? 1 : 0);
@@ -135,7 +137,8 @@ export function bubbleVision(): void {
   const turns = Math.min(turnsRemaining(), getModifier("Effect Duration", item));
   const averageItemDrop = (turns / 2) * (2 + (turns - 1)); // Sum of arithmetic sequence where a = d = 1
   const potion = new Potion(item, { itemDrop: averageItemDrop, effectDuration: turns });
-  const valuator = Calculator.current().valueOf;
+  const calc = Calculator.current();
+  const valuator = calc.valueOf.bind(calc);
 
   if (potion.net(valuator) > 0) {
     acquire(1, potion.item, potion.gross(valuator));

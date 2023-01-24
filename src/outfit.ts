@@ -88,7 +88,8 @@ export function chooseOutfit(): Outfit {
   outfit.equip($item`mafia thumb ring`);
   outfit.setModes({ parka: "ghostasaurus" });
 
-  const valuator = Calculator.baseline(outfit).valueOf; // Estimate value of modifiers
+  const calc = Calculator.baseline(outfit);
+  const valuator = calc.valueOf.bind(calc);
   outfit.equip({
     modifier: `${valuator(1, 0)}familiar weight, ${valuator(0, 1)}item drop`,
     avoid: [$item`time-twitching toolbelt`],
