@@ -12956,7 +12956,7 @@ function chooseOutfit() {
   return outfit;
 }
 ;// CONCATENATED MODULE: ./src/potions.ts
-var potions_templateObject, potions_templateObject2, potions_templateObject3, potions_templateObject4, potions_templateObject5, potions_templateObject6, potions_templateObject7;
+var potions_templateObject, potions_templateObject2, potions_templateObject3, potions_templateObject4, potions_templateObject5, potions_templateObject6, potions_templateObject7, potions_templateObject8, potions_templateObject9;
 
 function potions_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -13111,8 +13111,11 @@ function potionSetup(outfit) {
   }
 }
 function bubbleVision() {
-  if (!(0,external_kolmafia_namespaceObject.canInteract)() || have($effect(potions_templateObject6 || (potions_templateObject6 = potions_taggedTemplateLiteral(["Bubble Vision"]))))) return;
-  var item = template_string_$item(potions_templateObject7 || (potions_templateObject7 = potions_taggedTemplateLiteral(["bottle of bubbles"])));
+  if (!(0,external_kolmafia_namespaceObject.canInteract)() || have($effect(potions_templateObject6 || (potions_templateObject6 = potions_taggedTemplateLiteral(["Bubble Vision"])))) || (0,external_kolmafia_namespaceObject.effectModifier)(template_string_$item(potions_templateObject7 || (potions_templateObject7 = potions_taggedTemplateLiteral(["bottle of bubbles"]))), "Effect") !== $effect(potions_templateObject8 || (potions_templateObject8 = potions_taggedTemplateLiteral(["Bubble Vision"])))) {
+    return;
+  }
+
+  var item = template_string_$item(potions_templateObject9 || (potions_templateObject9 = potions_taggedTemplateLiteral(["bottle of bubbles"])));
   var turns = Math.min(turnsRemaining(), modifier_get("Effect Duration", item));
   var averageItemDrop = turns / 2 * (2 + (turns - 1)); // Sum of arithmetic sequence where a = d = 1
 

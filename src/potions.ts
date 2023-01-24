@@ -127,7 +127,13 @@ export function potionSetup(outfit?: Outfit): void {
 }
 
 export function bubbleVision(): void {
-  if (!canInteract() || have($effect`Bubble Vision`)) return;
+  if (
+    !canInteract() ||
+    have($effect`Bubble Vision`) ||
+    effectModifier($item`bottle of bubbles`, "Effect") !== $effect`Bubble Vision`
+  ) {
+    return;
+  }
 
   const item = $item`bottle of bubbles`;
   const turns = Math.min(turnsRemaining(), getModifier("Effect Duration", item));
