@@ -12949,8 +12949,7 @@ function chooseOutfit() {
   outfit.setModes({
     parka: "ghostasaurus"
   });
-  var calc = Calculator.baseline(outfit);
-  var valuator = calc.valueOf.bind(calc);
+  var valuator = Calculator.prototype.valueOf.bind(Calculator.baseline(outfit));
   outfit.equip({
     modifier: "".concat(valuator(1, 0), "familiar weight, ").concat(valuator(0, 1), "item drop"),
     avoid: [template_string_$item(src_outfit_templateObject19 || (src_outfit_templateObject19 = src_outfit_taggedTemplateLiteral(["time-twitching toolbelt"])))]
@@ -13070,8 +13069,7 @@ function farmingPotions() {
 }
 function potionSetup() {
   var excludedEffects = new Set(getActiveEffects().map(effect => getMutuallyExclusiveEffectsOf(effect)).flat());
-  var calc = Calculator.current();
-  var valuator = calc.valueOf.bind(calc);
+  var valuator = Calculator.prototype.valueOf.bind(Calculator.current());
   var profitablePotions = farmingPotions().filter(potion => potion.net(valuator) > 0).sort((a, b) => b.net(valuator) - a.net(valuator));
 
   var _iterator2 = potions_createForOfIteratorHelper(profitablePotions),
@@ -13080,19 +13078,17 @@ function potionSetup() {
   try {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var potion = _step2.value;
+      valuator = Calculator.prototype.valueOf.bind(Calculator.current()); // Update after each potion application to handle caps
+
+      if (potion.net(valuator) <= 0) continue; // Potion can become non-profitable if a cap is reached
+
       var effect = potion.effect();
       if (excludedEffects.has(effect)) continue;
-
-      var _calc = Calculator.current(); // Update after each potion application to address capping item drops
-
-
-      var _valuator = _calc.valueOf.bind(_calc);
-
       var desiredAmount = (turnsRemaining() - (0,external_kolmafia_namespaceObject.haveEffect)(effect)) / potion.effectDuration();
-      var overageProfitable = desiredAmount % 1 * potion.gross(_valuator) - potion.price() > 0;
+      var overageProfitable = desiredAmount % 1 * potion.gross(valuator) - potion.price() > 0;
       var acquireAmount = Math.floor(desiredAmount) + (overageProfitable ? 1 : 0);
       if (acquireAmount <= 0) continue;
-      acquire(acquireAmount, potion.item, potion.gross(_valuator));
+      acquire(acquireAmount, potion.item, potion.gross(valuator));
       var useAmount = Math.min(acquireAmount, (0,external_kolmafia_namespaceObject.itemAmount)(potion.item));
       debug("Using ".concat(formatAmountOfItem(useAmount, potion.item)));
       (0,external_kolmafia_namespaceObject.use)(useAmount, potion.item);
@@ -13132,8 +13128,7 @@ function bubbleVision() {
     itemDrop: averageItemDrop,
     effectDuration: turns
   });
-  var calc = Calculator.current();
-  var valuator = calc.valueOf.bind(calc);
+  var valuator = Calculator.prototype.valueOf.bind(Calculator.current());
 
   if (potion.net(valuator) > 0) {
     acquire(1, potion.item, potion.gross(valuator));
