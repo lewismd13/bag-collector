@@ -1,4 +1,3 @@
-import { Outfit } from "grimoire-kolmafia";
 import {
   canInteract,
   Effect,
@@ -66,20 +65,17 @@ export class Potion {
     return this.overrideItemDrop ?? getModifier("Item Drop", this.effect());
   }
 
-  gross(unitValue: { famWeight: number; itemDrop: number }, maxTurns?: number): number {
+  gross(valuator: (famWeight: number, itemDrop: number) => number, maxTurns?: number): number {
     const duration = Math.max(this.effectDuration(), maxTurns ?? 0);
-    return (
-      (unitValue.famWeight * this.familiarWeight() + unitValue.itemDrop * this.itemDrop()) *
-      duration
-    );
+    return valuator(this.familiarWeight(), this.itemDrop()) * duration;
   }
 
   price(): number {
     return mallPrice(this.item);
   }
 
-  net(unitValue: { famWeight: number; itemDrop: number }): number {
-    return this.gross(unitValue) - this.price();
+  net(valuator: (famWeight: number, itemDrop: number) => number): number {
+    return this.gross(valuator) - this.price();
   }
 }
 
@@ -90,29 +86,29 @@ export function farmingPotions(): Potion[] {
     .filter((potion) => potion.familiarWeight() > 0 || potion.itemDrop() > 0);
 }
 
-export function potionSetup(outfit?: Outfit): void {
-  const unitValue = Calculator.baseline(outfit).unitValue();
-
+export function potionSetup(): void {
   const excludedEffects = new Set<Effect>(
     getActiveEffects()
       .map((effect) => getMutuallyExclusiveEffectsOf(effect))
       .flat()
   );
 
+  const valuator = Calculator.current().valueOf;
   const profitablePotions = farmingPotions()
-    .filter((potion) => potion.net(unitValue) > 0)
-    .sort((a, b) => b.net(unitValue) - a.net(unitValue));
+    .filter((potion) => potion.net(valuator) > 0)
+    .sort((a, b) => b.net(valuator) - a.net(valuator));
 
   for (const potion of profitablePotions) {
     const effect = potion.effect();
     if (excludedEffects.has(effect)) continue;
 
+    const valuator = Calculator.current().valueOf; // Update after each potion application to address capping item drops
     const desiredAmount = (turnsRemaining() - haveEffect(effect)) / potion.effectDuration();
-    const overageProfitable = (desiredAmount % 1) * potion.gross(unitValue) - potion.price() > 0;
+    const overageProfitable = (desiredAmount % 1) * potion.gross(valuator) - potion.price() > 0;
     const acquireAmount = Math.floor(desiredAmount) + (overageProfitable ? 1 : 0);
 
     if (acquireAmount <= 0) continue;
-    acquire(acquireAmount, potion.item, potion.gross(unitValue));
+    acquire(acquireAmount, potion.item, potion.gross(valuator));
 
     const useAmount = Math.min(acquireAmount, itemAmount(potion.item));
     debug(`Using ${formatAmountOfItem(useAmount, potion.item)}`);
@@ -139,10 +135,10 @@ export function bubbleVision(): void {
   const turns = Math.min(turnsRemaining(), getModifier("Effect Duration", item));
   const averageItemDrop = (turns / 2) * (2 + (turns - 1)); // Sum of arithmetic sequence where a = d = 1
   const potion = new Potion(item, { itemDrop: averageItemDrop, effectDuration: turns });
-  const unitValue = Calculator.baseline().unitValue();
+  const valuator = Calculator.current().valueOf;
 
-  if (potion.net(unitValue) > 0) {
-    acquire(1, potion.item, potion.gross(unitValue));
+  if (potion.net(valuator) > 0) {
+    acquire(1, potion.item, potion.gross(valuator));
     debug(`Using ${formatAmountOfItem(1, potion.item)}`);
     use(1, potion.item);
   }

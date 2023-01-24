@@ -12472,16 +12472,13 @@ var Calculator = /*#__PURE__*/function () {
       return 6 / 7 * b + 1 / 7 * (2 / 5 * b + 3 / 5 * (runawayChance + (1 - runawayChance) * a) * b);
     }
     /**
-     * @returns The value, in meat, of one unit of the familiar weight and item drop modifiers.
+     * @returns The value, in meat, of adding a certain amount of familiar weight and item drop to the calculator instance.
      */
 
   }, {
-    key: "unitValue",
-    value: function unitValue() {
-      return {
-        famWeight: (new Calculator(this.outfit, this.famWeight + 1, this.itemDrop).bagsGainedPerAdv() - this.bagsGainedPerAdv()) * args.bagvalue,
-        itemDrop: (new Calculator(this.outfit, this.famWeight, this.itemDrop + 1).bagsGainedPerAdv() - this.bagsGainedPerAdv()) * args.bagvalue
-      };
+    key: "valueOf",
+    value: function valueOf(famWeight, itemDrop) {
+      return (new Calculator(this.outfit, this.famWeight + famWeight, this.itemDrop + itemDrop).bagsGainedPerAdv() - this.bagsGainedPerAdv()) * args.bagvalue;
     }
   }], [{
     key: "baseline",
@@ -12504,6 +12501,11 @@ var Calculator = /*#__PURE__*/function () {
       var famWeight = sources.reduce((a, b) => a + modifier_get("Familiar Weight", b), 0) + (outfit.familiar ? (0,external_kolmafia_namespaceObject.familiarWeight)(outfit.familiar) : 0);
       var itemDrop = sources.reduce((a, b) => a + modifier_get("Item Drop", b), 0);
       return new Calculator(outfit, famWeight, itemDrop);
+    }
+  }, {
+    key: "current",
+    value: function current() {
+      return new Calculator(fromCurrent(), modifier_get("Familiar Weight"), modifier_get("Item Drop"));
     }
   }]);
 
@@ -12947,10 +12949,10 @@ function chooseOutfit() {
   outfit.setModes({
     parka: "ghostasaurus"
   });
-  var unitValue = Calculator.baseline(outfit).unitValue(); // Estimate value of modifiers
+  var valuator = Calculator.baseline(outfit).valueOf; // Estimate value of modifiers
 
   outfit.equip({
-    modifier: "".concat(unitValue.famWeight, "familiar weight, ").concat(unitValue.itemDrop, "item drop"),
+    modifier: "".concat(valuator(1, 0), "familiar weight, ").concat(valuator(0, 1), "item drop"),
     avoid: [template_string_$item(src_outfit_templateObject19 || (src_outfit_templateObject19 = src_outfit_taggedTemplateLiteral(["time-twitching toolbelt"])))]
   });
   return outfit;
@@ -13045,9 +13047,9 @@ var Potion = /*#__PURE__*/function () {
     }
   }, {
     key: "gross",
-    value: function gross(unitValue, maxTurns) {
+    value: function gross(valuator, maxTurns) {
       var duration = Math.max(this.effectDuration(), maxTurns !== null && maxTurns !== void 0 ? maxTurns : 0);
-      return (unitValue.famWeight * this.familiarWeight() + unitValue.itemDrop * this.itemDrop()) * duration;
+      return valuator(this.familiarWeight(), this.itemDrop()) * duration;
     }
   }, {
     key: "price",
@@ -13056,8 +13058,8 @@ var Potion = /*#__PURE__*/function () {
     }
   }, {
     key: "net",
-    value: function net(unitValue) {
-      return this.gross(unitValue) - this.price();
+    value: function net(valuator) {
+      return this.gross(valuator) - this.price();
     }
   }]);
 
@@ -13066,10 +13068,10 @@ var Potion = /*#__PURE__*/function () {
 function farmingPotions() {
   return external_kolmafia_namespaceObject.Item.all().filter(item => item.tradeable && !blacklist.includes(item) && (0,external_kolmafia_namespaceObject.itemType)(item) === "potion").map(item => new Potion(item)).filter(potion => potion.familiarWeight() > 0 || potion.itemDrop() > 0);
 }
-function potionSetup(outfit) {
-  var unitValue = Calculator.baseline(outfit).unitValue();
+function potionSetup() {
   var excludedEffects = new Set(getActiveEffects().map(effect => getMutuallyExclusiveEffectsOf(effect)).flat());
-  var profitablePotions = farmingPotions().filter(potion => potion.net(unitValue) > 0).sort((a, b) => b.net(unitValue) - a.net(unitValue));
+  var valuator = Calculator.current().valueOf;
+  var profitablePotions = farmingPotions().filter(potion => potion.net(valuator) > 0).sort((a, b) => b.net(valuator) - a.net(valuator));
 
   var _iterator2 = potions_createForOfIteratorHelper(profitablePotions),
       _step2;
@@ -13079,11 +13081,13 @@ function potionSetup(outfit) {
       var potion = _step2.value;
       var effect = potion.effect();
       if (excludedEffects.has(effect)) continue;
+      var _valuator = Calculator.current().valueOf; // Update after each potion application to address capping item drops
+
       var desiredAmount = (turnsRemaining() - (0,external_kolmafia_namespaceObject.haveEffect)(effect)) / potion.effectDuration();
-      var overageProfitable = desiredAmount % 1 * potion.gross(unitValue) - potion.price() > 0;
+      var overageProfitable = desiredAmount % 1 * potion.gross(_valuator) - potion.price() > 0;
       var acquireAmount = Math.floor(desiredAmount) + (overageProfitable ? 1 : 0);
       if (acquireAmount <= 0) continue;
-      acquire(acquireAmount, potion.item, potion.gross(unitValue));
+      acquire(acquireAmount, potion.item, potion.gross(_valuator));
       var useAmount = Math.min(acquireAmount, (0,external_kolmafia_namespaceObject.itemAmount)(potion.item));
       debug("Using ".concat(formatAmountOfItem(useAmount, potion.item)));
       (0,external_kolmafia_namespaceObject.use)(useAmount, potion.item);
@@ -13123,10 +13127,10 @@ function bubbleVision() {
     itemDrop: averageItemDrop,
     effectDuration: turns
   });
-  var unitValue = Calculator.baseline().unitValue();
+  var valuator = Calculator.current().valueOf;
 
-  if (potion.net(unitValue) > 0) {
-    acquire(1, potion.item, potion.gross(unitValue));
+  if (potion.net(valuator) > 0) {
+    acquire(1, potion.item, potion.gross(valuator));
     debug("Using ".concat(formatAmountOfItem(1, potion.item)));
     (0,external_kolmafia_namespaceObject.use)(1, potion.item);
   }

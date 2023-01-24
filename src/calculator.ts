@@ -29,6 +29,10 @@ export class Calculator {
     return new Calculator(outfit, famWeight, itemDrop);
   }
 
+  static current(): Calculator {
+    return new Calculator(fromCurrent(), getModifier("Familiar Weight"), getModifier("Item Drop"));
+  }
+
   /**
    * Create the calculator.
    * @param outfit Outfit to use for evaluating combat results. The modifier values from items equipped to the outfit are not taken into account.
@@ -103,18 +107,17 @@ export class Calculator {
   }
 
   /**
-   * @returns The value, in meat, of one unit of the familiar weight and item drop modifiers.
+   * @returns The value, in meat, of adding a certain amount of familiar weight and item drop to the calculator instance.
    */
-  unitValue(): { famWeight: number; itemDrop: number } {
-    return {
-      famWeight:
-        (new Calculator(this.outfit, this.famWeight + 1, this.itemDrop).bagsGainedPerAdv() -
-          this.bagsGainedPerAdv()) *
-        args.bagvalue,
-      itemDrop:
-        (new Calculator(this.outfit, this.famWeight, this.itemDrop + 1).bagsGainedPerAdv() -
-          this.bagsGainedPerAdv()) *
-        args.bagvalue,
-    };
+  valueOf(famWeight: number, itemDrop: number): number {
+    return (
+      (new Calculator(
+        this.outfit,
+        this.famWeight + famWeight,
+        this.itemDrop + itemDrop
+      ).bagsGainedPerAdv() -
+        this.bagsGainedPerAdv()) *
+      args.bagvalue
+    );
   }
 }
