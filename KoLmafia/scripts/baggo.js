@@ -14197,7 +14197,8 @@ function endTracking() {
 var args = Args.create("baggo", "A script for farming duffel bags and van keys.", {
   turns: Args.number({
     help: "Number of turns to run (use negative numbers for the number of turns remaining).",
-    default: Infinity
+    default: Infinity,
+    setting: ""
   }),
   bagvalue: Args.number({
     help: "Value of a single duffel bag or van key.",
