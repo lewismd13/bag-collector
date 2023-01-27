@@ -11,7 +11,7 @@ The script was originally designed to be run in aftercore after something like [
 To install the script, use the following command in the KoLMafia CLI.
 
 ```text
-git checkout https://github.com/MrFizzyBubbs/bag-collector.git release
+git checkout MrFizzyBubbs/bag-collector.git release
 ```
 
 ## Usage
