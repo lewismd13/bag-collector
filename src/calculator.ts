@@ -1,8 +1,8 @@
 import { Outfit } from "grimoire-kolmafia";
 import { Effect, Familiar, familiarWeight, myClass, Skill, toEffect } from "kolmafia";
 import { $classes, $item, findFairyMultiplier, getModifier, have, ReagnimatedGnome } from "libram";
+import { args } from "./args";
 import { fromCurrent } from "./engine/outfit";
-import { args } from "./main";
 
 export class Calculator {
   outfit: Outfit;

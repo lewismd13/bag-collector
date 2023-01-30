@@ -1,5 +1,17 @@
+import { args } from "./args";
+import { Calculator } from "./calculator";
 import { Outfit } from "grimoire-kolmafia";
-import { canInteract, Item, itemAmount, myPath, print, retrieveItem, toInt } from "kolmafia";
+import {
+  canInteract,
+  Item,
+  itemAmount,
+  myAdventures,
+  myPath,
+  myTurncount,
+  print,
+  retrieveItem,
+  toInt,
+} from "kolmafia";
 import { $path, get, withProperty } from "libram";
 
 export function debug(message: string, color?: string): void {
@@ -80,4 +92,17 @@ export function gyou(): boolean {
 export function canPull(item: Item): boolean {
   const pulls = get("_roninStoragePulls").split(",");
   return ronin() && pulls.length < 20 && !pulls.includes(`${toInt(item)}`);
+}
+
+export const adventures = myAdventures();
+export const turncount = myTurncount();
+
+export function turnsRemaining(): number {
+  if (args.turns === 0) return 0;
+  if (isFinite(args.turns) && args.turns > 0) {
+    const spent = myTurncount() - turncount;
+    return Math.min(args.turns - spent, myAdventures());
+  }
+  const spend = myAdventures() + Math.min(0, args.turns);
+  return Math.round(spend / (1 - Calculator.baseline().advsGainedPerTurnTakingCombat()));
 }
