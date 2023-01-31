@@ -57,7 +57,7 @@ export class Engine extends BaseEngine<CombatActions, Task> {
         ...Engine.runSource,
         num: Math.ceil(
           Math.log(1 / (1 - 0.999)) / Math.log(1 / (1 - Engine.runSource.successRate))
-        ),
+        ), // Enough to guarantee success >= 99.9% of the time
       });
     }
     super.acquireItems({ ...task, acquire: items });

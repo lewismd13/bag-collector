@@ -1,7 +1,7 @@
 import { myAdventures, myTurncount, print, todayToString } from "kolmafia";
 import { $item, get, Session, set } from "libram";
-import { formatNumber } from "./lib";
-import { adventures, args, turncount } from "./main";
+import { args } from "./args";
+import { adventures, formatNumber, turncount } from "./lib";
 
 const dailyProperties = ["bags", "keys", "adventures", "turns", "meat", "runs"] as const;
 export type DailyProperty = typeof dailyProperties[number];

@@ -28,8 +28,7 @@ import {
   SourceTerminal,
 } from "libram";
 import { Quest, Task } from "../engine/task";
-import { canPull, gyou, ronin } from "../lib";
-import { turnsRemaining } from "../main";
+import { canPull, gyou, ronin, turnsRemaining } from "../lib";
 import { chooseFamiliar } from "../outfit";
 
 function pull(item: Item): Task {
