@@ -5,31 +5,9 @@ import { equipFirst } from "./outfit";
 import { unusedBanishes } from "./resources";
 import { Task } from "./task";
 import { Engine as BaseEngine, CombatResources, CombatStrategy, Outfit } from "grimoire-kolmafia";
-import {
-  cliExecute,
-  haveEffect,
-  haveEquipped,
-  Item,
-  Location,
-  mallPrice,
-  myAdventures,
-  readCcs,
-  setAutoAttack,
-  toInt,
-  writeCcs,
-} from "kolmafia";
-import {
-  $effect,
-  $item,
-  $items,
-  get,
-  getBanishedMonsters,
-  have,
-  Macro,
-  PropertiesManager,
-} from "libram";
+import { haveEffect, haveEquipped, Item, mallPrice, myAdventures, toInt } from "kolmafia";
+import { $effect, $item, $items, getBanishedMonsters, have, Macro } from "libram";
 
-const grimoireCCS = "grimoire_macro";
 type FreeRun = { item: Item; successRate: number; price: number };
 const RUN_SOURCES = [
   { item: $item`tattered scrap of paper`, successRate: 0.5 },
@@ -38,7 +16,6 @@ const RUN_SOURCES = [
 ];
 
 export class Engine extends BaseEngine<CombatActions, Task> {
-  cachedCss = "";
   static runSource: FreeRun | null = null;
 
   static runMacro(): Macro {
@@ -103,36 +80,6 @@ export class Engine extends BaseEngine<CombatActions, Task> {
     }
   }
 
-  setCombat(
-    task: Task,
-    task_combat: CombatStrategy<CombatActions>,
-    task_resources: CombatResources<CombatActions>
-  ): void {
-    // Save regular combat macro
-    const macro = task_combat.compile(
-      task_resources,
-      this.options?.combat_defaults,
-      task.do instanceof Location ? task.do : undefined
-    );
-
-    if (macro.toString() !== this.cachedCss) {
-      // Use the macro through a CCS file
-      this.cachedCss = macro.toString();
-      writeCcs(`[ default ]\n"${macro.toString()}"`, grimoireCCS);
-      cliExecute(`ccs ${grimoireCCS}`); // force Mafia to reparse the ccs
-    }
-
-    // Save autoattack combat macro
-    const autoattack = task_combat.compileAutoattack().step(macro);
-
-    if (autoattack.toString().length > 1) {
-      autoattack.save();
-      autoattack.setAutoAttack();
-    } else {
-      setAutoAttack(0);
-    }
-  }
-
   customize(
     task: Task,
     outfit: Outfit,
@@ -148,54 +95,5 @@ export class Engine extends BaseEngine<CombatActions, Task> {
       const strategy = combat.currentStrategy(monster);
       if (strategy === "banish") combat.macro(Macro.runaway(), monster);
     }
-  }
-
-  initPropertiesManager(manager: PropertiesManager): void {
-    // Properties adapted from garbo
-    manager.set({
-      logPreferenceChange: true,
-      logPreferenceChangeFilter: [
-        ...new Set([
-          ...get("logPreferenceChangeFilter").split(","),
-          "libram_savedMacro",
-          "maximizerMRUList",
-          "testudinalTeachings",
-          "_lastCombatStarted",
-        ]),
-      ]
-        .sort()
-        .filter((a) => a)
-        .join(","),
-      battleAction: "custom combat script",
-      autoSatisfyWithMall: true,
-      autoSatisfyWithNPCs: true,
-      autoSatisfyWithCoinmasters: true,
-      autoSatisfyWithStash: false,
-      dontStopForCounters: true,
-      maximizerFoldables: true,
-      afterAdventureScript: "",
-      betweenBattleScript: "",
-      choiceAdventureScript: "",
-      familiarScript: "",
-      currentMood: "apathetic",
-      autoTuxedo: true,
-      autoPinkyRing: true,
-      autoGarish: true,
-      allowNonMoodBurning: false,
-      allowSummonBurning: true,
-      libramSkillsSoftcore: "none",
-    });
-    if (this.options.ccs !== "") {
-      if (this.options.ccs === undefined && readCcs(grimoireCCS) === "") {
-        // Write a simple CCS so we can switch to it
-        writeCcs("[ default ]\nabort", grimoireCCS);
-      }
-      manager.set({ customCombatScript: this.options.ccs ?? grimoireCCS });
-    }
-  }
-
-  destruct(): void {
-    super.destruct();
-    setAutoAttack(0);
   }
 }
