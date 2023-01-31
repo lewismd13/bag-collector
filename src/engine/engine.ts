@@ -93,7 +93,7 @@ export class Engine extends BaseEngine<CombatActions, Task> {
     const alreadyBanished = [...getBanishedMonsters().values()];
     for (const monster of alreadyBanished) {
       const strategy = combat.currentStrategy(monster);
-      if (strategy === "banish") combat.macro(Macro.runaway(), monster);
+      if (strategy === "banish") combat.macro(Engine.runMacro(), monster);
     }
   }
 }
