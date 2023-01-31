@@ -12,8 +12,7 @@ import {
 } from "kolmafia";
 import { $effect, $effects, $item, $location, getActiveEffects, getModifier, have } from "libram";
 import { Calculator } from "./calculator";
-import { acquire, debug, formatAmountOfItem } from "./lib";
-import { turnsRemaining } from "./main";
+import { acquire, debug, formatAmountOfItem, turnsRemaining } from "./lib";
 
 const blacklist = [$item`bottle of bubbles`];
 

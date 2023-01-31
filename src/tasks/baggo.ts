@@ -1,3 +1,10 @@
+import { args } from "../args";
+import { CombatStrategy } from "../engine/combat";
+import { Engine } from "../engine/engine";
+import { Quest } from "../engine/task";
+import { gyou, turnsRemaining } from "../lib";
+import { chooseOutfit } from "../outfit";
+import { bubbleVision, potionSetup } from "../potions";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
@@ -35,12 +42,6 @@ import {
   have,
   Macro,
 } from "libram";
-import { CombatStrategy } from "../engine/combat";
-import { Quest } from "../engine/task";
-import { gyou } from "../lib";
-import { args, turnsRemaining } from "../main";
-import { chooseOutfit } from "../outfit";
-import { bubbleVision, potionSetup } from "../potions";
 
 const floristFlowers = [
   FloristFriar.StealingMagnolia,
@@ -166,18 +167,19 @@ export function BaggoQuest(): Quest {
         combat: new CombatStrategy()
           .banish($monsters`biker, party girl, "plain" girl`)
           .autoattack(
-            Macro.externalIf(
-              !gyou(),
-              Macro.if_(`!hppercentbelow 75`, Macro.step("pickpocket")),
-              Macro.step("pickpocket")
-            )
-              .if_(`match "unremarkable duffel bag" || match "van key"`, Macro.runaway()) // TODO only runaway if we have a navel runaway, consider tatters/GOTOs
-              .trySkill($skill`Spit jurassic acid`)
-              .trySkill($skill`Summon Love Gnats`)
-              .if_(
-                "!hppercentbelow 75 && !mpbelow 40",
-                Macro.trySkill($skill`Double Nanovision`).trySkill($skill`Double Nanovision`)
-              ),
+            () =>
+              Macro.externalIf(
+                !gyou(),
+                Macro.if_(`!hppercentbelow 75`, Macro.step("pickpocket")),
+                Macro.step("pickpocket")
+              )
+                .if_(`match "unremarkable duffel bag" || match "van key"`, Engine.runMacro()) // TODO only runaway if we have a navel runaway, consider tatters/GOTOs
+                .trySkill($skill`Spit jurassic acid`)
+                .trySkill($skill`Summon Love Gnats`)
+                .if_(
+                  "!hppercentbelow 75 && !mpbelow 40",
+                  Macro.trySkill($skill`Double Nanovision`).trySkill($skill`Double Nanovision`)
+                ),
             $monsters`burnout, jock`
           )
           .autoattack((): Macro => {
