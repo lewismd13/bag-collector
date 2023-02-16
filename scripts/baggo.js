@@ -11735,50 +11735,50 @@ function fromCurrent() {
   outfit.setModes(outfit_getCurrentModes());
   return outfit;
 }
-;// CONCATENATED MODULE: ./src/calculator.ts
-var calculator_templateObject, calculator_templateObject2, calculator_templateObject3, calculator_templateObject4, calculator_templateObject5, calculator_templateObject6, calculator_templateObject7;
+;// CONCATENATED MODULE: ./src/simulated-state.ts
+var simulated_state_templateObject, simulated_state_templateObject2, simulated_state_templateObject3, simulated_state_templateObject4, simulated_state_templateObject5, simulated_state_templateObject6, simulated_state_templateObject7;
 
-function calculator_toConsumableArray(arr) { return calculator_arrayWithoutHoles(arr) || calculator_iterableToArray(arr) || calculator_unsupportedIterableToArray(arr) || calculator_nonIterableSpread(); }
+function simulated_state_toConsumableArray(arr) { return simulated_state_arrayWithoutHoles(arr) || simulated_state_iterableToArray(arr) || simulated_state_unsupportedIterableToArray(arr) || simulated_state_nonIterableSpread(); }
 
-function calculator_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function simulated_state_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function calculator_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return calculator_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return calculator_arrayLikeToArray(o, minLen); }
+function simulated_state_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return simulated_state_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return simulated_state_arrayLikeToArray(o, minLen); }
 
-function calculator_iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function simulated_state_iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
-function calculator_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return calculator_arrayLikeToArray(arr); }
+function simulated_state_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return simulated_state_arrayLikeToArray(arr); }
 
-function calculator_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function simulated_state_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function calculator_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+function simulated_state_taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-function calculator_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function simulated_state_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function calculator_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+function simulated_state_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function calculator_createClass(Constructor, protoProps, staticProps) { if (protoProps) calculator_defineProperties(Constructor.prototype, protoProps); if (staticProps) calculator_defineProperties(Constructor, staticProps); return Constructor; }
+function simulated_state_createClass(Constructor, protoProps, staticProps) { if (protoProps) simulated_state_defineProperties(Constructor.prototype, protoProps); if (staticProps) simulated_state_defineProperties(Constructor, staticProps); return Constructor; }
 
-function calculator_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
+function simulated_state_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
-var Calculator = /*#__PURE__*/function () {
+
+
+var SimulatedState = /*#__PURE__*/function () {
   /**
-   * Create the calculator.
+   * Create the SimulatedState.
    * @param outfit Outfit to use for evaluating combat results. The modifier values from items equipped to the outfit are not taken into account.
    * @param famWeight Value of familiar weight modifier.
    * @param itemDrop Value of item drop modifier.
    */
-  function Calculator(outfit, famWeight, itemDrop) {
-    calculator_classCallCheck(this, Calculator);
+  function SimulatedState(outfit, famWeight, itemDrop) {
+    simulated_state_classCallCheck(this, SimulatedState);
 
-    calculator_defineProperty(this, "outfit", void 0);
+    simulated_state_defineProperty(this, "outfit", void 0);
 
-    calculator_defineProperty(this, "famWeight", void 0);
+    simulated_state_defineProperty(this, "famWeight", void 0);
 
-    calculator_defineProperty(this, "itemDrop", void 0);
+    simulated_state_defineProperty(this, "itemDrop", void 0);
 
     this.outfit = outfit;
     this.famWeight = famWeight;
@@ -11789,10 +11789,10 @@ var Calculator = /*#__PURE__*/function () {
    */
 
 
-  calculator_createClass(Calculator, [{
+  simulated_state_createClass(SimulatedState, [{
     key: "canPickpocket",
     value: function canPickpocket() {
-      return $classes(calculator_templateObject || (calculator_templateObject = calculator_taggedTemplateLiteral(["Disco Bandit, Accordion Thief"]))).includes((0,external_kolmafia_namespaceObject.myClass)()) || [template_string_$item(calculator_templateObject2 || (calculator_templateObject2 = calculator_taggedTemplateLiteral(["mime army infiltration glove"]))), template_string_$item(calculator_templateObject3 || (calculator_templateObject3 = calculator_taggedTemplateLiteral(["tiny black hole"])))].some(item => this.outfit.haveEquipped(item));
+      return $classes(simulated_state_templateObject || (simulated_state_templateObject = simulated_state_taggedTemplateLiteral(["Disco Bandit, Accordion Thief"]))).includes((0,external_kolmafia_namespaceObject.myClass)()) || [template_string_$item(simulated_state_templateObject2 || (simulated_state_templateObject2 = simulated_state_taggedTemplateLiteral(["mime army infiltration glove"]))), template_string_$item(simulated_state_templateObject3 || (simulated_state_templateObject3 = simulated_state_taggedTemplateLiteral(["tiny black hole"])))].some(item => this.outfit.haveEquipped(item));
     }
     /**
      * @returns Whether the outfit has the ability to use navel runaways.
@@ -11801,7 +11801,7 @@ var Calculator = /*#__PURE__*/function () {
   }, {
     key: "canNavelRunaway",
     value: function canNavelRunaway() {
-      return [template_string_$item(calculator_templateObject4 || (calculator_templateObject4 = calculator_taggedTemplateLiteral(["Greatest American Pants"]))), template_string_$item(calculator_templateObject5 || (calculator_templateObject5 = calculator_taggedTemplateLiteral(["navel ring of navel gazing"])))].some(item => this.outfit.haveEquipped(item));
+      return [template_string_$item(simulated_state_templateObject4 || (simulated_state_templateObject4 = simulated_state_taggedTemplateLiteral(["Greatest American Pants"]))), template_string_$item(simulated_state_templateObject5 || (simulated_state_templateObject5 = simulated_state_taggedTemplateLiteral(["navel ring of navel gazing"])))].some(item => this.outfit.haveEquipped(item));
     }
     /**
      * @returns The total item bonus from item drop modifier and a fairy-like familiar.
@@ -11823,8 +11823,8 @@ var Calculator = /*#__PURE__*/function () {
   }, {
     key: "advsGainedPerTurnTakingCombat",
     value: function advsGainedPerTurnTakingCombat() {
-      var gnome = this.outfit.haveEquipped(template_string_$item(calculator_templateObject6 || (calculator_templateObject6 = calculator_taggedTemplateLiteral(["gnomish housemaid's kgnee"])))) ? expectedAdvsPerCombat(this.famWeight) : 0;
-      var ring = this.outfit.haveEquipped(template_string_$item(calculator_templateObject7 || (calculator_templateObject7 = calculator_taggedTemplateLiteral(["mafia thumb ring"])))) ? 0.04 : 0;
+      var gnome = this.outfit.haveEquipped(template_string_$item(simulated_state_templateObject6 || (simulated_state_templateObject6 = simulated_state_taggedTemplateLiteral(["gnomish housemaid's kgnee"])))) ? expectedAdvsPerCombat(this.famWeight) : 0;
+      var ring = this.outfit.haveEquipped(template_string_$item(simulated_state_templateObject7 || (simulated_state_templateObject7 = simulated_state_taggedTemplateLiteral(["mafia thumb ring"])))) ? 0.04 : 0;
       return gnome + ring;
     }
     /**
@@ -11842,21 +11842,21 @@ var Calculator = /*#__PURE__*/function () {
       return 6 / 7 * b + 1 / 7 * (2 / 5 * b + 3 / 5 * (runawayChance + (1 - runawayChance) * a) * b);
     }
     /**
-     * @returns The value, in meat, of adding a certain amount of familiar weight and item drop to the calculator instance.
+     * @returns The value, in meat, of adding a certain amount of familiar weight and item drop to the SimulatedState instance.
      */
 
   }, {
     key: "valueOf",
     value: function valueOf(famWeight, itemDrop) {
-      return (new Calculator(this.outfit, this.famWeight + famWeight, this.itemDrop + itemDrop).bagsGainedPerAdv() - this.bagsGainedPerAdv()) * args.bagvalue;
+      return (new SimulatedState(this.outfit, this.famWeight + famWeight, this.itemDrop + itemDrop).bagsGainedPerAdv() - this.bagsGainedPerAdv()) * args.bagvalue;
     }
   }], [{
     key: "baseline",
     value:
     /**
-     * Create a calculator instance using what are considered "baseline" values: passives, buffs, outfit equips, and base familiar weight.
+     * Create a SimulatedState instance using what are considered "baseline" values: passives, buffs, outfit equips, and base familiar weight.
      * @param outfit The outfit to use. If not specified, this will use an outfit created from the current character state.
-     * @returns A calculator instance that includes the modifier values of baseline sources.
+     * @returns A SimulatedState instance that includes the modifier values of baseline sources.
      */
     function baseline(outfit) {
       var _outfit;
@@ -11865,21 +11865,21 @@ var Calculator = /*#__PURE__*/function () {
       var passives = external_kolmafia_namespaceObject.Skill.all().filter(skill => have(skill) && skill.passive);
       var buffs = external_kolmafia_namespaceObject.Skill.all().filter(skill => have(skill) && skill.buff && (0,external_kolmafia_namespaceObject.toEffect)(skill) !== external_kolmafia_namespaceObject.Effect.none).map(skill => (0,external_kolmafia_namespaceObject.toEffect)(skill));
 
-      var equips = calculator_toConsumableArray(outfit.equips.values());
+      var equips = simulated_state_toConsumableArray(outfit.equips.values());
 
-      var sources = [].concat(calculator_toConsumableArray(passives), calculator_toConsumableArray(buffs), calculator_toConsumableArray(equips));
+      var sources = [].concat(simulated_state_toConsumableArray(passives), simulated_state_toConsumableArray(buffs), simulated_state_toConsumableArray(equips));
       var famWeight = sources.reduce((a, b) => a + modifier_get("Familiar Weight", b), 0) + (outfit.familiar ? (0,external_kolmafia_namespaceObject.familiarWeight)(outfit.familiar) : 0);
       var itemDrop = sources.reduce((a, b) => a + modifier_get("Item Drop", b), 0);
-      return new Calculator(outfit, famWeight, itemDrop);
+      return new SimulatedState(outfit, famWeight, itemDrop);
     }
   }, {
     key: "current",
     value: function current() {
-      return new Calculator(fromCurrent(), modifier_get("Familiar Weight"), modifier_get("Item Drop"));
+      return new SimulatedState(fromCurrent(), modifier_get("Familiar Weight"), modifier_get("Item Drop"));
     }
   }]);
 
-  return Calculator;
+  return SimulatedState;
 }();
 ;// CONCATENATED MODULE: ./src/engine/combat.ts
 var engine_combat_templateObject, engine_combat_templateObject2, combat_templateObject3, combat_templateObject4, combat_templateObject5, combat_templateObject6, combat_templateObject7;
@@ -12295,7 +12295,7 @@ function turnsRemaining() {
   }
 
   var spend = (0,external_kolmafia_namespaceObject.myAdventures)() + Math.min(0, args.turns);
-  return Math.round(spend / (1 - Calculator.baseline().advsGainedPerTurnTakingCombat()));
+  return Math.round(spend / (1 - SimulatedState.baseline().advsGainedPerTurnTakingCombat()));
 }
 ;// CONCATENATED MODULE: ./src/engine/resources.ts
 var resources_templateObject, resources_templateObject2, resources_templateObject3, resources_templateObject4, resources_templateObject5, resources_templateObject6, resources_templateObject7, resources_templateObject8, resources_templateObject9, resources_templateObject10, resources_templateObject11, resources_templateObject12, resources_templateObject13, resources_templateObject14, resources_templateObject15, resources_templateObject16, resources_templateObject17, resources_templateObject18, resources_templateObject19, resources_templateObject20;
@@ -12458,7 +12458,7 @@ var engine_Engine = /*#__PURE__*/function (_BaseEngine) {
         return {
           item: item,
           successRate: successRate,
-          price: Calculator.current().bagsGainedPerAdv() * args.bagvalue - (0,external_kolmafia_namespaceObject.mallPrice)(item) / successRate // Break-even price
+          price: SimulatedState.current().bagsGainedPerAdv() * args.bagvalue - (0,external_kolmafia_namespaceObject.mallPrice)(item) / successRate // Break-even price
 
         };
       }).sort((a, b) => b.price - a.price).find(_ref2 => {
@@ -12997,7 +12997,7 @@ function chooseOutfit() {
   outfit.setModes({
     parka: "ghostasaurus"
   });
-  var valuator = Calculator.prototype.valueOf.bind(Calculator.baseline(outfit));
+  var valuator = SimulatedState.prototype.valueOf.bind(SimulatedState.baseline(outfit));
   outfit.equip({
     modifier: "".concat(valuator(1, 0), "familiar weight, ").concat(valuator(0, 1), "item drop"),
     avoid: [template_string_$item(src_outfit_templateObject19 || (src_outfit_templateObject19 = src_outfit_taggedTemplateLiteral(["time-twitching toolbelt"])))]
@@ -13116,7 +13116,7 @@ function farmingPotions() {
 }
 function potionSetup() {
   var excludedEffects = new Set(getActiveEffects().map(effect => getMutuallyExclusiveEffectsOf(effect)).flat());
-  var valuator = Calculator.prototype.valueOf.bind(Calculator.current());
+  var valuator = SimulatedState.prototype.valueOf.bind(SimulatedState.current());
   var profitablePotions = farmingPotions().filter(potion => potion.net(valuator) > 0).sort((a, b) => b.net(valuator) - a.net(valuator));
 
   var _iterator2 = potions_createForOfIteratorHelper(profitablePotions),
@@ -13125,7 +13125,7 @@ function potionSetup() {
   try {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var potion = _step2.value;
-      valuator = Calculator.prototype.valueOf.bind(Calculator.current()); // Update after each potion application to handle caps
+      valuator = SimulatedState.prototype.valueOf.bind(SimulatedState.current()); // Update after each potion application to handle caps
 
       if (potion.net(valuator) <= 0) continue; // Potion can become non-profitable if a cap is reached
 
@@ -13175,7 +13175,7 @@ function bubbleVision() {
     itemDrop: averageItemDrop,
     effectDuration: turns
   });
-  var valuator = Calculator.prototype.valueOf.bind(Calculator.current());
+  var valuator = SimulatedState.prototype.valueOf.bind(SimulatedState.current());
 
   if (potion.net(valuator) > 0) {
     acquire(1, potion.item, potion.gross(valuator));
