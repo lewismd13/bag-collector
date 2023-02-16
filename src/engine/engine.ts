@@ -1,5 +1,5 @@
 import { args } from "../args";
-import { Calculator } from "../calculator";
+import { SimulatedState } from "../simulated-state";
 import { CombatActions, MyActionDefaults } from "./combat";
 import { equipFirst } from "./outfit";
 import { unusedBanishes } from "./resources";
@@ -38,7 +38,8 @@ export class Engine extends BaseEngine<CombatActions, Task> {
           item,
           successRate,
           price:
-            Calculator.current().bagsGainedPerAdv() * args.bagvalue - mallPrice(item) / successRate, // Break-even price
+            SimulatedState.current().bagsGainedPerAdv() * args.bagvalue -
+            mallPrice(item) / successRate, // Break-even price
         }))
           .sort((a, b) => b.price - a.price)
           .find(({ price }) => price > 0) ?? null;

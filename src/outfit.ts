@@ -1,5 +1,5 @@
 import { args } from "./args";
-import { Calculator } from "./calculator";
+import { SimulatedState } from "./simulated-state";
 import { Engine } from "./engine/engine";
 import { gyou, maxBy } from "./lib";
 import { Outfit } from "grimoire-kolmafia";
@@ -91,7 +91,7 @@ export function chooseOutfit(): Outfit {
   outfit.equip($item`mafia thumb ring`);
   outfit.setModes({ parka: "ghostasaurus" });
 
-  const valuator = Calculator.prototype.valueOf.bind(Calculator.baseline(outfit));
+  const valuator = SimulatedState.prototype.valueOf.bind(SimulatedState.baseline(outfit));
   outfit.equip({
     modifier: `${valuator(1, 0)}familiar weight, ${valuator(0, 1)}item drop`,
     avoid: [$item`time-twitching toolbelt`],

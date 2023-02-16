@@ -1,5 +1,5 @@
 import { args } from "./args";
-import { Calculator } from "./calculator";
+import { SimulatedState } from "./simulated-state";
 import { Outfit } from "grimoire-kolmafia";
 import {
   canInteract,
@@ -104,5 +104,5 @@ export function turnsRemaining(): number {
     return Math.min(args.turns - spent, myAdventures());
   }
   const spend = myAdventures() + Math.min(0, args.turns);
-  return Math.round(spend / (1 - Calculator.baseline().advsGainedPerTurnTakingCombat()));
+  return Math.round(spend / (1 - SimulatedState.baseline().advsGainedPerTurnTakingCombat()));
 }

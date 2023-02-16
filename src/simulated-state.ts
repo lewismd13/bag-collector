@@ -4,17 +4,17 @@ import { $classes, $item, findFairyMultiplier, getModifier, have, ReagnimatedGno
 import { args } from "./args";
 import { fromCurrent } from "./engine/outfit";
 
-export class Calculator {
+export class SimulatedState {
   outfit: Outfit;
   famWeight: number;
   itemDrop: number;
 
   /**
-   * Create a calculator instance using what are considered "baseline" values: passives, buffs, outfit equips, and base familiar weight.
+   * Create a SimulatedState instance using what are considered "baseline" values: passives, buffs, outfit equips, and base familiar weight.
    * @param outfit The outfit to use. If not specified, this will use an outfit created from the current character state.
-   * @returns A calculator instance that includes the modifier values of baseline sources.
+   * @returns A SimulatedState instance that includes the modifier values of baseline sources.
    */
-  static baseline(outfit?: Outfit): Calculator {
+  static baseline(outfit?: Outfit): SimulatedState {
     outfit = outfit ?? fromCurrent();
     const passives = Skill.all().filter((skill) => have(skill) && skill.passive);
     const buffs = Skill.all()
@@ -26,15 +26,19 @@ export class Calculator {
       sources.reduce((a, b) => a + getModifier("Familiar Weight", b), 0) +
       (outfit.familiar ? familiarWeight(outfit.familiar) : 0);
     const itemDrop = sources.reduce((a, b) => a + getModifier("Item Drop", b), 0);
-    return new Calculator(outfit, famWeight, itemDrop);
+    return new SimulatedState(outfit, famWeight, itemDrop);
   }
 
-  static current(): Calculator {
-    return new Calculator(fromCurrent(), getModifier("Familiar Weight"), getModifier("Item Drop"));
+  static current(): SimulatedState {
+    return new SimulatedState(
+      fromCurrent(),
+      getModifier("Familiar Weight"),
+      getModifier("Item Drop")
+    );
   }
 
   /**
-   * Create the calculator.
+   * Create the SimulatedState.
    * @param outfit Outfit to use for evaluating combat results. The modifier values from items equipped to the outfit are not taken into account.
    * @param famWeight Value of familiar weight modifier.
    * @param itemDrop Value of item drop modifier.
@@ -107,11 +111,11 @@ export class Calculator {
   }
 
   /**
-   * @returns The value, in meat, of adding a certain amount of familiar weight and item drop to the calculator instance.
+   * @returns The value, in meat, of adding a certain amount of familiar weight and item drop to the SimulatedState instance.
    */
   valueOf(famWeight: number, itemDrop: number): number {
     return (
-      (new Calculator(
+      (new SimulatedState(
         this.outfit,
         this.famWeight + famWeight,
         this.itemDrop + itemDrop
