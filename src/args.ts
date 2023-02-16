@@ -13,8 +13,16 @@ export const args = Args.create("baggo", "A script for farming duffel bags and v
       ["none", "Do no olfact."],
       ["burnout", "Drops van key (food)."],
       ["jock", "Drops duffel bag (booze)."],
+      [
+        "balance",
+        "Automatically choose one of the above options to keep your available bags/keys relatively equal.",
+      ],
     ],
     default: "none",
+  }),
+  balance: Args.number({
+    help: "Maximum difference between your available bags/keys to be considered equal. This argument is only used when olfact=balance.",
+    default: 50,
   }),
   buff: Args.flag({
     help: "Only do setup and buffing, do not adventure.",
