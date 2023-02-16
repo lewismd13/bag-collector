@@ -8,6 +8,7 @@ import { bubbleVision, potionSetup } from "../potions";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
+  availableAmount,
   canAdventure,
   canInteract,
   expectedColdMedicineCabinet,
@@ -33,6 +34,7 @@ import {
   $class,
   $item,
   $location,
+  $monster,
   $monsters,
   $skill,
   $thrall,
@@ -50,6 +52,27 @@ const floristFlowers = [
 ];
 
 let potionsCompleted = false;
+
+function olfactMonster(): Monster | undefined {
+  const bags = availableAmount($item`unremarkable duffel bag`);
+  const keys = availableAmount($item`van key`);
+  const diff =
+    args.balance < 1 ? Math.abs((bags - keys) / ((bags + keys) / 2)) : Math.abs(bags - keys);
+
+  switch (args.olfact) {
+    case "none":
+      return undefined;
+    case "burnout":
+      return $monster`burnout`;
+    case "jock":
+      return $monster`jock`;
+    case "balance":
+      if (diff <= args.balance) return undefined;
+      return keys < bags ? $monster`burnout` : $monster`jock`;
+    default:
+      throw `Unknown olfact target: ${args.olfact}`;
+  }
+}
 
 export function BaggoQuest(): Quest {
   return {
@@ -183,8 +206,9 @@ export function BaggoQuest(): Quest {
             $monsters`burnout, jock`
           )
           .autoattack((): Macro => {
-            return args.olfact !== "none"
-              ? Macro.if_(Monster.get(args.olfact), Macro.trySkill($skill`Transcendent Olfaction`))
+            const olfact = olfactMonster();
+            return olfact
+              ? Macro.if_(olfact, Macro.trySkill($skill`Transcendent Olfaction`))
               : new Macro();
           })
           .kill(),
