@@ -143,7 +143,7 @@ export function BaggoQuest(): Quest {
       },
       {
         name: "Collect Bags",
-        after: ["Dailies/Kgnee", "Potions", "Party Fair"],
+        after: ["Potions", "Party Fair"],
         completed: () => turnsRemaining() <= 0 || args.buff,
         prepare: () => {
           bubbleVision();
