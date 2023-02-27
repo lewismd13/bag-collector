@@ -166,7 +166,7 @@ export function BaggoQuest(): Quest {
         choices: { 1324: 5 },
         combat: new CombatStrategy()
           .banish($monsters`biker, party girl, "plain" girl`)
-          .autoattack(
+          .macro(
             () =>
               Macro.externalIf(
                 !gyou(),
@@ -182,7 +182,7 @@ export function BaggoQuest(): Quest {
                 ),
             $monsters`burnout, jock`
           )
-          .autoattack((): Macro => {
+          .macro((): Macro => {
             return olfactMonster
               ? Macro.if_(olfactMonster, Macro.trySkill($skill`Transcendent Olfaction`))
               : new Macro();
