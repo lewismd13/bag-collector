@@ -3,7 +3,7 @@ import { CombatStrategy } from "../engine/combat";
 import { Engine } from "../engine/engine";
 import { Quest } from "../engine/task";
 import { gyou, turnsRemaining } from "../lib";
-import { chooseOutfit } from "../outfit";
+import { chooseOutfit, isSober } from "../outfit";
 import { bubbleVision, potionSetup } from "../potions";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
@@ -165,6 +165,7 @@ export function BaggoQuest(): Quest {
           .map((skill) => toEffect(skill)),
         choices: { 1324: 5 },
         combat: new CombatStrategy()
+          .startingMacro(() => Macro.externalIf(!isSober(), Macro.attack().repeat()))
           .banish($monsters`biker, party girl, "plain" girl`)
           .macro(
             () =>

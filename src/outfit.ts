@@ -63,7 +63,7 @@ export function chooseOutfit(): Outfit {
     return outfit;
   }
 
-  if (!$classes`Disco Bandit, Accordion Thief`.includes(myClass())) {
+  if (!$classes`Disco Bandit, Accordion Thief`.includes(myClass()) && isSober()) {
     outfit.equipFirst($items`mime army infiltration glove, tiny black hole`);
   }
 
@@ -71,7 +71,7 @@ export function chooseOutfit(): Outfit {
     outfit.equipFirst($items`Greatest American Pants, navel ring of navel gazing`);
   }
 
-  if (!have($effect`Everything Looks Yellow`) || gyou()) {
+  if ((!have($effect`Everything Looks Yellow`) && isSober()) || gyou()) {
     outfit.equip($item`Jurassic Parka`);
     outfit.setModes({
       parka: !have($effect`Everything Looks Yellow`) ? "dilophosaur" : "kachungasaur",
