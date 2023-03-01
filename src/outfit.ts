@@ -1,52 +1,11 @@
 import { args } from "./args";
 import { SimulatedState } from "./simulated-state";
 import { Engine } from "./engine/engine";
-import { gyou, maxBy } from "./lib";
+import { gyou, isSober } from "./lib";
 import { Outfit } from "grimoire-kolmafia";
-import {
-  Familiar,
-  inebrietyLimit,
-  myClass,
-  myFamiliar,
-  myInebriety,
-  outfitPieces,
-  totalTurnsPlayed,
-} from "kolmafia";
-import {
-  $classes,
-  $effect,
-  $familiar,
-  $item,
-  $items,
-  $slot,
-  findFairyMultiplier,
-  get,
-  have,
-  ReagnimatedGnome,
-} from "libram";
-
-export function isSober(): boolean {
-  return myInebriety() <= inebrietyLimit() - Number(myFamiliar() === $familiar`Stooper`);
-}
-
-export function chooseFamiliar(): Familiar {
-  if (args.familiar !== undefined) return args.familiar;
-
-  if (ReagnimatedGnome.chosenParts().includes($item`gnomish housemaid's kgnee`)) {
-    return $familiar`Reagnimated Gnome`;
-  }
-
-  const viableFairies = Familiar.all().filter(
-    (f) =>
-      have(f) &&
-      findFairyMultiplier(f) &&
-      f !== $familiar`Steam-Powered Cheerleader` &&
-      !f.physicalDamage &&
-      !f.elementalDamage
-  );
-  const bestFairy = maxBy(viableFairies, findFairyMultiplier);
-  return bestFairy;
-}
+import { myClass, outfitPieces, totalTurnsPlayed } from "kolmafia";
+import { $classes, $effect, $item, $items, $slot, get, have } from "libram";
+import { itemFamiliar } from "./familiar/item-familiar";
 
 export function chooseOutfit(): Outfit {
   const outfit = new Outfit();
@@ -55,8 +14,8 @@ export function chooseOutfit(): Outfit {
     throw "Unable to add Drunkula's wineglass to our outfit";
   }
 
-  outfit.equip(chooseFamiliar());
-  outfit.equip($item`gnomish housemaid's kgnee`);
+  outfit.equip(itemFamiliar());
+  outfit.equipFirst($items`gnomish housemaid's kgnee, li'l ninja costume`);
 
   if (args.outfit) {
     outfit.equip(outfitPieces(args.outfit));
@@ -86,7 +45,7 @@ export function chooseOutfit(): Outfit {
     outfit.equip($item`protonic accelerator pack`);
   }
 
-  outfit.equip([$item`June cleaver`, $item`Fourth of May Cosplay Saber`], $slot`weapon`);
+  outfit.equipFirst($items`June cleaver, Fourth of May Cosplay Saber`, $slot`weapon`);
   outfit.equip($item`carnivorous potted plant`);
   outfit.equip($item`mafia thumb ring`);
   outfit.setModes({ parka: "ghostasaurus" });

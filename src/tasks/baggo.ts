@@ -2,8 +2,8 @@ import { args } from "../args";
 import { CombatStrategy } from "../engine/combat";
 import { Engine } from "../engine/engine";
 import { Quest } from "../engine/task";
-import { gyou, turnsRemaining } from "../lib";
-import { chooseOutfit, isSober } from "../outfit";
+import { gyou, isSober, turnsRemaining } from "../lib";
+import { chooseOutfit } from "../outfit";
 import { bubbleVision, potionSetup } from "../potions";
 import { OutfitSpec } from "grimoire-kolmafia";
 import {
@@ -32,24 +32,43 @@ import {
   $class,
   $item,
   $location,
+  $monster,
   $monsters,
   $skill,
   $thrall,
   AutumnAton,
+  Counter,
   FloristFriar,
   get,
   have,
   Macro,
+  SourceTerminal,
 } from "libram";
 import { olfactMonster } from "../main";
+import { meatFamiliar } from "../familiar/meat-familiar";
 
-const floristFlowers = [
+const FLORIST_FLOWERS = [
   FloristFriar.StealingMagnolia,
   FloristFriar.AloeGuvnor,
   FloristFriar.PitcherPlant,
 ];
 
 let potionsCompleted = false;
+
+const effects = [
+  $skill`Blood Bond`,
+  $skill`Leash of Linguini`,
+  $skill`Empathy of the Newt`,
+  $skill`The Spirit of Taking`,
+  $skill`Fat Leon's Phat Loot Lyric`,
+  $skill`Singer's Faithful Ocelot`,
+  $skill`The Polka of Plenty`,
+  $skill`Disco Leer`,
+  $skill`Astral Shell`,
+  $skill`Ghostly Shell`,
+]
+  .filter((skill) => have(skill))
+  .map((skill) => toEffect(skill));
 
 export function BaggoQuest(): Quest {
   return {
@@ -72,8 +91,8 @@ export function BaggoQuest(): Quest {
         name: "Florist Friar",
         ready: () => FloristFriar.have() && myLocation() === $location`The Neverending Party`,
         completed: () =>
-          FloristFriar.isFull() || floristFlowers.every((flower) => !flower.available()),
-        do: () => floristFlowers.forEach((flower) => flower.plant()),
+          FloristFriar.isFull() || FLORIST_FLOWERS.every((flower) => !flower.available()),
+        do: () => FLORIST_FLOWERS.forEach((flower) => flower.plant()),
         limit: { tries: 1 },
       },
       {
@@ -119,6 +138,7 @@ export function BaggoQuest(): Quest {
             throw "Could not determine ghost location";
           }
         },
+        effects,
         outfit: (): OutfitSpec => {
           return { ...chooseOutfit().spec(), back: $item`protonic accelerator pack` };
         },
@@ -130,6 +150,14 @@ export function BaggoQuest(): Quest {
             .trySkill($skill`Shoot Ghost`)
             .trySkill($skill`Trap Ghost`)
         ),
+      },
+      {
+        name: "Digitized Embezzler",
+        completed: () => Counter.get("Digitize Monster") > 0,
+        ready: () => SourceTerminal.getDigitizeMonster() === $monster`Knob Goblin Embezzler`,
+        do: $location`Noob Cave`,
+        outfit: { familiar: meatFamiliar(), modifier: "meat" },
+        effects,
       },
       {
         name: "Party Fair",
@@ -151,18 +179,7 @@ export function BaggoQuest(): Quest {
         },
         do: $location`The Neverending Party`,
         outfit: chooseOutfit,
-        effects: [
-          $skill`Blood Bond`,
-          $skill`Leash of Linguini`,
-          $skill`Empathy of the Newt`,
-          $skill`The Spirit of Taking`,
-          $skill`Fat Leon's Phat Loot Lyric`,
-          $skill`Singer's Faithful Ocelot`,
-          $skill`Astral Shell`,
-          $skill`Ghostly Shell`,
-        ]
-          .filter((skill) => have(skill))
-          .map((skill) => toEffect(skill)),
+        effects,
         choices: { 1324: 5 },
         combat: new CombatStrategy()
           .startingMacro(() => Macro.externalIf(!isSober(), Macro.attack().repeat()))
@@ -174,7 +191,7 @@ export function BaggoQuest(): Quest {
                 Macro.if_(`!hppercentbelow 75`, Macro.step("pickpocket")),
                 Macro.step("pickpocket")
               )
-                .if_(`match "unremarkable duffel bag" || match "van key"`, Engine.runMacro()) // TODO only runaway if we have a navel runaway, consider tatters/GOTOs
+                .if_(`match "unremarkable duffel bag" || match "van key"`, Engine.runMacro())
                 .trySkill($skill`Spit jurassic acid`)
                 .trySkill($skill`Summon Love Gnats`)
                 .if_(
