@@ -1,6 +1,7 @@
 import { Familiar } from "kolmafia";
 import { $familiar, $item, findFairyMultiplier, findLeprechaunMultiplier, have } from "libram";
 import { isSober, maxBy } from "../lib";
+import { FamiliarSpec } from "./spec";
 
 let bestLeprechaun: Familiar;
 
@@ -24,10 +25,10 @@ function findBestLeprechaun(): Familiar {
   return bestLeprechaun;
 }
 
-export function meatFamiliar(): Familiar {
+export function meatFamiliarSpec(): FamiliarSpec {
   if (!isSober() && have($familiar`Trick-or-Treating Tot`) && have($item`li'l pirate costume`)) {
-    return $familiar`Trick-or-Treating Tot`;
+    return { familiar: $familiar`Trick-or-Treating Tot`, famequip: $item`li'l pirate costume` };
   }
-  if (have($familiar`Robortender`)) return $familiar`Robortender`;
-  return findBestLeprechaun();
+  if (have($familiar`Robortender`)) return { familiar: $familiar`Robortender` };
+  return { familiar: findBestLeprechaun() };
 }

@@ -110,8 +110,8 @@ export class Engine extends BaseEngine<CombatActions, Task> {
 
   prepare(task: Task): void {
     super.prepare(task);
-    if (task.combat !== undefined && myHp() < myMaxhp() * 0.9 && have($skill`Cannelloni Cocoon`)) {
-      useSkill($skill`Cannelloni Cocoon`);
+    if (task.combat !== undefined && have($skill`Cannelloni Cocoon`)) {
+      while (myHp() < myMaxhp() * 0.9) useSkill($skill`Cannelloni Cocoon`);
     }
   }
 }

@@ -1,7 +1,8 @@
 import { Familiar } from "kolmafia";
 import { $familiar, $item, findFairyMultiplier, have } from "libram";
 import { args } from "../args";
-import { maxBy } from "../lib";
+import { isSober, maxBy } from "../lib";
+import { FamiliarSpec } from "./spec";
 
 let bestNonCheerleaderFairy: Familiar;
 
@@ -21,13 +22,17 @@ function findBestNonCheerleaderFairy(): Familiar {
   return bestNonCheerleaderFairy;
 }
 
-export function itemFamiliar(): Familiar {
-  if (args.familiar) return args.familiar;
-  if (have($familiar`Reagnimated Gnome`) && have($item`gnomish housemaid's kgnee`)) {
-    return $familiar`Reagnimated Gnome`;
+export function itemFamiliarSpec(): FamiliarSpec {
+  if (args.familiar) return { familiar: args.familiar };
+  if (
+    have($familiar`Reagnimated Gnome`) &&
+    have($item`gnomish housemaid's kgnee`) &&
+    (isSober() || !(have($familiar`Trick-or-Treating Tot`) && have($item`li'l ninja costume`)))
+  ) {
+    return { familiar: $familiar`Reagnimated Gnome`, famequip: $item`gnomish housemaid's kgnee` };
   }
   if (have($familiar`Trick-or-Treating Tot`) && have($item`li'l ninja costume`)) {
-    return $familiar`Trick-or-Treating Tot`;
+    return { familiar: $familiar`Trick-or-Treating Tot`, famequip: $item`li'l ninja costume` };
   }
-  return findBestNonCheerleaderFairy();
+  return { familiar: findBestNonCheerleaderFairy() };
 }

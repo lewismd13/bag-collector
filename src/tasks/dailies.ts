@@ -28,7 +28,7 @@ import {
   SourceTerminal,
 } from "libram";
 import { Quest, Task } from "../engine/task";
-import { itemFamiliar } from "../familiar/item-familiar";
+import { itemFamiliarSpec } from "../familiar/item-familiar";
 import { canPull, gyou, ronin, turnsRemaining } from "../lib";
 
 function pull(item: Item): Task {
@@ -122,11 +122,7 @@ export function DailiesQuest(): Quest {
         ready: () => have($item`mumming trunk`),
         completed: () => get("_mummeryMods").includes("Item Drop"),
         do: () => cliExecute("mummery item"),
-        outfit: () => {
-          return {
-            familiar: itemFamiliar(),
-          };
-        },
+        outfit: () => itemFamiliarSpec(),
         limit: { tries: 1 },
       },
       {

@@ -3,9 +3,7 @@ import { CombatStrategy } from "../engine/combat";
 import { Engine } from "../engine/engine";
 import { Quest } from "../engine/task";
 import { gyou, isSober, turnsRemaining } from "../lib";
-import { chooseOutfit } from "../outfit";
 import { bubbleVision, potionSetup } from "../potions";
-import { OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
   canAdventure,
@@ -17,10 +15,8 @@ import {
   myAdventures,
   myClass,
   myLocation,
-  myMaxhp,
   myThrall,
   putCloset,
-  restoreHp,
   runChoice,
   toEffect,
   totalTurnsPlayed,
@@ -45,7 +41,9 @@ import {
   SourceTerminal,
 } from "libram";
 import { olfactMonster } from "../main";
-import { meatFamiliar } from "../familiar/meat-familiar";
+import { meatFamiliarSpec } from "../familiar/meat-familiar";
+import { freeFightFamiliarSpec } from "../familiar/free-fight-familiar";
+import { baggoOutfit } from "../outfit";
 
 const FLORIST_FLOWERS = [
   FloristFriar.StealingMagnolia,
@@ -121,7 +119,7 @@ export function BaggoQuest(): Quest {
         post: () => {
           potionsCompleted = true;
         },
-        outfit: chooseOutfit,
+        outfit: baggoOutfit,
       },
       {
         name: "Proton Ghost",
@@ -139,8 +137,12 @@ export function BaggoQuest(): Quest {
           }
         },
         effects,
-        outfit: (): OutfitSpec => {
-          return { ...chooseOutfit().spec(), back: $item`protonic accelerator pack` };
+        outfit: () => {
+          return {
+            ...baggoOutfit(false).spec(),
+            ...freeFightFamiliarSpec(),
+            back: $item`protonic accelerator pack`,
+          };
         },
         combat: new CombatStrategy().macro(
           Macro.trySkill($skill`Sing Along`)
@@ -156,7 +158,7 @@ export function BaggoQuest(): Quest {
         completed: () => Counter.get("Digitize Monster") > 0,
         ready: () => SourceTerminal.getDigitizeMonster() === $monster`Knob Goblin Embezzler`,
         do: $location`Noob Cave`,
-        outfit: { familiar: meatFamiliar(), modifier: "meat" },
+        outfit: { ...meatFamiliarSpec(), modifier: "meat" },
         effects,
       },
       {
@@ -173,12 +175,9 @@ export function BaggoQuest(): Quest {
         name: "Collect Bags",
         after: ["Potions", "Party Fair"],
         completed: () => turnsRemaining() <= 0 || args.buff,
-        prepare: () => {
-          bubbleVision();
-          if (gyou()) restoreHp(myMaxhp());
-        },
+        prepare: bubbleVision,
         do: $location`The Neverending Party`,
-        outfit: chooseOutfit,
+        outfit: baggoOutfit,
         effects,
         choices: { 1324: 5 },
         combat: new CombatStrategy()
