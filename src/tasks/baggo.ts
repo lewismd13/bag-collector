@@ -159,7 +159,16 @@ export function BaggoQuest(): Quest {
         ready: () => SourceTerminal.getDigitizeMonster() === $monster`Knob Goblin Embezzler`,
         do: $location`Noob Cave`,
         outfit: { ...meatFamiliarSpec(), modifier: "meat" },
-        combat: new CombatStrategy().macro(Macro.trySkill($skill`Sing Along`)).kill(),
+        combat: new CombatStrategy().kill(),
+        effects,
+      },
+      {
+        name: "Digitized Non-Embezzler",
+        completed: () => Counter.get("Digitize Monster") > 0,
+        ready: () => SourceTerminal.getDigitizeMonster() !== $monster`Knob Goblin Embezzler`,
+        do: $location`Noob Cave`,
+        outfit: baggoOutfit,
+        combat: new CombatStrategy().kill(),
         effects,
       },
       {
