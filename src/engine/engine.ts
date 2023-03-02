@@ -5,18 +5,16 @@ import { equipFirst } from "./outfit";
 import { unusedBanishes } from "./resources";
 import { Task } from "./task";
 import { Engine as BaseEngine, CombatResources, CombatStrategy, Outfit } from "grimoire-kolmafia";
+import { haveEffect, haveEquipped, Item, mallPrice, myAdventures, toInt } from "kolmafia";
 import {
-  haveEffect,
-  haveEquipped,
-  Item,
-  mallPrice,
-  myAdventures,
-  myHp,
-  myMaxhp,
-  toInt,
-  useSkill,
-} from "kolmafia";
-import { $effect, $item, $items, $skill, getBanishedMonsters, have, Macro } from "libram";
+  $effect,
+  $item,
+  $items,
+  getBanishedMonsters,
+  have,
+  Macro,
+  PropertiesManager,
+} from "libram";
 
 type FreeRun = { item: Item; successRate: number; price: number };
 const RUN_SOURCES = [
@@ -108,10 +106,7 @@ export class Engine extends BaseEngine<CombatActions, Task> {
     }
   }
 
-  prepare(task: Task): void {
-    super.prepare(task);
-    if (task.combat !== undefined && have($skill`Cannelloni Cocoon`)) {
-      while (myHp() < myMaxhp() * 0.9) useSkill($skill`Cannelloni Cocoon`);
-    }
+  initPropertiesManager(manager: PropertiesManager): void {
+    manager.set({ hpAutoRecovery: 0.5, hpAutoRecoveryTarget: 1.0 });
   }
 }
