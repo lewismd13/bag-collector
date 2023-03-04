@@ -28,8 +28,8 @@ import {
   SourceTerminal,
 } from "libram";
 import { Quest, Task } from "../engine/task";
+import { itemFamiliarSpec } from "../familiar/item-familiar";
 import { canPull, gyou, ronin, turnsRemaining } from "../lib";
-import { chooseFamiliar } from "../outfit";
 
 function pull(item: Item): Task {
   return {
@@ -122,7 +122,7 @@ export function DailiesQuest(): Quest {
         ready: () => have($item`mumming trunk`),
         completed: () => get("_mummeryMods").includes("Item Drop"),
         do: () => cliExecute("mummery item"),
-        outfit: { familiar: chooseFamiliar() },
+        outfit: () => itemFamiliarSpec(),
         limit: { tries: 1 },
       },
       {

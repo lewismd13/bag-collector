@@ -1,62 +1,20 @@
 import { args } from "./args";
 import { SimulatedState } from "./simulated-state";
 import { Engine } from "./engine/engine";
-import { gyou, maxBy } from "./lib";
+import { gyou, isSober } from "./lib";
 import { Outfit } from "grimoire-kolmafia";
-import {
-  Familiar,
-  inebrietyLimit,
-  myClass,
-  myFamiliar,
-  myInebriety,
-  outfitPieces,
-  totalTurnsPlayed,
-} from "kolmafia";
-import {
-  $classes,
-  $effect,
-  $familiar,
-  $item,
-  $items,
-  $slot,
-  findFairyMultiplier,
-  get,
-  have,
-  ReagnimatedGnome,
-} from "libram";
+import { myClass, outfitPieces, totalTurnsPlayed } from "kolmafia";
+import { $classes, $effect, $item, $items, $slot, get, have } from "libram";
+import { itemFamiliarSpec } from "./familiar/item-familiar";
 
-export function isSober(): boolean {
-  return myInebriety() <= inebrietyLimit() - Number(myFamiliar() === $familiar`Stooper`);
-}
-
-export function chooseFamiliar(): Familiar {
-  if (args.familiar !== undefined) return args.familiar;
-
-  if (ReagnimatedGnome.chosenParts().includes($item`gnomish housemaid's kgnee`)) {
-    return $familiar`Reagnimated Gnome`;
-  }
-
-  const viableFairies = Familiar.all().filter(
-    (f) =>
-      have(f) &&
-      findFairyMultiplier(f) &&
-      f !== $familiar`Steam-Powered Cheerleader` &&
-      !f.physicalDamage &&
-      !f.elementalDamage
-  );
-  const bestFairy = maxBy(viableFairies, findFairyMultiplier);
-  return bestFairy;
-}
-
-export function chooseOutfit(): Outfit {
+export function baggoOutfit(includeFamiliar = true): Outfit {
   const outfit = new Outfit();
 
-  if (!isSober() && !outfit.equip($item`Drunkula's wineglass`)) {
-    throw "Unable to add Drunkula's wineglass to our outfit";
-  }
+  if (includeFamiliar) outfit.equip(itemFamiliarSpec());
 
-  outfit.equip(chooseFamiliar());
-  outfit.equip($item`gnomish housemaid's kgnee`);
+  if (!isSober() && !outfit.equip($item`Drunkula's wineglass`)) {
+    throw "Unable to equip Drunkula's wineglass on baggo outfit";
+  }
 
   if (args.outfit) {
     outfit.equip(outfitPieces(args.outfit));
@@ -86,7 +44,7 @@ export function chooseOutfit(): Outfit {
     outfit.equip($item`protonic accelerator pack`);
   }
 
-  outfit.equip([$item`June cleaver`, $item`Fourth of May Cosplay Saber`], $slot`weapon`);
+  outfit.equip($items`June cleaver, Fourth of May Cosplay Saber`, $slot`weapon`);
   outfit.equip($item`carnivorous potted plant`);
   outfit.equip($item`mafia thumb ring`);
   outfit.setModes({ parka: "ghostasaurus" });
@@ -94,7 +52,7 @@ export function chooseOutfit(): Outfit {
   const valuator = SimulatedState.prototype.valueOf.bind(SimulatedState.baseline(outfit));
   outfit.equip({
     modifier: `${valuator(1, 0)}familiar weight, ${valuator(0, 1)}item drop`,
-    avoid: [$item`time-twitching toolbelt`],
+    avoid: [$item`time-twitching toolbelt`], // Might be uncessary in recent versions of mafia
   });
   return outfit;
 }

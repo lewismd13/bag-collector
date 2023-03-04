@@ -3,16 +3,19 @@ import { SimulatedState } from "./simulated-state";
 import { Outfit } from "grimoire-kolmafia";
 import {
   canInteract,
+  inebrietyLimit,
   Item,
   itemAmount,
   myAdventures,
+  myFamiliar,
+  myInebriety,
   myPath,
   myTurncount,
   print,
   retrieveItem,
   toInt,
 } from "kolmafia";
-import { $path, get, withProperty } from "libram";
+import { $familiar, $path, get, withProperty } from "libram";
 
 export function debug(message: string, color?: string): void {
   if (color) {
@@ -105,4 +108,8 @@ export function turnsRemaining(): number {
   }
   const spend = myAdventures() + Math.min(0, args.turns);
   return Math.round(spend / (1 - SimulatedState.baseline().advsGainedPerTurnTakingCombat()));
+}
+
+export function isSober(): boolean {
+  return myInebriety() <= inebrietyLimit() - Number(myFamiliar() === $familiar`Stooper`);
 }

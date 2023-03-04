@@ -2,10 +2,8 @@ import { args } from "../args";
 import { CombatStrategy } from "../engine/combat";
 import { Engine } from "../engine/engine";
 import { Quest } from "../engine/task";
-import { gyou, turnsRemaining } from "../lib";
-import { chooseOutfit, isSober } from "../outfit";
+import { gyou, isSober, turnsRemaining } from "../lib";
 import { bubbleVision, potionSetup } from "../potions";
-import { OutfitSpec } from "grimoire-kolmafia";
 import {
   adv1,
   canAdventure,
@@ -17,10 +15,8 @@ import {
   myAdventures,
   myClass,
   myLocation,
-  myMaxhp,
   myThrall,
   putCloset,
-  restoreHp,
   runChoice,
   toEffect,
   totalTurnsPlayed,
@@ -32,24 +28,45 @@ import {
   $class,
   $item,
   $location,
+  $monster,
   $monsters,
   $skill,
   $thrall,
   AutumnAton,
+  Counter,
   FloristFriar,
   get,
   have,
   Macro,
+  SourceTerminal,
 } from "libram";
 import { olfactMonster } from "../main";
+import { meatFamiliarSpec } from "../familiar/meat-familiar";
+import { freeFightFamiliarSpec } from "../familiar/free-fight-familiar";
+import { baggoOutfit } from "../outfit";
 
-const floristFlowers = [
+const FLORIST_FLOWERS = [
   FloristFriar.StealingMagnolia,
   FloristFriar.AloeGuvnor,
   FloristFriar.PitcherPlant,
 ];
 
 let potionsCompleted = false;
+
+const effects = [
+  $skill`Blood Bond`,
+  $skill`Leash of Linguini`,
+  $skill`Empathy of the Newt`,
+  $skill`The Spirit of Taking`,
+  $skill`Fat Leon's Phat Loot Lyric`,
+  $skill`Singer's Faithful Ocelot`,
+  $skill`The Polka of Plenty`,
+  $skill`Disco Leer`,
+  $skill`Astral Shell`,
+  $skill`Ghostly Shell`,
+]
+  .filter((skill) => have(skill))
+  .map((skill) => toEffect(skill));
 
 export function BaggoQuest(): Quest {
   return {
@@ -72,8 +89,8 @@ export function BaggoQuest(): Quest {
         name: "Florist Friar",
         ready: () => FloristFriar.have() && myLocation() === $location`The Neverending Party`,
         completed: () =>
-          FloristFriar.isFull() || floristFlowers.every((flower) => !flower.available()),
-        do: () => floristFlowers.forEach((flower) => flower.plant()),
+          FloristFriar.isFull() || FLORIST_FLOWERS.every((flower) => !flower.available()),
+        do: () => FLORIST_FLOWERS.forEach((flower) => flower.plant()),
         limit: { tries: 1 },
       },
       {
@@ -102,7 +119,7 @@ export function BaggoQuest(): Quest {
         post: () => {
           potionsCompleted = true;
         },
-        outfit: chooseOutfit,
+        outfit: baggoOutfit,
       },
       {
         name: "Proton Ghost",
@@ -119,8 +136,13 @@ export function BaggoQuest(): Quest {
             throw "Could not determine ghost location";
           }
         },
-        outfit: (): OutfitSpec => {
-          return { ...chooseOutfit().spec(), back: $item`protonic accelerator pack` };
+        effects,
+        outfit: () => {
+          return {
+            ...baggoOutfit(false).spec(),
+            ...freeFightFamiliarSpec(),
+            back: $item`protonic accelerator pack`,
+          };
         },
         combat: new CombatStrategy().macro(
           Macro.trySkill($skill`Sing Along`)
@@ -130,6 +152,24 @@ export function BaggoQuest(): Quest {
             .trySkill($skill`Shoot Ghost`)
             .trySkill($skill`Trap Ghost`)
         ),
+      },
+      {
+        name: "Digitized Embezzler",
+        completed: () => Counter.get("Digitize Monster") > 0,
+        ready: () => SourceTerminal.getDigitizeMonster() === $monster`Knob Goblin Embezzler`,
+        do: () => adv1(isSober() ? $location`Noob Cave` : $location`Drunken Stupor`, 0, ""),
+        outfit: { ...meatFamiliarSpec(), modifier: "meat" },
+        combat: new CombatStrategy().kill(),
+        effects,
+      },
+      {
+        name: "Digitized Non-Embezzler",
+        completed: () => Counter.get("Digitize Monster") > 0,
+        ready: () => SourceTerminal.getDigitizeMonster() !== $monster`Knob Goblin Embezzler`,
+        do: () => adv1(isSober() ? $location`Noob Cave` : $location`Drunken Stupor`, 0, ""),
+        outfit: baggoOutfit,
+        combat: new CombatStrategy().kill(),
+        effects,
       },
       {
         name: "Party Fair",
@@ -145,24 +185,10 @@ export function BaggoQuest(): Quest {
         name: "Collect Bags",
         after: ["Potions", "Party Fair"],
         completed: () => turnsRemaining() <= 0 || args.buff,
-        prepare: () => {
-          bubbleVision();
-          if (gyou()) restoreHp(myMaxhp());
-        },
+        prepare: bubbleVision,
         do: $location`The Neverending Party`,
-        outfit: chooseOutfit,
-        effects: [
-          $skill`Blood Bond`,
-          $skill`Leash of Linguini`,
-          $skill`Empathy of the Newt`,
-          $skill`The Spirit of Taking`,
-          $skill`Fat Leon's Phat Loot Lyric`,
-          $skill`Singer's Faithful Ocelot`,
-          $skill`Astral Shell`,
-          $skill`Ghostly Shell`,
-        ]
-          .filter((skill) => have(skill))
-          .map((skill) => toEffect(skill)),
+        outfit: baggoOutfit,
+        effects,
         choices: { 1324: 5 },
         combat: new CombatStrategy()
           .startingMacro(() => Macro.externalIf(!isSober(), Macro.attack().repeat()))
@@ -174,7 +200,7 @@ export function BaggoQuest(): Quest {
                 Macro.if_(`!hppercentbelow 75`, Macro.step("pickpocket")),
                 Macro.step("pickpocket")
               )
-                .if_(`match "unremarkable duffel bag" || match "van key"`, Engine.runMacro()) // TODO only runaway if we have a navel runaway, consider tatters/GOTOs
+                .if_(`match "unremarkable duffel bag" || match "van key"`, Engine.runMacro())
                 .trySkill($skill`Spit jurassic acid`)
                 .trySkill($skill`Summon Love Gnats`)
                 .if_(
