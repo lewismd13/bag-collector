@@ -14,6 +14,7 @@ import {
   have,
   Macro,
   PropertiesManager,
+  uneffect,
 } from "libram";
 
 type FreeRun = { item: Item; successRate: number; price: number };
@@ -87,6 +88,7 @@ export class Engine extends BaseEngine<CombatActions, Task> {
           $effect`Beaten Up`
         )}, (${start_advs} => ${myAdventures()}); stop.`;
     }
+    uneffect($effect`Beaten Up`);
   }
 
   customize(
