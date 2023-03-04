@@ -16,7 +16,7 @@ import {
   toInt,
   useSkill,
 } from "kolmafia";
-import { $effect, $item, $items, $skill, getBanishedMonsters, have, Macro } from "libram";
+import { $effect, $item, $items, $skill, getBanishedMonsters, have, Macro, uneffect } from "libram";
 
 type FreeRun = { item: Item; successRate: number; price: number };
 const RUN_SOURCES = [
@@ -89,6 +89,7 @@ export class Engine extends BaseEngine<CombatActions, Task> {
           $effect`Beaten Up`
         )}, (${start_advs} => ${myAdventures()}); stop.`;
     }
+    uneffect($effect`Beaten Up`);
   }
 
   customize(
