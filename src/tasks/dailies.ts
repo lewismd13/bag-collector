@@ -3,6 +3,7 @@ import {
   buyUsingStorage,
   canEquip,
   cliExecute,
+  equip,
   getClanLounge,
   Item,
   mallPrice,
@@ -121,7 +122,7 @@ export function DailiesQuest(): Quest {
         name: "GAP Vision",
         ready: () => have($item`Greatest American Pants`) && get("_gapBuffs") < 5,
         completed: () => get("_gapBuffs") >= 5,
-        do: () => cliExecute("gap Vision"),
+        do: () => equip($item`Greatest American Pants`) && cliExecute("gap Vision"),
         limit: { tries: 5 },
       },
       {
