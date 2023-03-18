@@ -118,10 +118,11 @@ export function DailiesQuest(): Quest {
         limit: { tries: 1 },
       },
       {
-        name:"GAP Vision",
+        name: "GAP Vision",
         ready: () => have($item`Greatest American Pants`) && get("_gapBuffs") < 5,
         completed: () => get("_gapBuffs") >= 5,
-        do: () => cliExecute("gap Vision")
+        do: () => cliExecute("gap Vision"),
+        limit: { tries: 5 },
       },
       {
         name: "Mummery Item",
