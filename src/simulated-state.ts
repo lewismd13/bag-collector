@@ -136,7 +136,7 @@ export class SimulatedState {
   /**
    * @returns A valuator function based on this SimulatedState instance
    */
-  valuator(): (famWeight: number, itemDrop: number) => number {
+  makeValuator(): (famWeight: number, itemDrop: number) => number {
     return (famWeight: number, itemDrop: number) => {
       return this.valueOf(famWeight, itemDrop);
     };
