@@ -22,8 +22,7 @@ export class SimulatedState {
    * @param outfit The outfit to use. If not specified, this will use an outfit created from the current character state.
    * @returns A SimulatedState instance that includes the modifier values of baseline sources.
    */
-  static baseline(outfit?: Outfit): SimulatedState {
-    outfit = outfit ?? fromCurrent();
+  static baseline(outfit = fromCurrent()): SimulatedState {
     const passives = Skill.all().filter((skill) => have(skill) && skill.passive);
     const buffs = Skill.all()
       .filter((skill) => have(skill) && skill.buff && toEffect(skill) !== Effect.none)
@@ -136,7 +135,7 @@ export class SimulatedState {
   /**
    * @returns A valuator function based on this SimulatedState instance
    */
-  valuator(): (famWeight: number, itemDrop: number) => number {
+  makeValuator(): (famWeight: number, itemDrop: number) => number {
     return (famWeight: number, itemDrop: number) => {
       return this.valueOf(famWeight, itemDrop);
     };

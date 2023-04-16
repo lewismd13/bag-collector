@@ -5,9 +5,9 @@
   "main": "KoLmafia/scripts/baggo.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "yarn run build:types && yarn run build:js",
+    "build": "yarn run build:types && yarn run build:bundled",
     "build:types": "tsc",
-    "build:js": "webpack",
+    "build:bundled": "node build.mjs",
     "lint": "eslint src && prettier --check .",
     "lint:fix": "eslint src --fix && prettier --check --write .",
     "watch": "webpack --watch --progress"
@@ -22,6 +22,8 @@
     "@typescript-eslint/eslint-plugin": "^4.29.3",
     "@typescript-eslint/parser": "^4.29.3",
     "babel-loader": "^8.2.2",
+    "esbuild": "^0.17.0",
+    "esbuild-plugin-babel": "^0.2.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-libram": "^0.2.19",

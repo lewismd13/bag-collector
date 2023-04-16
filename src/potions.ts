@@ -10,7 +10,16 @@ import {
   setLocation,
   use,
 } from "kolmafia";
-import { $effect, $effects, $item, $location, getActiveEffects, getModifier, have } from "libram";
+import {
+  $effect,
+  $effects,
+  $item,
+  $location,
+  flat,
+  getActiveEffects,
+  getModifier,
+  have,
+} from "libram";
 import { SimulatedState } from "./simulated-state";
 import { acquire, debug, formatAmountOfItem, turnsRemaining } from "./lib";
 
@@ -87,19 +96,17 @@ export function farmingPotions(): Potion[] {
 
 export function potionSetup(): void {
   const excludedEffects = new Set<Effect>(
-    getActiveEffects()
-      .map((effect) => getMutuallyExclusiveEffectsOf(effect))
-      .flat()
+    flat(getActiveEffects().map((effect) => getMutuallyExclusiveEffectsOf(effect)))
   );
 
-  let valuator = SimulatedState.current().valuator();
+  let valuator = SimulatedState.current().makeValuator();
 
   const profitablePotions = farmingPotions()
     .filter((potion) => potion.net(valuator) > 0)
     .sort((a, b) => b.net(valuator) - a.net(valuator));
 
   for (const potion of profitablePotions) {
-    valuator = SimulatedState.current().valuator(); // Update after each potion application to handle caps
+    valuator = SimulatedState.current().makeValuator(); // Update after each potion application to handle caps
     if (potion.net(valuator) <= 0) continue; // Potion can become non-profitable if a cap is reached
 
     const effect = potion.effect();
@@ -137,7 +144,7 @@ export function bubbleVision(): void {
   const turns = Math.min(turnsRemaining(), getModifier("Effect Duration", item));
   const averageItemDrop = (turns / 2) * (2 + (turns - 1)); // Sum of arithmetic sequence where a = d = 1
   const potion = new Potion(item, { itemDrop: averageItemDrop, effectDuration: turns });
-  const valuator = SimulatedState.current().valuator();
+  const valuator = SimulatedState.current().makeValuator();
 
   if (potion.net(valuator) > 0) {
     acquire(1, potion.item, potion.gross(valuator));
