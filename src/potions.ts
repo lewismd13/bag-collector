@@ -10,7 +10,16 @@ import {
   setLocation,
   use,
 } from "kolmafia";
-import { $effect, $effects, $item, $location, getActiveEffects, getModifier, have } from "libram";
+import {
+  $effect,
+  $effects,
+  $item,
+  $location,
+  flat,
+  getActiveEffects,
+  getModifier,
+  have,
+} from "libram";
 import { SimulatedState } from "./simulated-state";
 import { acquire, debug, formatAmountOfItem, turnsRemaining } from "./lib";
 
@@ -87,9 +96,7 @@ export function farmingPotions(): Potion[] {
 
 export function potionSetup(): void {
   const excludedEffects = new Set<Effect>(
-    getActiveEffects()
-      .map((effect) => getMutuallyExclusiveEffectsOf(effect))
-      .flat()
+    flat(getActiveEffects().map((effect) => getMutuallyExclusiveEffectsOf(effect)))
   );
 
   let valuator = SimulatedState.current().valuator();
