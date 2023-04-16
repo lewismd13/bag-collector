@@ -1,6 +1,14 @@
 import { Outfit } from "grimoire-kolmafia";
 import { Effect, Familiar, familiarWeight, myClass, Skill, toEffect } from "kolmafia";
-import { $classes, $item, findFairyMultiplier, getModifier, have, ReagnimatedGnome, sum } from "libram";
+import {
+  $classes,
+  $item,
+  findFairyMultiplier,
+  getModifier,
+  have,
+  ReagnimatedGnome,
+  sum,
+} from "libram";
 import { args } from "./args";
 import { fromCurrent } from "./engine/outfit";
 
@@ -22,7 +30,8 @@ export class SimulatedState {
       .map((skill) => toEffect(skill));
     const equips = [...outfit.equips.values()];
     const sources = [...passives, ...buffs, ...equips];
-    const famWeight = sum(sources, (source) => getModifier("Familiar Weight", source)) +
+    const famWeight =
+      sum(sources, (source) => getModifier("Familiar Weight", source)) +
       (outfit.familiar ? familiarWeight(outfit.familiar) : 0);
     const itemDrop = sum(sources, (source) => getModifier("Item Drop", source));
     return new SimulatedState(outfit, famWeight, itemDrop);
@@ -130,6 +139,6 @@ export class SimulatedState {
   valuator(): (famWeight: number, itemDrop: number) => number {
     return (famWeight: number, itemDrop: number) => {
       return this.valueOf(famWeight, itemDrop);
-    }
+    };
   }
 }
