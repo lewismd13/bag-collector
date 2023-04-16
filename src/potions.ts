@@ -92,14 +92,14 @@ export function potionSetup(): void {
       .flat()
   );
 
-  let valuator = SimulatedState.prototype.valueOf.bind(SimulatedState.current());
+  let valuator = SimulatedState.current().valuator();
 
   const profitablePotions = farmingPotions()
     .filter((potion) => potion.net(valuator) > 0)
     .sort((a, b) => b.net(valuator) - a.net(valuator));
 
   for (const potion of profitablePotions) {
-    valuator = SimulatedState.prototype.valueOf.bind(SimulatedState.current()); // Update after each potion application to handle caps
+    valuator = SimulatedState.current().valuator(); // Update after each potion application to handle caps
     if (potion.net(valuator) <= 0) continue; // Potion can become non-profitable if a cap is reached
 
     const effect = potion.effect();
@@ -137,7 +137,7 @@ export function bubbleVision(): void {
   const turns = Math.min(turnsRemaining(), getModifier("Effect Duration", item));
   const averageItemDrop = (turns / 2) * (2 + (turns - 1)); // Sum of arithmetic sequence where a = d = 1
   const potion = new Potion(item, { itemDrop: averageItemDrop, effectDuration: turns });
-  const valuator = SimulatedState.prototype.valueOf.bind(SimulatedState.current());
+  const valuator = SimulatedState.current().valuator();
 
   if (potion.net(valuator) > 0) {
     acquire(1, potion.item, potion.gross(valuator));
