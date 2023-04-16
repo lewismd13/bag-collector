@@ -1,6 +1,13 @@
 import { Familiar } from "kolmafia";
-import { $familiar, $item, findFairyMultiplier, findLeprechaunMultiplier, have } from "libram";
-import { isSober, maxBy } from "../lib";
+import {
+  $familiar,
+  $item,
+  findFairyMultiplier,
+  findLeprechaunMultiplier,
+  have,
+  maxBy,
+} from "libram";
+import { isSober } from "../lib";
 import { FamiliarSpec } from "./spec";
 
 let bestLeprechaun: Familiar;

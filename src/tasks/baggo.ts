@@ -5,7 +5,7 @@ import { Quest } from "../engine/task";
 import { gyou, isSober, turnsRemaining } from "../lib";
 import { bubbleVision, potionSetup } from "../potions";
 import {
-  adv1,
+  abort,
   canAdventure,
   canInteract,
   expectedColdMedicineCabinet,
@@ -97,7 +97,9 @@ export function BaggoQuest(): Quest {
         name: "Autumn-Aton",
         ready: () => AutumnAton.available(),
         completed: () => AutumnAton.currentlyIn() !== null,
-        do: () => AutumnAton.sendTo($location`The Neverending Party`),
+        do: (): void => {
+          AutumnAton.sendTo($location`The Neverending Party`);
+        },
       },
       {
         name: "Cold Medicine Cabinet",
@@ -128,14 +130,7 @@ export function BaggoQuest(): Quest {
           canAdventure(get("ghostLocation", Location.none)) &&
           myAdventures() > 0,
         completed: () => get("questPAGhost") === "unstarted" || args.buff,
-        do: (): void => {
-          const location = get("ghostLocation");
-          if (location) {
-            adv1(location, 0, "");
-          } else {
-            throw "Could not determine ghost location";
-          }
-        },
+        do: () => get("ghostLocation") ?? abort("Could not determine ghost location"),
         effects,
         outfit: () => {
           return {
@@ -157,7 +152,7 @@ export function BaggoQuest(): Quest {
         name: "Digitized Embezzler",
         completed: () => Counter.get("Digitize Monster") > 0,
         ready: () => SourceTerminal.getDigitizeMonster() === $monster`Knob Goblin Embezzler`,
-        do: () => adv1(isSober() ? $location`Noob Cave` : $location`Drunken Stupor`, 0, ""),
+        do: () => (isSober() ? $location`Noob Cave` : $location`Drunken Stupor`),
         outfit: { ...meatFamiliarSpec(), modifier: "meat" },
         combat: new CombatStrategy().kill(),
         effects,
@@ -166,7 +161,7 @@ export function BaggoQuest(): Quest {
         name: "Digitized Non-Embezzler",
         completed: () => Counter.get("Digitize Monster") > 0,
         ready: () => SourceTerminal.getDigitizeMonster() !== $monster`Knob Goblin Embezzler`,
-        do: () => adv1(isSober() ? $location`Noob Cave` : $location`Drunken Stupor`, 0, ""),
+        do: () => (isSober() ? $location`Noob Cave` : $location`Drunken Stupor`),
         outfit: baggoOutfit,
         combat: new CombatStrategy().kill(),
         effects,
