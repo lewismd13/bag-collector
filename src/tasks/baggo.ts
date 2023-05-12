@@ -1,9 +1,3 @@
-import { args } from "../args";
-import { CombatStrategy } from "../engine/combat";
-import { Engine } from "../engine/engine";
-import { Quest } from "../engine/task";
-import { gyou, isSober, turnsRemaining } from "../lib";
-import { bubbleVision, potionSetup } from "../potions";
 import {
   abort,
   canAdventure,
@@ -40,10 +34,16 @@ import {
   Macro,
   SourceTerminal,
 } from "libram";
-import { olfactMonster } from "../main";
-import { meatFamiliarSpec } from "../familiar/meat-familiar";
+import { args } from "../args";
+import { CombatStrategy } from "../engine/combat";
+import { Engine } from "../engine/engine";
+import { Quest } from "../engine/task";
 import { freeFightFamiliarSpec } from "../familiar/free-fight-familiar";
+import { meatFamiliarSpec } from "../familiar/meat-familiar";
+import { gyou, isSober, turnsRemaining } from "../lib";
+import { olfactMonster } from "../main";
 import { baggoOutfit } from "../outfit";
+import { bubbleVision, potionSetup } from "../potions";
 
 const FLORIST_FLOWERS = [
   FloristFriar.StealingMagnolia,
@@ -151,7 +151,9 @@ export function BaggoQuest(): Quest {
       {
         name: "Digitized Embezzler",
         completed: () => Counter.get("Digitize Monster") > 0,
-        ready: () => SourceTerminal.getDigitizeMonster() === $monster`Knob Goblin Embezzler`,
+        ready: () =>
+          SourceTerminal.getDigitizeMonster() === $monster`Knob Goblin Embezzler` &&
+          myAdventures() > 0,
         do: () => (isSober() ? $location`Noob Cave` : $location`Drunken Stupor`),
         outfit: { ...meatFamiliarSpec(), modifier: "meat" },
         combat: new CombatStrategy().kill(),
@@ -160,7 +162,9 @@ export function BaggoQuest(): Quest {
       {
         name: "Digitized Non-Embezzler",
         completed: () => Counter.get("Digitize Monster") > 0,
-        ready: () => SourceTerminal.getDigitizeMonster() !== $monster`Knob Goblin Embezzler`,
+        ready: () =>
+          SourceTerminal.getDigitizeMonster() !== $monster`Knob Goblin Embezzler` &&
+          myAdventures() > 0,
         do: () => (isSober() ? $location`Noob Cave` : $location`Drunken Stupor`),
         outfit: baggoOutfit,
         combat: new CombatStrategy().kill(),
