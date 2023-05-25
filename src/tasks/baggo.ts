@@ -40,7 +40,7 @@ import { Engine } from "../engine/engine";
 import { Quest } from "../engine/task";
 import { freeFightFamiliarSpec } from "../familiar/free-fight-familiar";
 import { meatFamiliarSpec } from "../familiar/meat-familiar";
-import { gyou, isSober, turnsRemaining } from "../lib";
+import { gyou, isSober, sausageFightGuaranteed, turnsRemaining } from "../lib";
 import { olfactMonster } from "../main";
 import { baggoOutfit } from "../outfit";
 import { bubbleVision, potionSetup } from "../potions";
@@ -113,6 +113,21 @@ export function BaggoQuest(): Quest {
           runChoice(5);
         },
         limit: { tries: 5 },
+      },
+      {
+        name: "Fight Guaranteed Kramcos",
+        ready: () =>
+          sausageFightGuaranteed() && myAdventures() > 0 && have($item`Kramco Sausage-o-Matic™`),
+        completed: () => !sausageFightGuaranteed(),
+        do: () => (isSober() ? $location`Noob Cave` : $location`Drunken Stupor`),
+        outfit: () => {
+          return {
+            ...baggoOutfit(false).spec(),
+            ...freeFightFamiliarSpec(),
+            offhand: $item`Kramco Sausage-o-Matic™`,
+          };
+        },
+        combat: new CombatStrategy().kill(),
       },
       {
         name: "Potions",
