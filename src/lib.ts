@@ -12,7 +12,6 @@ import {
   print,
   retrieveItem,
   toInt,
-  totalTurnsPlayed,
 } from "kolmafia";
 import { $familiar, $path, get, withProperty } from "libram";
 import { args } from "./args";
@@ -81,11 +80,4 @@ export function turnsRemaining(): number {
 
 export function isSober(): boolean {
   return myInebriety() <= inebrietyLimit() - Number(myFamiliar() === $familiar`Stooper`);
-}
-
-export function sausageFightGuaranteed() {
-  const goblinsFought = get("_sausageFights");
-  const nextGuaranteed =
-    get("_lastSausageMonsterTurn") + 4 + goblinsFought * 3 + Math.max(0, goblinsFought - 5) ** 3;
-  return goblinsFought === 0 || totalTurnsPlayed() >= nextGuaranteed;
 }
